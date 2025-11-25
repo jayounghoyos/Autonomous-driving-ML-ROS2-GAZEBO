@@ -1,0 +1,35 @@
+# Build artifacts
+build/
+install/
+log/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Datasets (too large for build context)
+datasets/
+*.bag
+*.db3
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore

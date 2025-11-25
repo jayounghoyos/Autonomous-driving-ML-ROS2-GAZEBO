@@ -1,0 +1,22 @@
+[0.041s] Invoking command in '/home/jayoungh/kaiju_ws/build/vehicle_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/jayoungh/kaiju_ws/src/vehicle_description -DCMAKE_INSTALL_PREFIX=/home/jayoungh/kaiju_ws/install/vehicle_description
+[1.072s] -- The C compiler identification is GNU 11.4.0
+[1.072s] -- The CXX compiler identification is GNU 11.4.0
+[1.072s] -- Detecting C compiler ABI info
+[1.073s] -- Detecting C compiler ABI info - done
+[1.073s] -- Check for working C compiler: /usr/bin/cc - skipped
+[1.073s] -- Detecting C compile features
+[1.073s] -- Detecting C compile features - done
+[1.074s] -- Detecting CXX compiler ABI info
+[1.074s] -- Detecting CXX compiler ABI info - done
+[1.074s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[1.074s] -- Detecting CXX compile features
+[1.075s] -- Detecting CXX compile features - done
+[1.075s] -- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+[1.075s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[1.172s] -- Configuring done
+[1.181s] -- Generating done
+[1.186s] -- Build files have been written to: /home/jayoungh/kaiju_ws/build/vehicle_description
+[1.428s] Invoked command in '/home/jayoungh/kaiju_ws/build/vehicle_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/jayoungh/kaiju_ws/src/vehicle_description -DCMAKE_INSTALL_PREFIX=/home/jayoungh/kaiju_ws/install/vehicle_description
+[1.433s] Invoking command in '/home/jayoungh/kaiju_ws/build/vehicle_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jayoungh/kaiju_ws/build/vehicle_description -- -j8 -l8
+[1.483s] gmake: *** [Makefile:145: all] Interrupt
+[1.486s] Invoked command in '/home/jayoungh/kaiju_ws/build/vehicle_description' returned '-2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jayoungh/kaiju_ws/build/vehicle_description -- -j8 -l8

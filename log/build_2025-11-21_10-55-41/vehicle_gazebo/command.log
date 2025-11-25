@@ -1,0 +1,1 @@
+Invoking command in '/home/jayoungh/kaiju_ws/build/vehicle_gazebo': AMENT_PREFIX_PATH=/home/jayoungh/kaiju_ws/install/vehicle_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/jayoungh/kaiju_ws/install/vehicle_description:/opt/ros/humble /usr/bin/cmake /home/jayoungh/kaiju_ws/src/vehicle_gazebo -DCMAKE_INSTALL_PREFIX=/home/jayoungh/kaiju_ws/install/vehicle_gazebo

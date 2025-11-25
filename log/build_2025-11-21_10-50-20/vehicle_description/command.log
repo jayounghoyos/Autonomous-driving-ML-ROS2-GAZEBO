@@ -1,0 +1,4 @@
+Invoking command in '/home/jayoungh/kaiju_ws/build/vehicle_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/jayoungh/kaiju_ws/src/vehicle_description -DCMAKE_INSTALL_PREFIX=/home/jayoungh/kaiju_ws/install/vehicle_description
+Invoked command in '/home/jayoungh/kaiju_ws/build/vehicle_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/jayoungh/kaiju_ws/src/vehicle_description -DCMAKE_INSTALL_PREFIX=/home/jayoungh/kaiju_ws/install/vehicle_description
+Invoking command in '/home/jayoungh/kaiju_ws/build/vehicle_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jayoungh/kaiju_ws/build/vehicle_description -- -j8 -l8
+Invoked command in '/home/jayoungh/kaiju_ws/build/vehicle_description' returned '-2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jayoungh/kaiju_ws/build/vehicle_description -- -j8 -l8

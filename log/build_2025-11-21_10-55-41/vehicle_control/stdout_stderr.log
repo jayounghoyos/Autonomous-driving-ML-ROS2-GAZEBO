@@ -1,0 +1,40 @@
+running egg_info
+creating ../../build/vehicle_control/vehicle_control.egg-info
+writing ../../build/vehicle_control/vehicle_control.egg-info/PKG-INFO
+writing dependency_links to ../../build/vehicle_control/vehicle_control.egg-info/dependency_links.txt
+writing entry points to ../../build/vehicle_control/vehicle_control.egg-info/entry_points.txt
+writing requirements to ../../build/vehicle_control/vehicle_control.egg-info/requires.txt
+writing top-level names to ../../build/vehicle_control/vehicle_control.egg-info/top_level.txt
+writing manifest file '../../build/vehicle_control/vehicle_control.egg-info/SOURCES.txt'
+reading manifest file '../../build/vehicle_control/vehicle_control.egg-info/SOURCES.txt'
+writing manifest file '../../build/vehicle_control/vehicle_control.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/jayoungh/kaiju_ws/build/vehicle_control/build
+creating /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib
+creating /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control
+copying vehicle_control/__init__.py -> /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control
+copying vehicle_control/teleop_keyboard.py -> /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control
+copying vehicle_control/pid_controller.py -> /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control
+copying vehicle_control/teleop_keyboard_ackermann.py -> /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control
+running install
+running install_lib
+creating /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control
+copying /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control/__init__.py -> /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control
+copying /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control/teleop_keyboard.py -> /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control
+copying /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control/pid_controller.py -> /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control
+copying /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control/teleop_keyboard_ackermann.py -> /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control
+byte-compiling /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control/teleop_keyboard.py to teleop_keyboard.cpython-310.pyc
+byte-compiling /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control/pid_controller.py to pid_controller.cpython-310.pyc
+byte-compiling /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control/teleop_keyboard_ackermann.py to teleop_keyboard_ackermann.cpython-310.pyc
+running install_data
+creating /home/jayoungh/kaiju_ws/install/vehicle_control/share/ament_index
+creating /home/jayoungh/kaiju_ws/install/vehicle_control/share/ament_index/resource_index
+creating /home/jayoungh/kaiju_ws/install/vehicle_control/share/ament_index/resource_index/packages
+copying resource/vehicle_control -> /home/jayoungh/kaiju_ws/install/vehicle_control/share/ament_index/resource_index/packages
+copying package.xml -> /home/jayoungh/kaiju_ws/install/vehicle_control/share/vehicle_control
+running install_egg_info
+Copying ../../build/vehicle_control/vehicle_control.egg-info to /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control-0.1.0-py3.10.egg-info
+running install_scripts
+interrupted

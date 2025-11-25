@@ -1,0 +1,32 @@
+[2.062s] Invoking command in '/home/jayoungh/kaiju_ws/src/autonomous_nav': PYTHONPATH=/home/jayoungh/kaiju_ws/build/autonomous_nav/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jayoungh/kaiju_ws/install/autonomous_nav/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/autonomous_nav build --build-base /home/jayoungh/kaiju_ws/build/autonomous_nav/build install --record /home/jayoungh/kaiju_ws/build/autonomous_nav/install.log --single-version-externally-managed install_data
+[2.531s] Traceback (most recent call last):
+[2.531s]   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2866, in get_entry_map
+[2.532s]     ep_map = self._ep_map
+[2.532s]   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2828, in __getattr__
+[2.532s]     raise AttributeError(attr)
+[2.532s] AttributeError: _ep_map. Did you mean: '_dep_map'?
+[2.532s] 
+[2.533s] During handling of the above exception, another exception occurred:
+[2.533s] 
+[2.533s] Traceback (most recent call last):
+[2.533s]   File "/home/jayoungh/kaiju_ws/src/autonomous_nav/setup.py", line 5, in <module>
+[2.533s]     setup(
+[2.533s]   File "/usr/lib/python3/dist-packages/setuptools/__init__.py", line 152, in setup
+[2.533s]     _install_setup_requires(attrs)
+[2.533s]   File "/usr/lib/python3/dist-packages/setuptools/__init__.py", line 142, in _install_setup_requires
+[2.534s]     dist = MinimalDistribution(attrs)
+[2.534s]   File "/usr/lib/python3/dist-packages/setuptools/__init__.py", line 134, in __init__
+[2.534s]     distutils.core.Distribution.__init__(self, filtered)
+[2.534s]   File "/usr/lib/python3/dist-packages/setuptools/dist.py", line 457, in __init__
+[2.534s]     for ep in pkg_resources.iter_entry_points('distutils.setup_keywords'):
+[2.534s]   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 646, in <genexpr>
+[2.534s]     for entry in dist.get_entry_map(group).values()
+[2.534s]   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2868, in get_entry_map
+[2.535s]     ep_map = self._ep_map = EntryPoint.parse_map(
+[2.535s]   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2557, in parse_map
+[2.535s]     maps[group] = cls.parse_group(group, lines, dist)
+[2.537s]   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2535, in parse_group
+[2.538s]     ep = cls.parse(line, dist)
+[2.538s]   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2514, in parse
+[2.539s]     res = m.groupdict()
+[2.539s] KeyboardInterrupt

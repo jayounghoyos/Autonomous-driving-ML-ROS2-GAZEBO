@@ -1,0 +1,26 @@
+[0.041s] Invoking command in '/home/jayoungh/kaiju_ws/build/vehicle_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jayoungh/kaiju_ws/build/vehicle_description -- -j8 -l8
+[1.374s] Invoked command in '/home/jayoungh/kaiju_ws/build/vehicle_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jayoungh/kaiju_ws/build/vehicle_description -- -j8 -l8
+[1.397s] Invoking command in '/home/jayoungh/kaiju_ws/build/vehicle_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/jayoungh/kaiju_ws/build/vehicle_description
+[1.413s] -- Install configuration: ""
+[1.414s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/urdf
+[1.415s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/urdf/simple_car_with_sensors.sdf
+[1.416s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/urdf/ackermann_car.sdf
+[1.417s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/urdf/simple_car.urdf
+[1.418s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/meshes
+[1.418s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/config
+[1.418s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/ament_index/resource_index/package_run_dependencies/vehicle_description
+[1.418s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/ament_index/resource_index/parent_prefix_path/vehicle_description
+[1.418s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/environment/ament_prefix_path.sh
+[1.418s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/environment/ament_prefix_path.dsv
+[1.419s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/environment/path.sh
+[1.419s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/environment/path.dsv
+[1.419s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/local_setup.bash
+[1.419s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/local_setup.sh
+[1.419s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/local_setup.zsh
+[1.419s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/local_setup.dsv
+[1.419s] -- Up-to-date: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/package.dsv
+[1.420s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/ament_index/resource_index/packages/vehicle_description
+[1.420s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/cmake/vehicle_descriptionConfig.cmake
+[1.421s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/cmake/vehicle_descriptionConfig-version.cmake
+[1.421s] -- Installing: /home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/package.xml
+[1.422s] Invoked command in '/home/jayoungh/kaiju_ws/build/vehicle_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/jayoungh/kaiju_ws/build/vehicle_description

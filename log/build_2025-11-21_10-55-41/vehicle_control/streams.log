@@ -1,0 +1,41 @@
+[1.985s] Invoking command in '/home/jayoungh/kaiju_ws/src/vehicle_control': PYTHONPATH=/home/jayoungh/kaiju_ws/build/vehicle_control/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/vehicle_control build --build-base /home/jayoungh/kaiju_ws/build/vehicle_control/build install --record /home/jayoungh/kaiju_ws/build/vehicle_control/install.log --single-version-externally-managed install_data
+[2.471s] running egg_info
+[2.474s] creating ../../build/vehicle_control/vehicle_control.egg-info
+[2.475s] writing ../../build/vehicle_control/vehicle_control.egg-info/PKG-INFO
+[2.475s] writing dependency_links to ../../build/vehicle_control/vehicle_control.egg-info/dependency_links.txt
+[2.475s] writing entry points to ../../build/vehicle_control/vehicle_control.egg-info/entry_points.txt
+[2.475s] writing requirements to ../../build/vehicle_control/vehicle_control.egg-info/requires.txt
+[2.475s] writing top-level names to ../../build/vehicle_control/vehicle_control.egg-info/top_level.txt
+[2.475s] writing manifest file '../../build/vehicle_control/vehicle_control.egg-info/SOURCES.txt'
+[2.479s] reading manifest file '../../build/vehicle_control/vehicle_control.egg-info/SOURCES.txt'
+[2.480s] writing manifest file '../../build/vehicle_control/vehicle_control.egg-info/SOURCES.txt'
+[2.481s] running build
+[2.481s] running build_py
+[2.481s] creating /home/jayoungh/kaiju_ws/build/vehicle_control/build
+[2.481s] creating /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib
+[2.481s] creating /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control
+[2.481s] copying vehicle_control/__init__.py -> /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control
+[2.483s] copying vehicle_control/teleop_keyboard.py -> /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control
+[2.484s] copying vehicle_control/pid_controller.py -> /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control
+[2.484s] copying vehicle_control/teleop_keyboard_ackermann.py -> /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control
+[2.484s] running install
+[2.484s] running install_lib
+[2.487s] creating /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control
+[2.488s] copying /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control/__init__.py -> /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control
+[2.488s] copying /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control/teleop_keyboard.py -> /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control
+[2.488s] copying /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control/pid_controller.py -> /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control
+[2.488s] copying /home/jayoungh/kaiju_ws/build/vehicle_control/build/lib/vehicle_control/teleop_keyboard_ackermann.py -> /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control
+[2.489s] byte-compiling /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control/__init__.py to __init__.cpython-310.pyc
+[2.490s] byte-compiling /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control/teleop_keyboard.py to teleop_keyboard.cpython-310.pyc
+[2.491s] byte-compiling /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control/pid_controller.py to pid_controller.cpython-310.pyc
+[2.493s] byte-compiling /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control/teleop_keyboard_ackermann.py to teleop_keyboard_ackermann.cpython-310.pyc
+[2.498s] running install_data
+[2.498s] creating /home/jayoungh/kaiju_ws/install/vehicle_control/share/ament_index
+[2.498s] creating /home/jayoungh/kaiju_ws/install/vehicle_control/share/ament_index/resource_index
+[2.498s] creating /home/jayoungh/kaiju_ws/install/vehicle_control/share/ament_index/resource_index/packages
+[2.498s] copying resource/vehicle_control -> /home/jayoungh/kaiju_ws/install/vehicle_control/share/ament_index/resource_index/packages
+[2.499s] copying package.xml -> /home/jayoungh/kaiju_ws/install/vehicle_control/share/vehicle_control
+[2.499s] running install_egg_info
+[2.502s] Copying ../../build/vehicle_control/vehicle_control.egg-info to /home/jayoungh/kaiju_ws/install/vehicle_control/lib/python3.10/site-packages/vehicle_control-0.1.0-py3.10.egg-info
+[2.507s] running install_scripts
+[2.510s] interrupted

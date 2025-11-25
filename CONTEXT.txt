@@ -1,0 +1,304 @@
+# AUTONOMOUS DRIVING SIMULATION PROJECT - CONTEXT
+
+## PROJECT OVERVIEW
+Autonomous driving simulation project for an expo presentation in 1.5 months.
+Combining robotics simulation (ROS 2 + Gazebo) with Machine Learning/Neural Networks
+for object detection, lane detection, and autonomous navigation.
+
+**Timeline**: 1.5 months until expo
+**Focus**: Autonomous driving with ML, but open to innovative ideas that enhance the project
+**Goal**: Create a working autonomous vehicle demo that can navigate, detect obstacles,
+and showcase ML capabilities in a simulated environment.
+
+---
+
+## TECHNICAL STACK
+
+### Core Technologies
+- **OS**: Ubuntu 24.04 LTS (running in Docker container)
+- **Host System**: Pop!_OS 22.04 with AMD CPU + NVIDIA GTX 1650 GPU
+- **ROS Version**: ROS 2 Kilted Kaiju (latest rolling release)
+- **Simulator**: Gazebo Ionic (officially compatible with ROS 2 Kilted)
+- **ML Framework**: PyTorch with CUDA support for GPU acceleration
+- **Container**: Docker with NVIDIA Container Toolkit for GPU passthrough
+
+### Key Dependencies
+- ros-kilted-desktop (full ROS 2 installation)
+- gz-ionic (Gazebo Ionic simulator)
+- ros-kilted-ros-gz (ROS-Gazebo bridge)
+- PyTorch + torchvision + torchaudio
+- Ultralytics YOLO (pre-trained object detection)
+- OpenCV (opencv-python-headless)
+- ONNX + onnxruntime-gpu
+
+---
+
+## CURRENT PROJECT STATUS
+
+### ✅ Completed
+1. **Docker Environment**: Fully functional containerized development environment
+   - GPU passthrough working (NVIDIA GTX 1650 detected)
+   - X11 forwarding for Gazebo GUI
+   - All ROS 2 and ML dependencies installed
+
+2. **ROS 2 Workspace**: 6 packages created and building successfully
+   - `vehicle_description`: URDF/SDF vehicle models
+   - `vehicle_gazebo`: Launch files, worlds, simulation setup
+   - `ml_perception`: ML models (YOLO, lane detection) - structure ready
+   - `data_collection`: Dataset generation - structure ready
+   - `vehicle_control`: Teleoperation and control nodes
+   - `autonomous_nav`: Autonomous driving logic - structure ready
+
+3. **Vehicle Model**: Realistic Ackermann steering car
+   - 4 wheels with proper steering geometry
+   - Front camera sensor (640x480, 30Hz, 1.5708 rad FOV)
+   - Ackermann steering plugin (realistic car-like steering vs tank-like differential drive)
+   - Spawns successfully in Gazebo
+
+4. **Test Environment**:
+   - Test track world with boundaries (20x15m rectangular track)
+   - Two obstacles for testing (box and cylinder)
+   - Proper lighting and physics
+
+5. **Control System**:
+   - Custom keyboard teleoperation for Ackermann steering
+   - Incremental speed/steering control (allows simultaneous forward+turn)
+   - ROS-Gazebo bridges for /cmd_vel and camera topics
+
+### ⚠️ Known Issues
+- **Steering inversion**: A/D keys may be backwards (fix attempted, needs testing)
+  - Just swapped left/right steering joint assignments in Ackermann plugin
+  - Requires rebuild and restart to test
+
+---
+
+## NEXT STEPS (Priority Order)
+
+### Immediate (Current Session)
+1. Verify steering fix works correctly
+2. Set up RViz2 visualization for camera feed and robot state
+3. Test camera image topics are publishing correctly
+
+### Short-term (Next 1-2 weeks)
+4. **YOLO Integration**:
+   - Load pre-trained YOLO model (YOLOv8 or YOLOv10)
+   - Subscribe to camera topic
+   - Detect obstacles in real-time
+   - Publish detection results to ROS topics
+   - Visualize bounding boxes in RViz2
+
+5. **Lane Detection**:
+   - Traditional CV approach (Canny edge detection + Hough transform)
+   - Or ML approach (lane segmentation model)
+   - Publish lane center/boundaries to ROS topics
+
+6. **Data Collection System**:
+   - Record camera images with vehicle state (position, velocity, steering angle)
+   - Automatic labeling system for training data
+   - Dataset storage and organization
+
+### Medium-term (Weeks 3-5)
+7. **Autonomous Navigation**:
+   - Combine YOLO detections + lane detection
+   - Simple rule-based controller (follow lane, avoid obstacles)
+   - Or train a simple neural network policy
+   - Emergency stop logic for safety
+
+8. **Enhanced World**:
+   - Add more realistic road textures with lane markings
+   - More varied obstacles (pedestrians, other vehicles)
+   - Traffic signs for YOLO to detect
+
+9. **Performance Optimization**:
+   - Ensure ML models run efficiently on GTX 1650
+   - Optimize inference speed for real-time performance
+
+### Final (Week 6 - Expo Prep)
+10. **Demo Preparation**:
+    - Create impressive demo scenario
+    - Add visualization overlays (detected objects, predicted path)
+    - Prepare presentation materials
+    - Test stability and reliability
+
+---
+
+## KEY FILES AND LOCATIONS
+
+### Workspace Structure
+```
+/home/jayoungh/kaiju_ws/
+├── Dockerfile                          # Main Docker image definition
+├── docker-compose.yml                  # Container orchestration with GPU
+├── src/
+│   ├── vehicle_description/
+│   │   └── urdf/ackermann_car.sdf     # Vehicle model (Ackermann steering)
+│   ├── vehicle_gazebo/
+│   │   ├── worlds/test_track.sdf      # Test track world
+│   │   └── launch/spawn_vehicle.launch.py
+│   ├── ml_perception/                  # YOLO + lane detection (TODO)
+│   ├── data_collection/                # Dataset generation (TODO)
+│   ├── vehicle_control/
+│   │   └── vehicle_control/teleop_keyboard_ackermann.py
+│   └── autonomous_nav/                 # Autonomous driving logic (TODO)
+```
+
+### Important Configuration
+- **Vehicle control topic**: `/cmd_vel` (geometry_msgs/Twist)
+- **Camera topic**: `/camera` (sensor_msgs/Image)
+- **Wheel base**: 1.2m, Wheel separation: 1.0m
+- **Steering limit**: ±0.7 rad (±40 degrees)
+- **Max velocity**: ±5.0 m/s, Max acceleration: ±3.0 m/s²
+
+---
+
+## RELEVANT DOCUMENTATION LINKS
+
+### ROS 2 & Gazebo
+- ROS 2 Kilted: https://docs.ros.org/en/kilted/
+- Gazebo Ionic: https://gazebosim.org/docs/ionic/
+- ROS-Gazebo Bridge: https://github.com/gazebosim/ros_gz
+- Ackermann Steering Plugin: https://gazebosim.org/api/sim/8/classgz_1_1sim_1_1systems_1_1AckermannSteering.html
+
+### Machine Learning
+- Ultralytics YOLO: https://docs.ultralytics.com/
+- PyTorch: https://pytorch.org/docs/stable/index.html
+- OpenCV: https://docs.opencv.org/4.x/
+
+### ROS 2 Tutorials
+- Creating Packages: https://docs.ros.org/en/kilted/Tutorials/Beginner-Client-Libraries/Creating-Your-First-ROS2-Package.html
+- Writing Publishers/Subscribers: https://docs.ros.org/en/kilted/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html
+- Launch Files: https://docs.ros.org/en/kilted/Tutorials/Intermediate/Launch/Launch-Main.html
+
+---
+
+## DEVELOPMENT WORKFLOW
+
+### Starting the Environment
+```bash
+# On host (Pop!_OS)
+cd /home/jayoungh/kaiju_ws
+docker compose up -d
+docker compose exec kaiju_dev bash
+
+# Inside container
+cd /workspace
+source install/setup.bash
+
+# Launch simulation
+ros2 launch vehicle_gazebo spawn_vehicle.launch.py
+
+# In another terminal (inside container)
+source install/setup.bash
+ros2 run vehicle_control teleop_ackermann
+```
+
+### Building the Workspace
+```bash
+# Inside container at /workspace
+colcon build
+source install/setup.bash
+```
+
+### Common Commands
+```bash
+# List topics
+ros2 topic list
+
+# Monitor camera feed
+ros2 topic echo /camera
+
+# Check vehicle control
+ros2 topic echo /cmd_vel
+
+# View transforms
+ros2 run tf2_tools view_frames
+```
+
+---
+
+## PROJECT PHILOSOPHY
+
+**Primary Focus**: Autonomous driving with machine learning and neural networks
+
+**We are open to**:
+- Innovative ML architectures or approaches
+- Creative visualization techniques
+- Novel sensor fusion methods
+- Interesting demo scenarios
+- Performance optimizations
+- Better simulation realism
+
+**We are focused on**:
+- Delivering a working demo in 1.5 months
+- Practical, achievable solutions over perfect ones
+- Leveraging existing pre-trained models (YOLO) rather than training from scratch
+- Clear, modular code structure
+- Real-time performance on available hardware (GTX 1650)
+
+**Not interested in**:
+- Over-engineering that delays progress
+- Training large models from scratch (no time/compute)
+- Straying too far from autonomous driving core functionality
+- Perfection over progress
+
+---
+
+## TROUBLESHOOTING NOTES
+
+### Past Issues Resolved
+1. **Docker user creation errors**: Solved by running as root in container
+2. **PyTorch install conflicts**: Used `--ignore-installed` flag
+3. **NVIDIA GPU not detected**: Installed nvidia-container-toolkit on host
+4. **Vehicle not spawning**: Fixed path to SDF in launch file
+5. **Differential drive steering**: Replaced with Ackermann steering for realism
+6. **Single-action teleop**: Created incremental control for simultaneous speed+steering
+
+### Current Known Bugs
+- Steering may be inverted (fix in progress - needs testing after rebuild)
+
+---
+
+## HARDWARE SPECS
+- **GPU**: NVIDIA GeForce GTX 1650 (4GB VRAM)
+- **CPU**: AMD (model not specified)
+- **OS**: Pop!_OS 22.04 LTS
+- **Display**: X11 forwarding to container for Gazebo GUI
+
+---
+
+## NOTES FOR NEXT AI ASSISTANT
+
+1. **Project is time-sensitive**: 1.5 months to expo. Prioritize working solutions over perfect ones.
+
+2. **Docker environment is set up**: Don't recreate it. Work within the existing container.
+
+3. **Be proactive with todo lists**: Use TodoWrite tool to track progress.
+
+4. **The user speaks Spanish and English**: They may switch languages. Respond in the language they use.
+
+5. **User is hands-on**: They're running commands themselves and testing in real-time.
+
+6. **Focus on ML integration**: That's the exciting part - YOLO, lane detection, autonomous nav.
+
+7. **Steering issue needs immediate attention**: First task is to verify the steering fix works.
+
+8. **Be practical**: Pre-trained models, simple approaches, fast iterations.
+
+---
+
+## IMMEDIATE ACTION NEEDED
+
+After the steering fix (swapped left/right steering joints in Ackermann plugin):
+1. User needs to stop Gazebo
+2. Rebuild workspace: `cd /workspace && colcon build && source install/setup.bash`
+3. Restart simulation: `ros2 launch vehicle_gazebo spawn_vehicle.launch.py`
+4. Test teleop: `ros2 run vehicle_control teleop_ackermann`
+5. Verify: Press W (forward), then A (should turn LEFT), D (should turn RIGHT)
+
+If steering is correct, move on to RViz2 visualization and camera feed.
+If still wrong, may need to invert the angular velocity sign in the Ackermann plugin or check joint axis directions.
+
+---
+
+END OF CONTEXT
+Last updated: 2025-11-21

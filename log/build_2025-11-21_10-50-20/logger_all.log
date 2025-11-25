@@ -1,0 +1,288 @@
+[0.281s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.281s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=8, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7e6ca63743a0>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7e6ca64e1a50>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7e6ca64e1a50>>)
+[0.572s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.572s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.572s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.572s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.572s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.572s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.572s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/jayoungh/kaiju_ws'
+[0.572s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.572s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.572s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.572s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.573s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.573s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.573s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.573s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.573s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.623s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.623s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.623s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extensions ['ignore', 'ignore_ament_install']
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extension 'ignore'
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extension 'ignore_ament_install'
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extensions ['colcon_pkg']
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extension 'colcon_pkg'
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extensions ['colcon_meta']
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extension 'colcon_meta'
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extensions ['ros']
+[0.624s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extension 'ros'
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extensions ['cmake', 'python']
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extension 'cmake'
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extension 'python'
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extensions ['python_setup_py']
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(datasets) by extension 'python_setup_py'
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[0.625s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src/autonomous_nav) by extensions ['ignore', 'ignore_ament_install']
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src/autonomous_nav) by extension 'ignore'
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src/autonomous_nav) by extension 'ignore_ament_install'
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src/autonomous_nav) by extensions ['colcon_pkg']
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src/autonomous_nav) by extension 'colcon_pkg'
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src/autonomous_nav) by extensions ['colcon_meta']
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src/autonomous_nav) by extension 'colcon_meta'
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src/autonomous_nav) by extensions ['ros']
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(src/autonomous_nav) by extension 'ros'
+[0.630s] DEBUG:colcon.colcon_core.package_identification:Package 'src/autonomous_nav' with type 'ros.ament_python' and name 'autonomous_nav'
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(src/data_collection) by extensions ['ignore', 'ignore_ament_install']
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(src/data_collection) by extension 'ignore'
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(src/data_collection) by extension 'ignore_ament_install'
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(src/data_collection) by extensions ['colcon_pkg']
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(src/data_collection) by extension 'colcon_pkg'
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(src/data_collection) by extensions ['colcon_meta']
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(src/data_collection) by extension 'colcon_meta'
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(src/data_collection) by extensions ['ros']
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(src/data_collection) by extension 'ros'
+[0.632s] DEBUG:colcon.colcon_core.package_identification:Package 'src/data_collection' with type 'ros.ament_python' and name 'data_collection'
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(src/ml_perception) by extensions ['ignore', 'ignore_ament_install']
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(src/ml_perception) by extension 'ignore'
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(src/ml_perception) by extension 'ignore_ament_install'
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(src/ml_perception) by extensions ['colcon_pkg']
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(src/ml_perception) by extension 'colcon_pkg'
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(src/ml_perception) by extensions ['colcon_meta']
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(src/ml_perception) by extension 'colcon_meta'
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(src/ml_perception) by extensions ['ros']
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(src/ml_perception) by extension 'ros'
+[0.633s] DEBUG:colcon.colcon_core.package_identification:Package 'src/ml_perception' with type 'ros.ament_python' and name 'ml_perception'
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_control) by extensions ['ignore', 'ignore_ament_install']
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_control) by extension 'ignore'
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_control) by extension 'ignore_ament_install'
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_control) by extensions ['colcon_pkg']
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_control) by extension 'colcon_pkg'
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_control) by extensions ['colcon_meta']
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_control) by extension 'colcon_meta'
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_control) by extensions ['ros']
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_control) by extension 'ros'
+[0.635s] DEBUG:colcon.colcon_core.package_identification:Package 'src/vehicle_control' with type 'ros.ament_python' and name 'vehicle_control'
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_description) by extensions ['ignore', 'ignore_ament_install']
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_description) by extension 'ignore'
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_description) by extension 'ignore_ament_install'
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_description) by extensions ['colcon_pkg']
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_description) by extension 'colcon_pkg'
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_description) by extensions ['colcon_meta']
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_description) by extension 'colcon_meta'
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_description) by extensions ['ros']
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_description) by extension 'ros'
+[0.636s] DEBUG:colcon.colcon_core.package_identification:Package 'src/vehicle_description' with type 'ros.ament_cmake' and name 'vehicle_description'
+[0.636s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_gazebo) by extensions ['ignore', 'ignore_ament_install']
+[0.636s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_gazebo) by extension 'ignore'
+[0.636s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_gazebo) by extension 'ignore_ament_install'
+[0.636s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_gazebo) by extensions ['colcon_pkg']
+[0.636s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_gazebo) by extension 'colcon_pkg'
+[0.636s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_gazebo) by extensions ['colcon_meta']
+[0.636s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_gazebo) by extension 'colcon_meta'
+[0.636s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_gazebo) by extensions ['ros']
+[0.636s] Level 1:colcon.colcon_core.package_identification:_identify(src/vehicle_gazebo) by extension 'ros'
+[0.637s] DEBUG:colcon.colcon_core.package_identification:Package 'src/vehicle_gazebo' with type 'ros.ament_cmake' and name 'vehicle_gazebo'
+[0.637s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extensions ['ignore', 'ignore_ament_install']
+[0.637s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extension 'ignore'
+[0.637s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extension 'ignore_ament_install'
+[0.637s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extensions ['colcon_pkg']
+[0.637s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extension 'colcon_pkg'
+[0.637s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extensions ['colcon_meta']
+[0.637s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extension 'colcon_meta'
+[0.637s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extensions ['ros']
+[0.637s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extension 'ros'
+[0.638s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extensions ['cmake', 'python']
+[0.638s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extension 'cmake'
+[0.638s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extension 'python'
+[0.638s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extensions ['python_setup_py']
+[0.638s] Level 1:colcon.colcon_core.package_identification:_identify(training) by extension 'python_setup_py'
+[0.638s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.638s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.638s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.638s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.638s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.670s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.670s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.673s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 0 installed packages in /home/jayoungh/ros2_ws/install
+[0.675s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 271 installed packages in /opt/ros/humble
+[0.676s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.721s] Level 5:colcon.colcon_core.verb:set package 'autonomous_nav' build argument 'cmake_args' from command line to 'None'
+[0.721s] Level 5:colcon.colcon_core.verb:set package 'autonomous_nav' build argument 'cmake_target' from command line to 'None'
+[0.721s] Level 5:colcon.colcon_core.verb:set package 'autonomous_nav' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.721s] Level 5:colcon.colcon_core.verb:set package 'autonomous_nav' build argument 'cmake_clean_cache' from command line to 'False'
+[0.721s] Level 5:colcon.colcon_core.verb:set package 'autonomous_nav' build argument 'cmake_clean_first' from command line to 'False'
+[0.721s] Level 5:colcon.colcon_core.verb:set package 'autonomous_nav' build argument 'cmake_force_configure' from command line to 'False'
+[0.721s] Level 5:colcon.colcon_core.verb:set package 'autonomous_nav' build argument 'ament_cmake_args' from command line to 'None'
+[0.721s] Level 5:colcon.colcon_core.verb:set package 'autonomous_nav' build argument 'catkin_cmake_args' from command line to 'None'
+[0.721s] Level 5:colcon.colcon_core.verb:set package 'autonomous_nav' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.721s] DEBUG:colcon.colcon_core.verb:Building package 'autonomous_nav' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jayoungh/kaiju_ws/build/autonomous_nav', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jayoungh/kaiju_ws/install/autonomous_nav', 'merge_install': False, 'path': '/home/jayoungh/kaiju_ws/src/autonomous_nav', 'symlink_install': False, 'test_result_base': None}
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'data_collection' build argument 'cmake_args' from command line to 'None'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'data_collection' build argument 'cmake_target' from command line to 'None'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'data_collection' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'data_collection' build argument 'cmake_clean_cache' from command line to 'False'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'data_collection' build argument 'cmake_clean_first' from command line to 'False'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'data_collection' build argument 'cmake_force_configure' from command line to 'False'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'data_collection' build argument 'ament_cmake_args' from command line to 'None'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'data_collection' build argument 'catkin_cmake_args' from command line to 'None'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'data_collection' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.722s] DEBUG:colcon.colcon_core.verb:Building package 'data_collection' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jayoungh/kaiju_ws/build/data_collection', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jayoungh/kaiju_ws/install/data_collection', 'merge_install': False, 'path': '/home/jayoungh/kaiju_ws/src/data_collection', 'symlink_install': False, 'test_result_base': None}
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'ml_perception' build argument 'cmake_args' from command line to 'None'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'ml_perception' build argument 'cmake_target' from command line to 'None'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'ml_perception' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'ml_perception' build argument 'cmake_clean_cache' from command line to 'False'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'ml_perception' build argument 'cmake_clean_first' from command line to 'False'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'ml_perception' build argument 'cmake_force_configure' from command line to 'False'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'ml_perception' build argument 'ament_cmake_args' from command line to 'None'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'ml_perception' build argument 'catkin_cmake_args' from command line to 'None'
+[0.722s] Level 5:colcon.colcon_core.verb:set package 'ml_perception' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.722s] DEBUG:colcon.colcon_core.verb:Building package 'ml_perception' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jayoungh/kaiju_ws/build/ml_perception', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jayoungh/kaiju_ws/install/ml_perception', 'merge_install': False, 'path': '/home/jayoungh/kaiju_ws/src/ml_perception', 'symlink_install': False, 'test_result_base': None}
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_control' build argument 'cmake_args' from command line to 'None'
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_control' build argument 'cmake_target' from command line to 'None'
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_control' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_control' build argument 'cmake_clean_cache' from command line to 'False'
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_control' build argument 'cmake_clean_first' from command line to 'False'
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_control' build argument 'cmake_force_configure' from command line to 'False'
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_control' build argument 'ament_cmake_args' from command line to 'None'
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_control' build argument 'catkin_cmake_args' from command line to 'None'
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_control' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.723s] DEBUG:colcon.colcon_core.verb:Building package 'vehicle_control' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jayoungh/kaiju_ws/build/vehicle_control', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jayoungh/kaiju_ws/install/vehicle_control', 'merge_install': False, 'path': '/home/jayoungh/kaiju_ws/src/vehicle_control', 'symlink_install': False, 'test_result_base': None}
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_description' build argument 'cmake_args' from command line to 'None'
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_description' build argument 'cmake_target' from command line to 'None'
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_description' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_description' build argument 'cmake_clean_cache' from command line to 'False'
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_description' build argument 'cmake_clean_first' from command line to 'False'
+[0.723s] Level 5:colcon.colcon_core.verb:set package 'vehicle_description' build argument 'cmake_force_configure' from command line to 'False'
+[0.724s] Level 5:colcon.colcon_core.verb:set package 'vehicle_description' build argument 'ament_cmake_args' from command line to 'None'
+[0.724s] Level 5:colcon.colcon_core.verb:set package 'vehicle_description' build argument 'catkin_cmake_args' from command line to 'None'
+[0.724s] Level 5:colcon.colcon_core.verb:set package 'vehicle_description' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.724s] DEBUG:colcon.colcon_core.verb:Building package 'vehicle_description' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jayoungh/kaiju_ws/build/vehicle_description', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jayoungh/kaiju_ws/install/vehicle_description', 'merge_install': False, 'path': '/home/jayoungh/kaiju_ws/src/vehicle_description', 'symlink_install': False, 'test_result_base': None}
+[0.724s] Level 5:colcon.colcon_core.verb:set package 'vehicle_gazebo' build argument 'cmake_args' from command line to 'None'
+[0.724s] Level 5:colcon.colcon_core.verb:set package 'vehicle_gazebo' build argument 'cmake_target' from command line to 'None'
+[0.724s] Level 5:colcon.colcon_core.verb:set package 'vehicle_gazebo' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.724s] Level 5:colcon.colcon_core.verb:set package 'vehicle_gazebo' build argument 'cmake_clean_cache' from command line to 'False'
+[0.724s] Level 5:colcon.colcon_core.verb:set package 'vehicle_gazebo' build argument 'cmake_clean_first' from command line to 'False'
+[0.724s] Level 5:colcon.colcon_core.verb:set package 'vehicle_gazebo' build argument 'cmake_force_configure' from command line to 'False'
+[0.724s] Level 5:colcon.colcon_core.verb:set package 'vehicle_gazebo' build argument 'ament_cmake_args' from command line to 'None'
+[0.724s] Level 5:colcon.colcon_core.verb:set package 'vehicle_gazebo' build argument 'catkin_cmake_args' from command line to 'None'
+[0.724s] Level 5:colcon.colcon_core.verb:set package 'vehicle_gazebo' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.724s] DEBUG:colcon.colcon_core.verb:Building package 'vehicle_gazebo' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/jayoungh/kaiju_ws/build/vehicle_gazebo', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/jayoungh/kaiju_ws/install/vehicle_gazebo', 'merge_install': False, 'path': '/home/jayoungh/kaiju_ws/src/vehicle_gazebo', 'symlink_install': False, 'test_result_base': None}
+[0.724s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.726s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.726s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/jayoungh/kaiju_ws/src/vehicle_description' with build type 'ament_cmake'
+[0.726s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/jayoungh/kaiju_ws/src/vehicle_description'
+[0.731s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.731s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.731s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.735s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/jayoungh/kaiju_ws/src/autonomous_nav' with build type 'ament_python'
+[0.736s] Level 1:colcon.colcon_core.shell:create_environment_hook('autonomous_nav', 'ament_prefix_path')
+[0.736s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jayoungh/kaiju_ws/install/autonomous_nav/share/autonomous_nav/hook/ament_prefix_path.ps1'
+[0.737s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jayoungh/kaiju_ws/install/autonomous_nav/share/autonomous_nav/hook/ament_prefix_path.dsv'
+[0.739s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jayoungh/kaiju_ws/install/autonomous_nav/share/autonomous_nav/hook/ament_prefix_path.sh'
+[0.741s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.741s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.745s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/jayoungh/kaiju_ws/src/data_collection' with build type 'ament_python'
+[0.745s] Level 1:colcon.colcon_core.shell:create_environment_hook('data_collection', 'ament_prefix_path')
+[0.745s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jayoungh/kaiju_ws/install/data_collection/share/data_collection/hook/ament_prefix_path.ps1'
+[0.746s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jayoungh/kaiju_ws/install/data_collection/share/data_collection/hook/ament_prefix_path.dsv'
+[0.746s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jayoungh/kaiju_ws/install/data_collection/share/data_collection/hook/ament_prefix_path.sh'
+[0.747s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.747s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.750s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/jayoungh/kaiju_ws/src/ml_perception' with build type 'ament_python'
+[0.750s] Level 1:colcon.colcon_core.shell:create_environment_hook('ml_perception', 'ament_prefix_path')
+[0.751s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jayoungh/kaiju_ws/install/ml_perception/share/ml_perception/hook/ament_prefix_path.ps1'
+[0.752s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jayoungh/kaiju_ws/install/ml_perception/share/ml_perception/hook/ament_prefix_path.dsv'
+[0.752s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jayoungh/kaiju_ws/install/ml_perception/share/ml_perception/hook/ament_prefix_path.sh'
+[0.753s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.753s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.758s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/jayoungh/kaiju_ws/src/vehicle_control' with build type 'ament_python'
+[0.758s] Level 1:colcon.colcon_core.shell:create_environment_hook('vehicle_control', 'ament_prefix_path')
+[0.758s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jayoungh/kaiju_ws/install/vehicle_control/share/vehicle_control/hook/ament_prefix_path.ps1'
+[0.759s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/jayoungh/kaiju_ws/install/vehicle_control/share/vehicle_control/hook/ament_prefix_path.dsv'
+[0.760s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/jayoungh/kaiju_ws/install/vehicle_control/share/vehicle_control/hook/ament_prefix_path.sh'
+[0.761s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.761s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.768s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jayoungh/kaiju_ws/build/vehicle_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/jayoungh/kaiju_ws/src/vehicle_description -DCMAKE_INSTALL_PREFIX=/home/jayoungh/kaiju_ws/install/vehicle_description
+[1.132s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/jayoungh/kaiju_ws/src/autonomous_nav'
+[1.133s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.133s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.456s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/jayoungh/kaiju_ws/src/data_collection'
+[1.456s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.457s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.793s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/jayoungh/kaiju_ws/src/ml_perception'
+[1.793s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.793s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.132s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/jayoungh/kaiju_ws/src/vehicle_control'
+[2.132s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[2.132s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.155s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jayoungh/kaiju_ws/build/vehicle_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/jayoungh/kaiju_ws/src/vehicle_description -DCMAKE_INSTALL_PREFIX=/home/jayoungh/kaiju_ws/install/vehicle_description
+[2.160s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/jayoungh/kaiju_ws/build/vehicle_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jayoungh/kaiju_ws/build/vehicle_description -- -j8 -l8
+[2.208s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete was interrupted
+[2.208s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete again
+[2.212s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/jayoungh/kaiju_ws/build/vehicle_description' returned '-2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jayoungh/kaiju_ws/build/vehicle_description -- -j8 -l8
+[2.213s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(vehicle_description)
+[2.222s] Level 1:colcon.colcon_core.environment:checking '/home/jayoungh/kaiju_ws/install/vehicle_description' for CMake module files
+[2.223s] Level 1:colcon.colcon_core.environment:checking '/home/jayoungh/kaiju_ws/install/vehicle_description' for CMake config files
+[2.223s] Level 1:colcon.colcon_core.environment:checking '/home/jayoungh/kaiju_ws/install/vehicle_description/bin'
+[2.223s] Level 1:colcon.colcon_core.environment:checking '/home/jayoungh/kaiju_ws/install/vehicle_description/lib/pkgconfig/vehicle_description.pc'
+[2.224s] Level 1:colcon.colcon_core.environment:checking '/home/jayoungh/kaiju_ws/install/vehicle_description/lib/python3.10/site-packages'
+[2.224s] Level 1:colcon.colcon_core.environment:checking '/home/jayoungh/kaiju_ws/install/vehicle_description/bin'
+[2.224s] INFO:colcon.colcon_core.shell:Creating package script '/home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/package.ps1'
+[2.226s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/package.dsv'
+[2.227s] INFO:colcon.colcon_core.shell:Creating package script '/home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/package.sh'
+[2.228s] INFO:colcon.colcon_core.shell:Creating package script '/home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/package.bash'
+[2.229s] INFO:colcon.colcon_core.shell:Creating package script '/home/jayoungh/kaiju_ws/install/vehicle_description/share/vehicle_description/package.zsh'
+[2.230s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/jayoungh/kaiju_ws/install/vehicle_description/share/colcon-core/packages/vehicle_description)
+[2.242s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished
+[2.242s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[2.242s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[2.242s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[2.249s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[2.250s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[2.250s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[2.265s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[2.266s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/jayoungh/kaiju_ws/install/local_setup.ps1'
+[2.267s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/jayoungh/kaiju_ws/install/_local_setup_util_ps1.py'
+[2.270s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/jayoungh/kaiju_ws/install/setup.ps1'
+[2.272s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/jayoungh/kaiju_ws/install/local_setup.sh'
+[2.273s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/jayoungh/kaiju_ws/install/_local_setup_util_sh.py'
+[2.274s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/jayoungh/kaiju_ws/install/setup.sh'
+[2.277s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/jayoungh/kaiju_ws/install/local_setup.bash'
+[2.278s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/jayoungh/kaiju_ws/install/setup.bash'
+[2.279s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/jayoungh/kaiju_ws/install/local_setup.zsh'
+[2.280s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/jayoungh/kaiju_ws/install/setup.zsh'

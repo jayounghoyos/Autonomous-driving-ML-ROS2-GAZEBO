@@ -1,0 +1,37 @@
+[1.970s] Invoking command in '/home/jayoungh/kaiju_ws/src/ml_perception': PYTHONPATH=/home/jayoungh/kaiju_ws/build/ml_perception/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jayoungh/kaiju_ws/install/ml_perception/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/ml_perception build --build-base /home/jayoungh/kaiju_ws/build/ml_perception/build install --record /home/jayoungh/kaiju_ws/build/ml_perception/install.log --single-version-externally-managed install_data
+[2.338s] running egg_info
+[2.338s] creating ../../build/ml_perception/ml_perception.egg-info
+[2.338s] writing ../../build/ml_perception/ml_perception.egg-info/PKG-INFO
+[2.338s] writing dependency_links to ../../build/ml_perception/ml_perception.egg-info/dependency_links.txt
+[2.338s] writing entry points to ../../build/ml_perception/ml_perception.egg-info/entry_points.txt
+[2.338s] writing requirements to ../../build/ml_perception/ml_perception.egg-info/requires.txt
+[2.339s] writing top-level names to ../../build/ml_perception/ml_perception.egg-info/top_level.txt
+[2.339s] writing manifest file '../../build/ml_perception/ml_perception.egg-info/SOURCES.txt'
+[2.340s] reading manifest file '../../build/ml_perception/ml_perception.egg-info/SOURCES.txt'
+[2.341s] writing manifest file '../../build/ml_perception/ml_perception.egg-info/SOURCES.txt'
+[2.341s] running build
+[2.342s] running build_py
+[2.343s] creating /home/jayoungh/kaiju_ws/build/ml_perception/build
+[2.343s] creating /home/jayoungh/kaiju_ws/build/ml_perception/build/lib
+[2.343s] creating /home/jayoungh/kaiju_ws/build/ml_perception/build/lib/ml_perception
+[2.343s] copying ml_perception/__init__.py -> /home/jayoungh/kaiju_ws/build/ml_perception/build/lib/ml_perception
+[2.343s] running install
+[2.343s] running install_lib
+[2.350s] creating /home/jayoungh/kaiju_ws/install/ml_perception/lib/python3.10/site-packages/ml_perception
+[2.351s] copying /home/jayoungh/kaiju_ws/build/ml_perception/build/lib/ml_perception/__init__.py -> /home/jayoungh/kaiju_ws/install/ml_perception/lib/python3.10/site-packages/ml_perception
+[2.351s] byte-compiling /home/jayoungh/kaiju_ws/install/ml_perception/lib/python3.10/site-packages/ml_perception/__init__.py to __init__.cpython-310.pyc
+[2.358s] running install_data
+[2.358s] creating /home/jayoungh/kaiju_ws/install/ml_perception/share/ament_index
+[2.358s] creating /home/jayoungh/kaiju_ws/install/ml_perception/share/ament_index/resource_index
+[2.358s] creating /home/jayoungh/kaiju_ws/install/ml_perception/share/ament_index/resource_index/packages
+[2.358s] copying resource/ml_perception -> /home/jayoungh/kaiju_ws/install/ml_perception/share/ament_index/resource_index/packages
+[2.358s] copying package.xml -> /home/jayoungh/kaiju_ws/install/ml_perception/share/ml_perception
+[2.359s] creating /home/jayoungh/kaiju_ws/install/ml_perception/share/ml_perception/launch
+[2.359s] creating /home/jayoungh/kaiju_ws/install/ml_perception/share/ml_perception/config
+[2.359s] running install_egg_info
+[2.366s] Copying ../../build/ml_perception/ml_perception.egg-info to /home/jayoungh/kaiju_ws/install/ml_perception/lib/python3.10/site-packages/ml_perception-0.1.0-py3.10.egg-info
+[2.366s] running install_scripts
+[2.457s] Installing lane_detector script to /home/jayoungh/kaiju_ws/install/ml_perception/bin
+[2.457s] Installing yolo_detector script to /home/jayoungh/kaiju_ws/install/ml_perception/bin
+[2.457s] writing list of installed files to '/home/jayoungh/kaiju_ws/build/ml_perception/install.log'
+[2.526s] Invoked command in '/home/jayoungh/kaiju_ws/src/ml_perception' returned '-2': PYTHONPATH=/home/jayoungh/kaiju_ws/build/ml_perception/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/jayoungh/kaiju_ws/install/ml_perception/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/ml_perception build --build-base /home/jayoungh/kaiju_ws/build/ml_perception/build install --record /home/jayoungh/kaiju_ws/build/ml_perception/install.log --single-version-externally-managed install_data

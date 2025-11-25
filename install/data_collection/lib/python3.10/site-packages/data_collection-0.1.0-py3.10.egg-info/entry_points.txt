@@ -1,0 +1,3 @@
+[console_scripts]
+data_recorder = data_collection.data_recorder:main
+

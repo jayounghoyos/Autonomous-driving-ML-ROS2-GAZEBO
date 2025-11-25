@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2866, in get_entry_map
+    ep_map = self._ep_map
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2828, in __getattr__
+    raise AttributeError(attr)
+AttributeError: _ep_map. Did you mean: '_dep_map'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jayoungh/kaiju_ws/src/autonomous_nav/setup.py", line 5, in <module>
+    setup(
+  File "/usr/lib/python3/dist-packages/setuptools/__init__.py", line 152, in setup
+    _install_setup_requires(attrs)
+  File "/usr/lib/python3/dist-packages/setuptools/__init__.py", line 142, in _install_setup_requires
+    dist = MinimalDistribution(attrs)
+  File "/usr/lib/python3/dist-packages/setuptools/__init__.py", line 134, in __init__
+    distutils.core.Distribution.__init__(self, filtered)
+  File "/usr/lib/python3/dist-packages/setuptools/dist.py", line 457, in __init__
+    for ep in pkg_resources.iter_entry_points('distutils.setup_keywords'):
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 646, in <genexpr>
+    for entry in dist.get_entry_map(group).values()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2868, in get_entry_map
+    ep_map = self._ep_map = EntryPoint.parse_map(
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2557, in parse_map
+    maps[group] = cls.parse_group(group, lines, dist)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2535, in parse_group
+    ep = cls.parse(line, dist)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 2514, in parse
+    res = m.groupdict()
+KeyboardInterrupt
