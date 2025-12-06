@@ -46,3 +46,7 @@ python3 train_parallel.py --num-envs 12 --timesteps 1000000
 - Gazebo Sim
 - CUDA GPU (optional but recommended)
 - 16GB+ RAM for parallel training
+
+---
+
+![First Training Version](FirstTrainingVersion.png)
