@@ -1,5 +1,0 @@
-[console_scripts]
-pid_controller = vehicle_control.pid_controller:main
-teleop_ackermann = vehicle_control.teleop_keyboard_ackermann:main
-teleop_keyboard = vehicle_control.teleop_keyboard:main
-

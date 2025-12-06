@@ -1,0 +1,41 @@
+# ROS 2 Build Artifacts
+build/
+install/
+log/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+*.egg
+
+# Training Artifacts
+models/*.zip
+models/*.pt
+tensorboard_logs/PPO_*/
+*.ckpt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Gazebo
+.gazebo/
+
+# Datasets (optional - uncomment if datasets are large)
+# datasets/
+
+# Keep these directories but ignore contents
+models/.gitkeep
+tensorboard_logs/.gitkeep

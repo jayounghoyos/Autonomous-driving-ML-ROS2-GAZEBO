@@ -11,7 +11,13 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
-    install_requires=['setuptools'],
+    install_requires=[
+        'setuptools',
+        'rclpy',
+        'std_msgs',
+        'geometry_msgs',
+        'vision_msgs',
+    ],
     zip_safe=True,
     maintainer='Your Name',
     maintainer_email='your@email.com',
@@ -20,6 +26,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'lane_follower = autonomous_nav.lane_follower:main',
             'waypoint_follower = autonomous_nav.waypoint_follower:main',
             'obstacle_avoider = autonomous_nav.obstacle_avoider:main',
         ],

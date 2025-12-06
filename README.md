@@ -1,118 +1,48 @@
-# Kaiju Autonomous Driving Project
+# Autonomous Driving ML with ROS2 & Gazebo
 
-ROS 2 Kilted Kaiju + Gazebo Ionic + ML/Neural Networks for autonomous driving simulation.
+Goal-seeking robot trained with PPO reinforcement learning.
 
-## 🚀 Quick Start
+## Quick Start
 
-### 1. Build the Docker Image (First Time Only)
-
+### 1. Simple Training (Watch the robot learn!)
 ```bash
-chmod +x build.sh run.sh stop.sh
-./build.sh
+# Terminal 1: Launch Gazebo GUI
+source ~/ros2-ml-env/bin/activate
+source ~/PersonalPorjects/Autonomous-driving-ML-ROS2-GAZEBO/install/setup.zsh
+./launch_with_gui.sh
+
+# Terminal 2: Train
+source ~/ros2-ml-env/bin/activate
+python3 train_simple.py
 ```
 
-This will:
-- Create Ubuntu 24.04 container
-- Install ROS 2 Kilted Kaiju
-- Install Gazebo Ionic
-- Install PyTorch and ML dependencies
-
-**Expected time:** 10-15 minutes
-
-### 2. Run the Development Container
-
+### 2. Parallel Training (Maximum Speed!)
 ```bash
-./run.sh
+source ~/ros2-ml-env/bin/activate
+
+# 12 parallel environments (recommended)
+python3 train_parallel.py --num-envs 12 --timesteps 1000000
 ```
 
-This opens a bash shell inside the container.
+## Files
 
-### 3. Build the ROS 2 Workspace (Inside Container)
+**Training:**
+- `train_simple.py` - Single environment training (watch in GUI)
+- `train_parallel.py` - Multi-environment parallel training
+- `goal_seeking_env.py` - Gym environment implementation
 
-```bash
-cd /workspace
-colcon build
-source install/setup.bash
-```
+**Simulation:**
+- `simple_robot.sdf` - Robot model (2-wheel differential drive)
+- `launch_with_gui.sh` - Launch Gazebo with GUI
+- `launch_headless.sh` - Launch Gazebo headless
+- `drive_simple_robot.py` - Manual WASD control
 
-### 4. Test Gazebo
+**Utilities:**
+- `kill_gazebo.sh` - Kill all Gazebo processes
+- `TRAINING_COMMANDS.md` - Full training reference
 
-```bash
-gz sim shapes.sdf
-```
-
-You should see the Gazebo GUI with basic shapes.
-
-### 5. Stop the Container
-
-```bash
-exit  # Exit the container shell
-./stop.sh  # Stop the container
-```
-
----
-
-## 📁 Project Structure
-
-```
-kaiju_ws/
-├── src/                    # ROS 2 packages
-├── datasets/               # ML training datasets
-├── training/               # ML training scripts
-├── build/                  # Build artifacts (in Docker volume)
-├── install/                # Install artifacts (in Docker volume)
-├── log/                    # Build logs (in Docker volume)
-├── Dockerfile              # Container definition
-├── docker-compose.yml      # Container orchestration
-├── build.sh                # Build Docker image
-├── run.sh                  # Run container
-└── stop.sh                 # Stop container
-```
-
----
-
-## 🛠️ Development Workflow
-
-1. **Edit code** on your host machine (in `src/`, `datasets/`, `training/`)
-2. **Build & run** inside the container via `./run.sh`
-3. **Changes persist** - volumes are mounted from host
-
----
-
-## 📦 Installed Software
-
-- **ROS 2 Kilted Kaiju** - Latest rolling release
-- **Gazebo Ionic** - Official simulator for Kilted
-- **PyTorch** - Deep learning framework
-- **Ultralytics (YOLO)** - Object detection
-- **OpenCV** - Computer vision
-- **Nav2** - ROS 2 navigation stack
-
----
-
-## 🐛 Troubleshooting
-
-### Gazebo GUI doesn't appear
-```bash
-# On host, allow Docker X11 access:
-xhost +local:docker
-```
-
-### Permission errors
-```bash
-# Fix workspace permissions:
-sudo chown -R $USER:$USER .
-```
-
-### Container won't start
-```bash
-# Clean rebuild:
-docker compose down -v
-./build.sh
-```
-
----
-
-## 📚 Next Steps
-
-See the project phases in the main documentation.
+## System Requirements
+- ROS 2 Kilted
+- Gazebo Sim
+- CUDA GPU (optional but recommended)
+- 16GB+ RAM for parallel training

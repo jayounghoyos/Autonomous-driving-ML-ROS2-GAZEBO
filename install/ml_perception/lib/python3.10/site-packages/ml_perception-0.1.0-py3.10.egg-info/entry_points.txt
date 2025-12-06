@@ -1,4 +1,0 @@
-[console_scripts]
-lane_detector = ml_perception.lane_detector:main
-yolo_detector = ml_perception.yolo_detector:main
-
