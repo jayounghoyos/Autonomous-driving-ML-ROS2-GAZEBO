@@ -1,60 +1,55 @@
-#!/usr/bin/env python3
-"""
-Test the trained model - watch the robot navigate autonomously
-"""
-import rclpy
-from goal_seeking_env import GoalSeekingEnv
+import gymnasium as gym
 from stable_baselines3 import PPO
+from vision_goal_env import VisionGoalEnv
+import numpy as np
 import time
+import argparse
+import os
 
 def main():
-    print("Loading trained model...")
-    rclpy.init()
-    
-    # Create environment
-    env = GoalSeekingEnv()
-    
-    # Load trained model
-    model = PPO.load('models/parallel_16env_final')
-    print("Model loaded! Starting autonomous navigation...\n")
-    
-    # Run episodes
-    for episode in range(10):
-        obs, _ = env.reset()
-        print(f"\nEpisode {episode + 1}: New goal at distance={obs[0]:.2f}m, angle={obs[1]:.2f}rad")
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model', type=str, default='interrupted_model', help='Path to model (zip)')
+    args = parser.parse_args()
+
+    # Verify model exists
+    model_path = args.model
+    if not model_path.endswith('.zip'):
+        model_path += '.zip'
         
-        done = False
-        step = 0
-        total_reward = 0
-        
-        while not done:
-            # Get action from trained model
+    if not os.path.exists(model_path):
+        print(f"ERROR: Model not found: {model_path}")
+        return
+
+    print(f"Loading Model: {model_path}")
+    
+    # Create Environment
+    env = VisionGoalEnv()
+    
+    # Load Model
+    model = PPO.load(model_path)
+    
+    print("Starting Test Drive...")
+    obs, _ = env.reset()
+    
+    try:
+        while True:
             action, _ = model.predict(obs, deterministic=True)
+            obs, reward, terminated, truncated, _ = env.step(action)
             
-            # Execute action
-            obs, reward, done, _, _ = env.step(action)
-            total_reward += reward
-            step += 1
+            # Print status
+            # vec_vals = [distance, angle, lin_vel, ang_vel]
+            dist = obs['vector'][0]
+            print(f"Dist: {dist:.2f}m | Reward: {reward:.2f} | Action: {action}")
             
-            # Print progress every 20 steps
-            if step % 20 == 0:
-                print(f"  Step {step}: distance={obs[0]:.2f}m, reward={total_reward:.1f}")
-            
-            # Safety timeout
-            if step > 500:
-                print("  Timeout - episode too long")
-                break
-        
-        if total_reward > 90:
-            print(f"  SUCCESS! Goal reached in {step} steps, reward={total_reward:.1f}")
-        else:
-            print(f"  FAILED. Final distance={obs[0]:.2f}m, reward={total_reward:.1f}")
-        
-        time.sleep(2)  # Pause between episodes
-    
-    env.close()
-    rclpy.shutdown()
-    print("\nTest complete!")
+            if terminated or truncated:
+                print("Episode Finished (Collision or Timeout)")
+                obs, _ = env.reset()
+                time.sleep(1) # Pause before restart
+                
+    except KeyboardInterrupt:
+        print("Stopped.")
+    finally:
+        env.close()
 
 if __name__ == '__main__':
     main()

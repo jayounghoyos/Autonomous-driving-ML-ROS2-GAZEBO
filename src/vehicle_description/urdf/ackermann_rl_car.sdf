@@ -4,21 +4,21 @@
 
     <!-- Chassis -->
     <link name="chassis">
-      <pose>0 0 0.3 0 0 0</pose>
+      <pose>0 0 0.18 0 0 0</pose>
 
       <inertial>
-        <mass>50.0</mass>
+        <mass>18.0</mass>
         <inertia>
-          <ixx>5.0</ixx>
-          <iyy>5.0</iyy>
-          <izz>5.0</izz>
+          <ixx>1.8</ixx>
+          <iyy>1.8</iyy>
+          <izz>1.8</izz>
         </inertia>
       </inertial>
 
       <collision name="collision">
         <geometry>
           <box>
-            <size>2.0 1.0 0.4</size>
+            <size>1.2 0.6 0.24</size>
           </box>
         </geometry>
       </collision>
@@ -26,7 +26,7 @@
       <visual name="visual">
         <geometry>
           <box>
-            <size>2.0 1.0 0.4</size>
+            <size>1.2 0.6 0.24</size>
           </box>
         </geometry>
         <material>
@@ -34,6 +34,27 @@
           <diffuse>0.2 0.8 0.2 1.0</diffuse>
         </material>
       </visual>
+
+      <!-- Camera Sensor (Imported from 4-wheel) -->
+      <sensor name='front_camera' type='camera'>
+        <pose>0.7 0 0.2 0 0 0</pose> <!-- Outside front face of chassis -->
+        <camera>
+          <horizontal_fov>1.047</horizontal_fov>
+          <image>
+            <width>84</width>
+            <height>84</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>100</far>
+          </clip>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <visualize>true</visualize>
+        <topic>/camera/image_raw</topic>
+      </sensor>
     </link>
 
     <!-- LiDAR Sensor -->
@@ -93,7 +114,7 @@
 
     <!-- Front Left Steering Hub -->
     <link name="front_left_steering_hub">
-      <pose relative_to="chassis">0.6 0.5 0 0 0 0</pose>
+      <pose relative_to="chassis">0.36 0.3 0 0 0 0</pose>
       <inertial>
         <mass>1.0</mass>
         <inertia>
@@ -112,13 +133,14 @@
         <limit>
           <lower>-0.7</lower>
           <upper>0.7</upper>
+          <effort>10000</effort>
         </limit>
       </axis>
     </joint>
 
     <!-- Front Right Steering Hub -->
     <link name="front_right_steering_hub">
-      <pose relative_to="chassis">0.6 -0.5 0 0 0 0</pose>
+      <pose relative_to="chassis">0.36 -0.3 0 0 0 0</pose>
       <inertial>
         <mass>1.0</mass>
         <inertia>
@@ -137,6 +159,7 @@
         <limit>
           <lower>-0.7</lower>
           <upper>0.7</upper>
+          <effort>10000</effort>
         </limit>
       </axis>
     </joint>
@@ -157,8 +180,8 @@
       <collision name="collision">
         <geometry>
           <cylinder>
-            <radius>0.25</radius>
-            <length>0.15</length>
+            <radius>0.15</radius>
+            <length>0.09</length>
           </cylinder>
         </geometry>
         <surface>
@@ -174,8 +197,8 @@
       <visual name="visual">
         <geometry>
           <cylinder>
-            <radius>0.25</radius>
-            <length>0.15</length>
+            <radius>0.15</radius>
+            <length>0.09</length>
           </cylinder>
         </geometry>
         <material>
@@ -209,8 +232,8 @@
       <collision name="collision">
         <geometry>
           <cylinder>
-            <radius>0.25</radius>
-            <length>0.15</length>
+            <radius>0.15</radius>
+            <length>0.09</length>
           </cylinder>
         </geometry>
         <surface>
@@ -226,8 +249,8 @@
       <visual name="visual">
         <geometry>
           <cylinder>
-            <radius>0.25</radius>
-            <length>0.15</length>
+            <radius>0.15</radius>
+            <length>0.09</length>
           </cylinder>
         </geometry>
         <material>
@@ -247,7 +270,7 @@
 
     <!-- Rear Left Wheel -->
     <link name="rear_left_wheel">
-      <pose relative_to="chassis">-0.6 0.5 0 -1.5708 0 0</pose>
+      <pose relative_to="chassis">-0.36 0.3 0 -1.5708 0 0</pose>
 
       <inertial>
         <mass>2.0</mass>
@@ -261,8 +284,8 @@
       <collision name="collision">
         <geometry>
           <cylinder>
-            <radius>0.25</radius>
-            <length>0.15</length>
+            <radius>0.15</radius>
+            <length>0.09</length>
           </cylinder>
         </geometry>
         <surface>
@@ -278,8 +301,8 @@
       <visual name="visual">
         <geometry>
           <cylinder>
-            <radius>0.25</radius>
-            <length>0.15</length>
+            <radius>0.15</radius>
+            <length>0.09</length>
           </cylinder>
         </geometry>
         <material>
@@ -299,7 +322,7 @@
 
     <!-- Rear Right Wheel -->
     <link name="rear_right_wheel">
-      <pose relative_to="chassis">-0.6 -0.5 0 -1.5708 0 0</pose>
+      <pose relative_to="chassis">-0.36 -0.3 0 -1.5708 0 0</pose>
 
       <inertial>
         <mass>2.0</mass>
@@ -313,8 +336,8 @@
       <collision name="collision">
         <geometry>
           <cylinder>
-            <radius>0.25</radius>
-            <length>0.15</length>
+            <radius>0.15</radius>
+            <length>0.09</length>
           </cylinder>
         </geometry>
         <surface>
@@ -330,8 +353,8 @@
       <visual name="visual">
         <geometry>
           <cylinder>
-            <radius>0.25</radius>
-            <length>0.15</length>
+            <radius>0.15</radius>
+            <length>0.09</length>
           </cylinder>
         </geometry>
         <material>
@@ -349,20 +372,25 @@
       </axis>
     </joint>
 
+    <!-- Sensors System (Required for Camera & LiDAR) -->
+    <plugin filename="gz-sim-sensors-system"
+      name="gz::sim::systems::Sensors">
+    </plugin>
+
     <!-- Ackermann Steering Plugin -->
     <plugin
       filename="gz-sim-ackermann-steering-system"
       name="gz::sim::systems::AckermannSteering">
       <left_joint>rear_left_wheel_joint</left_joint>
       <right_joint>rear_right_wheel_joint</right_joint>
-      <left_steering_joint>front_right_steering_joint</left_steering_joint>
-      <right_steering_joint>front_left_steering_joint</right_steering_joint>
-      <wheel_base>1.2</wheel_base>
-      <wheel_separation>1.0</wheel_separation>
+      <left_steering_joint>front_left_steering_joint</left_steering_joint>
+      <right_steering_joint>front_right_steering_joint</right_steering_joint>
+      <wheel_base>0.72</wheel_base>
+      <wheel_separation>0.6</wheel_separation>
       <steering_limit>0.7</steering_limit>
-      <wheel_radius>0.25</wheel_radius>
-      <min_velocity>-3.0</min_velocity>
-      <max_velocity>3.0</max_velocity>
+      <wheel_radius>0.15</wheel_radius>
+      <min_velocity>-2.0</min_velocity>
+      <max_velocity>2.0</max_velocity>
       <min_acceleration>-2.0</min_acceleration>
       <max_acceleration>2.0</max_acceleration>
       <topic>/cmd_vel</topic>

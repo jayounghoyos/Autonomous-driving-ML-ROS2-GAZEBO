@@ -98,7 +98,7 @@
     </model>
     
     <model name="obstacle_3">
-      <pose>4 0 0.75 0 0 0</pose>
+      <pose>4 3 0.75 0 0 0</pose>
       <static>true</static>
       <link name="link">
         <collision name="collision">
@@ -134,6 +134,69 @@
           <material>
             <ambient>1 0 0 1</ambient>
             <diffuse>1 0 0 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    
+    <model name="obstacle_4_blocking">
+      <pose>2.5 0 0.5 0 0 0</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <cylinder><radius>0.4</radius><length>1.0</length></cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder><radius>0.4</radius><length>1.0</length></cylinder>
+          </geometry>
+          <material>
+            <ambient>0.8 0 0 1</ambient>
+            <diffuse>0.8 0 0 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    
+    <model name="obstacle_5_clutter">
+      <pose>1.5 1.5 0.5 0 0 0.7</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>0.5 0.5 1</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>0.5 0.5 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.5 0 0.5 1</ambient>
+            <diffuse>0.5 0 0.5 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="obstacle_6_clutter">
+      <pose>3.5 -1.2 0.5 0 0 -0.5</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>0.7 0.7 1</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>0.7 0.7 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.5 0 0 1</ambient>
+            <diffuse>0.5 0 0 1</diffuse>
           </material>
         </visual>
       </link>
