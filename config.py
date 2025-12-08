@@ -52,14 +52,43 @@ class RewardConfig:
     COLLISION_DISTANCE = 0.25     # Meters (LiDAR min)
     LIDAR_RAYS = 16               # Number of rays for observation
     
-    # Boundary / Geo-fence (Keep robot in play area)
-    BOUNDARY_X = (-10.0, 10.0)
-    BOUNDARY_Y = (-10.0, 10.0)
-    OUT_OF_BOUNDS_PENALTY = 100.0
+    # Boundary Settings (Raceway)
+    # BOUNDARY_X = (-300.0, 300.0) 
+    # BOUNDARY_Y = (-150.0, 150.0)
     
-    # Randomization
-    GOAL_X_RANGE = (3.0, 7.0)
-    GOAL_Y_RANGE = (-2.0, 2.0)
+    # Boundary Settings (Raceway)
+    # BOUNDARY_X = (-300.0, 300.0) 
+    # BOUNDARY_Y = (-150.0, 150.0)
+    
+    # Boundary Settings (Gymkhana/Warehouse)
+    BOUNDARY_X = (-50.0, 50.0)
+    BOUNDARY_Y = (-50.0, 50.0)
+    OUT_OF_BOUNDS_PENALTY = -100.0
+
+    # Goal Settings
+    GOAL_REACH_DISTANCE = 1.0 
+    COLLISION_PENALTY = -50.0
+    TIME_PENALTY = -0.05
+    GOAL_REWARD = 100.0
+    
+    # Random Goal Spawn Range
+    GOAL_X_RANGE = (-5.0, 40.0) # Covering most of the gymkhana track
+    GOAL_Y_RANGE = (-20.0, 20.0)
+    
+    # Waypoint System (Raceway Mode - 38 Degree Right Turn)
+    # Path: Diagonally Right (Angle -38 deg)
+    # Gymkhana Waypoints (Progressive Obstacle Course)
+    WAYPOINTS = [
+        (0.0, 0.0),        # Start
+        (10.0, 0.0),       # WP1: After slalom (Easy)
+        (28.0, 0.0),       # WP2: Through narrow passage (Medium)
+        (40.0, 0.0),       # WP3: Through box maze (Hard)
+        (52.0, 0.0),       # Goal: Final sprint
+    ]
+    
+    WAYPOINT_RADIUS = 3.0  # Reduced radius for tighter room tracking
+    WAYPOINT_REWARD = 50.0
+    LAP_COMPLETION_BONUS = 500.0
 
 class TrainingConfig:
     # PPO Hyperparameters
