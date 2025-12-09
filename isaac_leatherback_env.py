@@ -209,20 +209,41 @@ class LeatherbackEnv(gym.Env):
             )
             self.camera.initialize()
             
+            # Setup LiDAR
+            from omni.isaac.sensor import LidarRtx
+            # Generic Rotary Lidar
+            # FIX: Removed config_config_name which caused crash. Using basic params.
+            # Generic Rotary Lidar
+            # FIX: Removed config_config_name which caused crash. Using basic params.
+            # FIX 2: Parent to Chassis so it moves with the robot!
+            self.lidar = LidarRtx(
+                prim_path="/World/Leatherback/Rigid_Bodies/Chassis/Lidar",
+                name="lidar",
+                position=np.array([0.0, 0.0, 1.2]), # Roof Top relative to Chassis
+                orientation=np.array([1.0, 0.0, 0.0, 0.0]), # Standard Z-up
+            )
+            self.lidar.initialize()
+            # ENABLE DATA STREAM
+            self.lidar.add_range_data_to_frame()
+            self.lidar.enable_visualization()
+            
             # Define observation space
-            # We use a Dict space for Multi-Input Policy (Image + Vector)
+            # We use a Dict space for Multi-Input Policy (Image + Vector + Lidar)
             self.observation_space = spaces.Dict({
                 "image": spaces.Box(low=0, high=255, shape=(64, 64, 3), dtype=np.uint8),
-                "vector": spaces.Box(low=-np.inf, high=np.inf, shape=(5,), dtype=np.float32)
+                "vector": spaces.Box(low=-np.inf, high=np.inf, shape=(5,), dtype=np.float32),
+                "lidar": spaces.Box(low=0.0, high=100.0, shape=(360,), dtype=np.float32)
             })
         else:
             self.camera = None
-            # Standard vector space if no camera
+            self.lidar = None
+            # Standard vector space if no camera/lidar
             # But to keep code simple we'll still use Dict or just array?
-            # Let's stick to Dict but image will be zeros
+            # Let's stick to Dict but image/lidar will be zeros
             self.observation_space = spaces.Dict({
                 "image": spaces.Box(low=0, high=255, shape=(64, 64, 3), dtype=np.uint8),
-                "vector": spaces.Box(low=-np.inf, high=np.inf, shape=(5,), dtype=np.float32)
+                "vector": spaces.Box(low=-np.inf, high=np.inf, shape=(5,), dtype=np.float32),
+                "lidar": spaces.Box(low=0.0, high=100.0, shape=(360,), dtype=np.float32)
             })
 
         # Define action space
@@ -362,9 +383,42 @@ class LeatherbackEnv(gym.Env):
                 except Exception as e:
                     print(f"Warning: Failed to process camera image: {e}. Shape: {rgba.shape}")
         
+        # Get LiDAR data
+        lidar_data = np.zeros(360, dtype=np.float32)
+        if self.lidar:
+             try:
+                 # Standard Replicator/RtxLidar Pattern:
+                 # 1. We called add_range_data_to_frame() in init
+                 # 2. We get the full frame dictionary here
+                 frame = self.lidar.get_current_frame()
+                 
+                 # Extract 'range' data if it exists
+                 # Keys are usually "range" or "linear_depth" depending on what we added
+                 raw_data = None
+                 if "range" in frame: # Standard key for add_range_data_to_frame
+                     raw_data = frame["range"]
+                 elif "depth" in frame:
+                     raw_data = frame["depth"]
+                     
+                 if raw_data is not None and raw_data.size > 0:
+                     if raw_data.size != 360:
+                         indices = np.linspace(0, raw_data.size - 1, 360, dtype=int)
+                         lidar_data = raw_data[indices]
+                     else:
+                         lidar_data = raw_data
+                 
+                 # Normalize
+                 lidar_data = np.clip(lidar_data, 0.0, 20.0)
+                 
+             except Exception as e:
+                 # Silent fail after initial debug
+                 # print(f"Warning: LiDAR Read Failed: {e}")
+                 pass 
+        
         return {
             "image": image,
-            "vector": vector_obs
+            "vector": vector_obs,
+            "lidar": lidar_data
         }
     
     def _apply_action(self, throttle, steering):
@@ -418,8 +472,15 @@ class LeatherbackEnv(gym.Env):
         super().reset(seed=seed)
         
         # Reset robot to origin using Articulation API
-        # Spawn at 0.05m: Very low to minimize drop impact test
-        self.robot.set_world_pose(position=np.array([0.0, 0.0, 0.05]), orientation=np.array([1.0, 0.0, 0.0, 0.0]))
+        # Randomize Yaw (Rotation around Z)
+        import scipy.spatial.transform as transform
+        random_yaw = np.random.uniform(0, 2 * np.pi)
+        # Euler to Quaternion (w, x, y, z)
+        # For simple rotation around Z: w=cos(theta/2), z=sin(theta/2)
+        random_ori = np.array([np.cos(random_yaw/2), 0, 0, np.sin(random_yaw/2)])
+        
+        # Spawn at 0.05m but with random rotation
+        self.robot.set_world_pose(position=np.array([0.0, 0.0, 0.05]), orientation=random_ori)
         
         # Zero out velocities for controlled joints
         all_indices = self.throttle_indices + self.steering_indices
