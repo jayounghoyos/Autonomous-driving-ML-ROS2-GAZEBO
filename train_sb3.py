@@ -8,6 +8,7 @@ import torch
 # Import our custom environment
 from isaac_leatherback_env import LeatherbackEnv
 
+
 def main():
     print("Starting Training with Stable Baselines 3...")
     
@@ -15,8 +16,7 @@ def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Training on: {device}")
     
-    # Create Environment
-    # Headless for faster training
+    # Create the environment matching the Gym API
     env = LeatherbackEnv(headless=True, use_camera=True)
     
     # Wrap in DummyVecEnv (SB3 requires this for performance/vectorization)

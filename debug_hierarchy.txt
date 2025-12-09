@@ -1,0 +1,1687 @@
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+Starting Training with Stable Baselines 3...
+Training on: cuda
+Initializing Leatherback environment (Headless=True, Camera=True)...
+Starting kit application with the following args:  ['/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/exts/isaacsim.simulation_app/isaacsim/simulation_app/simulation_app.py', '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/apps/isaacsim.exp.base.python.kit', '--/app/tokens/exe-path=/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit', '--/persistent/app/viewport/displayOptions=3094', '--/rtx/materialDb/syncLoads=True', '--/rtx/hydra/materialSyncLoads=True', '--/omni.kit.plugin/syncUsdLoads=True', '--/app/renderer/resolution/width=1280', '--/app/renderer/resolution/height=720', '--/app/window/width=1440', '--/app/window/height=900', '--/renderer/multiGpu/enabled=True', '--/app/fastShutdown=True', '--/app/installSignalHandlers=0', '--ext-folder', '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/exts', '--ext-folder', '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/apps', '--/physics/cudaDevice=0', '--/plugins/carb.tasking.plugin/threadCount=16', '--/plugins/omni.tbb.globalcontrol/maxThreadCount=16', '--portable', '--no-window', '--/app/window/hideUi=1']
+Passing the following args to the base kit application:  []
+[Info] [carb] Logging to file: /home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/logs/Kit/Isaac-Sim Python/5.0/kit_20251208_180943.log
+2025-12-08T23:09:43Z [0ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/91ffff95-81c5-4598-ea1a7bb2-5df07751.dmp'
+2025-12-08T23:09:43Z [1ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/ff44b338-a9d7-4e78-cd0700bb-fc169333.dmp'
+2025-12-08T23:09:43Z [2ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/ef7b2ee5-1a16-4b4e-88d0d0ab-ebc69c3b.dmp'
+2025-12-08T23:09:43Z [2ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/8f812a25-1e62-4b95-81944a9e-4c977b0b.dmp'
+2025-12-08T23:09:43Z [2ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/9670d88c-174d-4d9f-8e93f89a-3cde7c25.dmp'
+2025-12-08T23:09:43Z [2ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/722668bc-26ae-49e4-0788a2a4-7e61ef0f.dmp'
+2025-12-08T23:09:43Z [3ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/1969af3b-b43e-4a88-8c72a196-3f4f9e05.dmp'
+2025-12-08T23:09:43Z [3ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/0c89fb58-a3a2-44ab-044b24a0-53189acd.dmp'
+2025-12-08T23:09:43Z [3ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/49adb4e3-d07e-46c0-100980a2-6d820cf1.dmp'
+2025-12-08T23:09:43Z [4ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/810a9d84-0112-4e79-76d85cb5-82998631.dmp'
+2025-12-08T23:09:43Z [4ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/c965edab-5e9d-4f1f-587d2d9c-b22fe6b7.dmp'
+2025-12-08T23:09:43Z [4ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/13afe067-edda-4b17-18a6c484-615b38f2.dmp'
+2025-12-08T23:09:43Z [5ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/a075afbf-de48-4fc8-5197e487-1b2d5291.dmp'
+2025-12-08T23:09:43Z [6ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/1ff2d087-d593-4aec-9011c481-f967da6c.dmp'
+2025-12-08T23:09:43Z [6ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/d9194510-b0bf-4f2d-2f98a0aa-1cb7dca2.dmp'
+2025-12-08T23:09:43Z [7ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/4db7f615-08fc-4851-9266e587-4830195a.dmp'
+[0.041s] [ext: omni.kit.async_engine-0.0.3] startup
+[0.439s] [ext: omni.metrics.core-0.0.3] startup
+[0.439s] [ext: omni.client.lib-1.1.0] startup
+[0.452s] [ext: omni.blobkey-1.1.2] startup
+[0.452s] [ext: omni.stats-1.0.1] startup
+[0.452s] [ext: omni.datastore-0.0.0] startup
+[0.457s] [ext: omni.client-1.3.0] startup
+[0.512s] [ext: omni.ujitso.default-1.0.0] startup
+[0.514s] [ext: omni.hsscclient-1.1.2] startup
+[0.517s] [ext: omni.gpu_foundation.shadercache.vulkan-1.0.0] startup
+[0.519s] [ext: omni.assets.plugins-0.0.0] startup
+[0.520s] [ext: omni.gpu_foundation-0.0.0] startup
+[0.526s] [ext: carb.windowing.plugins-1.0.0] startup
+[0.533s] [ext: omni.kit.renderer.init-0.0.0] startup
+
+|---------------------------------------------------------------------------------------------|
+| Driver Version: 580.95.05     | Graphics API: Vulkan
+|=============================================================================================|
+| GPU | Name                             | Active | LDA | GPU Memory | Vendor-ID | LUID       |
+|     |                                  |        |     |            | Device-ID | UUID       |
+|     |                                  |        |     |            | Bus-ID    |            |
+|---------------------------------------------------------------------------------------------|
+| 0   | NVIDIA GeForce RTX 5060 Ti       | Yes: 0 |     | 16311   MB | 10de      | 0          |
+|     |                                  |        |     |            | 2d04      | 0b2ad9dd.. |
+|     |                                  |        |     |            | 1         |            |
+|=============================================================================================|
+| OS: 24.04.3 LTS (Noble Numbat) ubuntu, Version: 24.04.3, Kernel: 6.14.0-36-generic
+| XServer Vendor: The X.Org Foundation, XServer Version: 12101011 (1.21.1.11)
+| Processor: AMD Ryzen 7 8700F 8-Core Processor
+| Cores: 8 | Logical Cores: 16
+|---------------------------------------------------------------------------------------------|
+| Total Memory (MB): 31647 | Free Memory: 22245
+| Total Page/Swap (MB): 8191 | Free Page/Swap: 5973
+|---------------------------------------------------------------------------------------------|
+2025-12-08T23:09:44Z [1,069ms] [Warning] [gpu.foundation.plugin] PCIe link width current (8) and maximum (16) for device 0 don't match.
+2025-12-08T23:09:44Z [1,069ms] [Warning] [gpu.foundation.plugin] IOMMU is enabled.
+[1.224s] [ext: omni.kit.pipapi-0.0.0] startup
+[1.225s] [ext: omni.kit.pip_archive-0.0.0] startup
+[1.226s] [ext: omni.materialx.libs-1.0.7] startup
+[1.232s] [ext: omni.pip.compute-1.6.2] startup
+[1.232s] [ext: omni.usd.config-1.0.6] startup
+[1.235s] [ext: omni.gpucompute.plugins-0.0.0] startup
+[1.235s] [ext: omni.usd.libs-1.0.1] startup
+[1.300s] [ext: omni.mdl-56.0.3] startup
+[1.318s] [ext: omni.iray.libs-0.0.0] startup
+[1.323s] [ext: omni.mdl.neuraylib-0.2.12] startup
+[1.325s] [ext: omni.kit.usd.mdl-1.1.4] startup
+[1.397s] [ext: omni.pip.cloud-1.3.6] startup
+[1.400s] [ext: omni.isaac.core_archive-2.6.1] startup
+[1.400s] [ext: omni.kit.telemetry-0.5.2] startup
+[1.432s] [ext: omni.kit.loop-isaac-1.3.7] startup
+[1.434s] [ext: omni.kit.test-2.0.1] startup
+[1.459s] [ext: omni.isaac.ml_archive-3.0.2] startup
+[1.459s] [ext: omni.appwindow-1.1.10] startup
+[1.461s] [ext: omni.kit.renderer.core-1.1.0] startup
+[2.374s] [ext: omni.kit.renderer.capture-0.0.0] startup
+[2.376s] [ext: omni.kit.renderer.imgui-2.0.5] startup
+[2.655s] [ext: omni.ui-2.26.18] startup
+[2.663s] [ext: omni.kit.mainwindow-1.0.3] startup
+[2.664s] [ext: carb.audio-0.1.0] startup
+[2.669s] [ext: omni.uiaudio-1.0.0] startup
+[2.670s] [ext: omni.kit.uiapp-0.0.0] startup
+[2.670s] [ext: omni.usd.schema.metrics.assembler-107.3.1] startup
+[2.672s] [ext: omni.usd.schema.anim-0.0.0] startup
+[2.687s] [ext: omni.usd.schema.omnigraph-1.0.0] startup
+[2.691s] [ext: omni.usd.schema.geospatial-0.0.0] startup
+[2.693s] [ext: omni.anim.graph.schema-107.3.0] startup
+[2.697s] [ext: omni.usd.schema.audio-0.0.0] startup
+[2.700s] [ext: omni.usd.schema.semantics-0.0.0] startup
+[2.701s] [ext: omni.usd_resolver-1.0.0] startup
+[2.704s] [ext: usdrt.scenegraph-7.6.1] startup
+[2.733s] [ext: omni.kit.actions.core-1.0.0] startup
+[2.735s] [ext: omni.timeline-1.0.14] startup
+[2.736s] [ext: omni.usd.core-1.5.3] startup
+[2.738s] [ext: omni.resourcemonitor-107.0.1] startup
+[2.740s] [ext: omni.activity.core-1.0.3] startup
+[2.741s] [ext: omni.kit.audiodeviceenum-1.0.2] startup
+[2.742s] [ext: omni.hydra.usdrt_delegate-7.5.1] startup
+[2.747s] [ext: omni.graph.exec-0.9.6] startup
+[2.748s] [ext: omni.kit.window.popup_dialog-2.0.24] startup
+[2.751s] [ext: omni.kit.exec.core-0.13.4] startup
+[2.752s] [ext: omni.kit.widget.nucleus_connector-2.0.1] startup
+[2.754s] [ext: omni.kit.usd_undo-0.1.8] startup
+[2.754s] [ext: omni.kit.commands-1.4.10] startup
+[2.757s] [ext: omni.hydra.scene_delegate-0.3.4] startup
+[2.760s] [ext: omni.usd-1.13.10] startup
+2025-12-08T23:09:45Z [2,774ms] [Warning] [omni.usd.audio] failed to subscribe to stage events
+[2.795s] [ext: omni.inspect-1.0.2] startup
+[2.796s] [ext: omni.kit.notification_manager-1.0.10] startup
+[2.797s] [ext: omni.graph.core-2.184.3] startup
+[2.799s] [ext: isaacsim.core.deprecation_manager-0.2.7] startup
+[2.800s] [ext: omni.usd.schema.omniscripting-1.0.0] startup
+[2.803s] [ext: omni.usd.schema.isaac-3.0.5] startup
+[2.803s] [ext: isaacsim.robot.schema-3.5.1] startup
+[2.809s] [ext: omni.usd.schema.omni_sensors-0.0.0] startup
+[2.810s] [ext: omni.usd.schema.omni_lens_distortion-0.0.0] startup
+[2.810s] [ext: omni.anim.navigation.schema-107.3.0] startup
+[2.813s] [ext: omni.usd.schema.physx-107.3.18] startup
+[2.841s] [ext: omni.usd.schema.flow-107.1.1] startup
+[2.841s] [ext: omni.usd.schema.render_settings.rtx-0.0.0] startup
+[2.842s] [ext: omni.kit.asset_converter-4.1.4] startup
+[2.851s] [ext: omni.convexdecomposition-107.3.18] startup
+[2.853s] [ext: omni.graph.tools-1.79.2] startup
+[2.873s] [ext: omni.physx.foundation-107.3.18] startup
+[2.875s] [ext: omni.kvdb-107.3.18] startup
+[2.876s] [ext: omni.graph.action_core-1.1.7] startup
+[2.877s] [ext: omni.graph-1.141.2] startup
+[2.914s] [ext: omni.usdphysics-107.3.18] startup
+[2.916s] [ext: omni.localcache-107.3.18] startup
+[2.917s] [ext: omni.kit.menu.core-1.1.2] startup
+[2.918s] [ext: omni.kit.widget.path_field-2.0.11] startup
+[2.919s] [ext: omni.kit.widget.options_menu-1.1.6] startup
+[2.922s] [ext: omni.kit.widget.context_menu-1.2.5] startup
+[2.923s] [ext: omni.kit.widget.browser_bar-2.0.10] startup
+[2.924s] [ext: omni.kit.clipboard-1.0.5] startup
+[2.925s] [ext: omni.kit.widget.options_button-1.0.3] startup
+[2.925s] [ext: omni.kit.helper.file_utils-0.1.9] startup
+[2.927s] [ext: omni.kit.usd.layers-2.2.10] startup
+[2.933s] [ext: omni.kit.menu.utils-2.0.3] startup
+[2.939s] [ext: omni.ui.scene-1.11.4] startup
+[2.943s] [ext: omni.kit.widget.filebrowser-2.12.2] startup
+[2.947s] [ext: omni.kit.stage_template.core-1.1.22] startup
+[2.948s] [ext: omni.kit.primitive.mesh-1.0.17] startup
+[2.951s] [ext: omni.kit.window.filepicker-2.13.3] startup
+[2.960s] [ext: omni.kit.stage_templates-2.0.0] startup
+[2.962s] [ext: omni.graph.action_nodes-1.50.4] startup
+[2.966s] [ext: omni.physx.cooking-107.3.18] startup
+[2.970s] [ext: omni.warp.core-1.7.1] startup
+[3.121s] [ext: omni.usd.metrics.assembler-107.3.1] startup
+[3.125s] [ext: omni.physx-107.3.18] startup
+[3.139s] [ext: omni.physics-107.3.18] startup
+[3.146s] [ext: isaacsim.core.experimental.utils-0.2.0] startup
+[3.150s] [ext: omni.graph.action-1.130.0] startup
+[3.151s] [ext: omni.kit.manipulator.viewport-107.0.1] startup
+[3.153s] [ext: omni.physics.physx-107.3.18] startup
+[3.155s] [ext: omni.physics.stageupdate-107.3.18] startup
+[3.156s] [ext: omni.kit.numpy.common-0.1.2] startup
+[3.158s] [ext: omni.kit.property.adapter.core-1.0.2] startup
+[3.160s] [ext: isaacsim.test.docstring-1.1.0] startup
+[3.163s] [ext: omni.isaac.dynamic_control-2.0.7] startup
+2025-12-08T23:09:46Z [3,154ms] [Warning] [omni.isaac.dynamic_control] omni.isaac.dynamic_control is deprecated as of Isaac Sim 4.5. No action is needed from end-users.
+[3.167s] [ext: omni.hydra.rtx.shadercache.vulkan-1.0.0] startup
+[3.169s] [ext: omni.hydra.engine.stats-1.0.3] startup
+[3.171s] [ext: omni.physics.tensors-107.3.18] startup
+[3.175s] [ext: omni.index.libs-380600.5717.0] startup
+[3.176s] [ext: omni.volume-0.5.2] startup
+[3.178s] [ext: omni.ujitso.client-0.0.0] startup
+[3.178s] [ext: omni.index-1.0.1] startup
+[3.179s] [ext: omni.usd.metrics.assembler.physics-107.3.18] startup
+[3.180s] [ext: omni.hydra.rtx-1.0.0] startup
+2025-12-08T23:09:46Z [3,182ms] [Warning] [omni.log] Source: omni.hydra was already registered.
+[3.209s] [ext: omni.kit.viewport.registry-104.0.6] startup
+[3.210s] [ext: omni.kit.viewport.legacy_gizmos-1.0.18] startup
+[3.212s] [ext: omni.kit.raycast.query-1.1.0] startup
+[3.216s] [ext: omni.kit.context_menu-1.8.6] startup
+[3.218s] [ext: omni.kit.viewport.scene_camera_model-1.0.6] startup
+[3.221s] [ext: omni.kit.hydra_texture-1.4.5] startup
+[3.224s] [ext: omni.kit.window.file_importer-1.1.18] startup
+[3.226s] [ext: isaacsim.core.version-2.0.6] startup
+[3.227s] [ext: omni.kit.window.drop_support-1.0.5] startup
+[3.228s] [ext: omni.kit.widget.viewport-107.1.3] startup
+[3.231s] [ext: omni.kit.material.library-2.0.7] startup
+[3.235s] [ext: isaacsim.storage.native-1.2.8] startup
+[3.237s] [ext: omni.kit.viewport.window-107.0.12] startup
+[3.253s] [ext: omni.physx.tensors-107.3.18] startup
+[3.257s] [ext: isaacsim.core.utils-3.4.5] startup
+[3.259s] [ext: omni.kit.viewport.utility-1.1.2] startup
+[3.261s] [ext: omni.kit.menu.create-2.0.1] startup
+[3.263s] [ext: isaacsim.core.simulation_manager-1.3.2] startup
+[3.463s] [ext: omni.graph.visualization.nodes-2.1.3] startup
+[3.469s] [ext: omni.kit.property.adapter.usd-1.0.2] startup
+[3.471s] [ext: omni.kit.property.adapter.fabric-1.0.3] startup
+[3.475s] [ext: omni.kit.widget.searchable_combobox-1.0.6] startup
+[3.477s] [ext: omni.kit.usd.collect-2.4.5] startup
+[3.481s] [ext: omni.kit.window.file_exporter-1.0.33] startup
+[3.483s] [ext: omni.kit.hotkeys.core-1.3.10] startup
+[3.485s] [ext: omni.kit.widget.highlight_label-1.0.3] startup
+[3.485s] [ext: omni.kit.window.file-2.0.5] startup
+[3.488s] [ext: omni.kit.widget.searchfield-1.1.8] startup
+[3.489s] [ext: omni.kit.widget.filter-1.1.4] startup
+[3.490s] [ext: omni.kit.window.content_browser_registry-0.0.6] startup
+[3.491s] [ext: omni.kit.widget.stage_icons-1.0.8] startup
+[3.492s] [ext: omni.kit.widget.stage-3.1.4] startup
+[3.502s] [ext: omni.kit.window.property-1.12.1] startup
+[3.504s] [ext: omni.kit.window.content_browser-3.1.1] startup
+[3.513s] [ext: omni.kit.window.stage-2.6.1] startup
+[3.516s] [ext: omni.kit.property.usd-4.5.11] startup
+[3.525s] [ext: omni.ui_query-1.1.8] startup
+[3.526s] [ext: omni.kit.widget.prompt-1.0.7] startup
+[3.527s] [ext: omni.kit.ui_test-1.3.6] startup
+[3.529s] [ext: omni.kit.tool.collect-2.2.18] startup
+[3.531s] [ext: omni.kit.scripting-107.3.1] startup
+[3.534s] [ext: isaacsim.core.experimental.prims-0.6.2] startup
+[3.555s] [ext: omni.kit.widget.zoombar-1.0.6] startup
+[3.558s] [ext: omni.kit.window.extensions-1.4.26] startup
+[3.563s] [ext: isaacsim.replicator.behavior-1.1.14] startup
+[3.564s] [ext: isaacsim.core.experimental.objects-0.2.4] startup
+[3.567s] [ext: omni.kit.browser.core-2.3.13] startup
+[3.572s] [ext: omni.kit.usdz_export-1.0.9] startup
+[3.575s] [ext: omni.kit.menu.stage-1.2.7] startup
+[3.576s] [ext: omni.kit.browser.folder.core-1.10.9] startup
+[3.580s] [ext: omni.kit.tool.asset_importer-4.3.2] startup
+[3.584s] [ext: isaacsim.gui.components-1.1.9] startup
+[3.587s] [ext: isaacsim.examples.browser-0.1.12] startup
+[3.591s] [ext: isaacsim.asset.importer.urdf-2.4.19] startup
+[3.638s] [ext: isaacsim.simulation_app-2.9.2] startup
+[3.639s] [ext: omni.graph.ui_nodes-1.50.5] startup
+[3.647s] [ext: omni.isaac.kit-2.0.6] startup
+2025-12-08T23:09:46Z [3,635ms] [Warning] [omni.isaac.kit] omni.isaac.kit has been deprecated in favor of isaacsim.simulation_app. Please update your code accordingly.
+[3.648s] [ext: omni.kit.widget.graph-2.0.0] startup
+[3.656s] [ext: omni.graph.image.core-0.6.1] startup
+[3.656s] [ext: omni.kit.widget.settings-1.2.3] startup
+[3.659s] [ext: omni.kit.graph.delegate.default-1.2.2] startup
+[3.660s] [ext: omni.graph.image.nodes-1.3.1] startup
+[3.661s] [ext: omni.kit.window.preferences-1.8.0] startup
+[3.674s] [ext: omni.kit.graph.editor.core-1.5.3] startup
+[3.678s] [ext: omni.kit.graph.usd.commands-1.3.1] startup
+[3.680s] [ext: omni.graph.nodes-1.170.10] startup
+[3.688s] [ext: omni.kit.viewport.menubar.core-107.1.5] startup
+[3.700s] [ext: omni.kit.widget.material_preview-1.0.16] startup
+[3.702s] [ext: omni.videoencoding-0.1.2] startup
+[3.703s] [ext: isaacsim.core.prims-0.5.1] startup
+[3.717s] [ext: omni.warp-1.7.1] startup
+[3.723s] [ext: omni.syntheticdata-0.6.13] startup
+[3.748s] [ext: omni.kit.window.material_graph-1.8.23] startup
+[3.822s] [ext: omni.graph.scriptnode-1.50.0] startup
+[3.824s] [ext: isaacsim.core.api-4.6.10] startup
+[3.837s] [ext: omni.replicator.core-1.12.16] startup
+2025-12-08T23:09:47Z [3,833ms] [Warning] [pxr.Semantics] pxr.Semantics is deprecated - please use Semantics instead
+Warp CUDA error: Failed to get driver entry point 'cuDeviceGetUuid' (CUDA error 1)
+Warp CUDA error: Function cuDeviceGetUuid_f: a suitable driver entry point was not found
+Warp CUDA error 36: API call is not supported in the installed CUDA driver (in function cuda_init, /builds/omniverse/warp/warp/native/warp.cu:277)
+Warp 1.7.1 initialized:
+   CUDA Toolkit 12.8, Driver 13.0
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 5060 Ti" (15 GiB, sm_120, mempool enabled)
+   Kernel cache:
+     /home/jayoungh/.cache/warp/1.7.1
+2025-12-08T23:09:47Z [3,918ms] [Warning] [omni.replicator.core.scripts.extension] No material configuration file, adding configuration to material settings directly.
+[3.933s] [ext: isaacsim.robot_motion.lula-4.0.8] startup
+[3.941s] [ext: isaacsim.robot.surface_gripper-3.2.6] startup
+[3.945s] [ext: isaacsim.core.nodes-3.2.16] startup
+[3.958s] [ext: isaacsim.robot_motion.motion_generation-8.0.25] startup
+[3.989s] [ext: isaacsim.robot.manipulators-3.3.5] startup
+[4.009s] [ext: omni.isaac.core_nodes-2.0.6] startup
+2025-12-08T23:09:47Z [4,000ms] [Warning] [omni.isaac.core_nodes] omni.isaac.core_nodes has been deprecated in favor of isaacsim.core.nodes. Please update your code accordingly.
+[4.018s] [ext: isaacsim.robot.manipulators.examples-1.0.17] startup
+[4.022s] [ext: omni.kit.property.audio-1.0.16] startup
+[4.029s] [ext: isaacsim.cortex.framework-1.0.12] startup
+[4.032s] [ext: omni.kit.property.camera-1.0.10] startup
+[4.045s] [ext: omni.hydra.scene_api-0.1.2] startup
+[4.051s] [ext: omni.kit.property.geometry-2.0.4] startup
+[4.062s] [ext: omni.kit.property.light-1.0.12] startup
+[4.073s] [ext: isaacsim.cortex.behaviors-2.0.12] startup
+[4.079s] [ext: omni.kit.property.material-1.11.9] startup
+[4.191s] [ext: omni.kit.property.transform-1.5.12] startup
+[4.209s] [ext: omni.kit.property.render-1.2.1] startup
+[4.231s] [ext: omni.isaac.cortex-1.0.5] startup
+2025-12-08T23:09:47Z [4,235ms] [Warning] [omni.isaac.cortex] omni.isaac.cortex has been deprecated in favor of isaacsim.cortex.framework. Please update your code accordingly.
+[4.248s] [ext: omni.isaac.cortex.sample_behaviors-2.0.5] startup
+2025-12-08T23:09:47Z [4,250ms] [Warning] [omni.isaac.cortex.sample_behaviors] omni.isaac.cortex.sample_behaviors has been deprecated in favor of isaacsim.cortex.behaviors. Please update your code accordingly.
+[4.263s] [ext: omni.anim.curve.core-1.3.1] startup
+[4.327s] [ext: isaacsim.robot_motion.lula_test_widget-1.0.12] startup
+[4.330s] [ext: omni.kit.property.bundle-1.4.1] startup
+[4.333s] [ext: omni.isaac.lula-4.0.6] startup
+2025-12-08T23:09:47Z [4,321ms] [Warning] [omni.isaac.lula] omni.isaac.lula has been deprecated in favor of isaacsim.robot_motion.lula. Please update your code accordingly.
+[4.334s] [ext: omni.isaac.manipulators-3.0.7] startup
+2025-12-08T23:09:47Z [4,323ms] [Warning] [omni.isaac.manipulators] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,323ms] [Warning] [omni.isaac.manipulators.controllers] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,323ms] [Warning] [omni.isaac.manipulators.controllers.pick_place_controller] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,324ms] [Warning] [omni.isaac.manipulators.controllers.stacking_controller] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,324ms] [Warning] [omni.isaac.manipulators.grippers] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,324ms] [Warning] [omni.isaac.manipulators.grippers.gripper] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,324ms] [Warning] [omni.isaac.manipulators.grippers.parallel_gripper] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,324ms] [Warning] [omni.isaac.manipulators.grippers.surface_gripper] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,325ms] [Warning] [omni.isaac.manipulators.manipulators] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,325ms] [Warning] [omni.isaac.manipulators.manipulators.single_manipulator] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+[4.338s] [ext: omni.kit.viewport.menubar.lighting-107.3.1] startup
+[4.344s] [ext: omni.isaac.lula_test_widget-1.0.6] startup
+2025-12-08T23:09:47Z [4,332ms] [Warning] [omni.isaac.lula_test_widget] omni.isaac.lula_test_widget has been deprecated in favor of isaacsim.robot_motion.lula_test_widget. Please update your code accordingly.
+[4.345s] [ext: isaacsim.core.throttling-2.1.10] startup
+[4.347s] [ext: isaacsim.asset.importer.mjcf-2.5.8] startup
+[4.353s] [ext: omni.kit.selection-0.1.6] startup
+[4.355s] [ext: omni.kit.widget.toolbar-2.0.1] startup
+[4.363s] [ext: omni.kit.manipulator.transform-107.0.0] startup
+[4.368s] [ext: isaacsim.gui.menu-2.3.17] startup
+[4.812s] [ext: isaacsim.asset.browser-1.3.19] startup
+[4.817s] [ext: omni.kit.manipulator.tool.snap-1.5.13] startup
+[4.821s] [ext: omni.kit.manipulator.selector-1.1.3] startup
+[4.822s] [ext: omni.isaac.menu-1.0.6] startup
+2025-12-08T23:09:47Z [4,810ms] [Warning] [omni.isaac.menu] omni.isaac.menu has been deprecated in favor of isaacsim.gui.menu. Please update your code accordingly.
+[4.823s] [ext: omni.isaac.motion_generation-8.0.7] startup
+2025-12-08T23:09:47Z [4,812ms] [Warning] [omni.isaac.motion_generation] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,812ms] [Warning] [omni.isaac.motion_generation.articulation_kinematics_solver] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,813ms] [Warning] [omni.isaac.motion_generation.articulation_motion_policy] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,813ms] [Warning] [omni.isaac.motion_generation.articulation_trajectory] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,813ms] [Warning] [omni.isaac.motion_generation.kinematics_interface] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,813ms] [Warning] [omni.isaac.motion_generation.lula] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,814ms] [Warning] [omni.isaac.motion_generation.lula.kinematics] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,814ms] [Warning] [omni.isaac.motion_generation.lula.motion_policies] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,814ms] [Warning] [omni.isaac.motion_generation.lula.path_planners] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,814ms] [Warning] [omni.isaac.motion_generation.lula.trajectory_generator] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,814ms] [Warning] [omni.isaac.motion_generation.motion_policy_controller] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,814ms] [Warning] [omni.isaac.motion_generation.motion_policy_interface] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,814ms] [Warning] [omni.isaac.motion_generation.path_planner_visualizer] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,814ms] [Warning] [omni.isaac.motion_generation.path_planning_interface] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,814ms] [Warning] [omni.isaac.motion_generation.trajectory] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,814ms] [Warning] [omni.isaac.motion_generation.world_interface] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+[4.827s] [ext: omni.isaac.asset_browser-1.0.6] startup
+2025-12-08T23:09:47Z [4,816ms] [Warning] [omni.isaac.asset_browser] omni.isaac.asset_browser has been deprecated in favor of isaacsim.asset.browser. Please update your code accordingly.
+[4.829s] [ext: omni.kit.viewport.manipulator.transform-107.0.4] startup
+[4.833s] [ext: omni.isaac.nucleus-1.0.6] startup
+2025-12-08T23:09:47Z [4,821ms] [Warning] [omni.isaac.nucleus] omni.isaac.nucleus has been deprecated in favor of isaacsim.storage.native. Please update your code accordingly.
+2025-12-08T23:09:47Z [4,822ms] [Warning] [omni.isaac.nucleus.nucleus] omni.isaac.nucleus.nucleus has been deprecated in favor of isaacsim.storage.native. Please update your code accordingly.
+[4.834s] [ext: omni.fabric.commands-1.1.6] startup
+[4.837s] [ext: omni.kit.manipulator.prim.core-107.0.8] startup
+[4.842s] [ext: isaacsim.robot.wheeled_robots-4.0.23] startup
+[4.846s] [ext: omni.isaac.utils-2.0.6] startup
+[4.848s] [ext: omni.isaac.version-2.0.7] startup
+2025-12-08T23:09:48Z [4,838ms] [Warning] [omni.isaac.version] omni.isaac.version has been deprecated in favor of isaacsim.core.version. Please update your code accordingly.
+[4.851s] [ext: omni.isaac.wheeled_robots-3.0.7] startup
+2025-12-08T23:09:48Z [4,839ms] [Warning] [omni.isaac.wheeled_robots] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,839ms] [Warning] [omni.isaac.wheeled_robots.controllers] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,839ms] [Warning] [omni.isaac.wheeled_robots.controllers.ackermann_controller] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,840ms] [Warning] [omni.isaac.wheeled_robots.controllers.differential_controller] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,840ms] [Warning] [omni.isaac.wheeled_robots.controllers.holonomic_controller] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,841ms] [Warning] [omni.isaac.wheeled_robots.controllers.quintic_path_planner] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,842ms] [Warning] [omni.isaac.wheeled_robots.controllers.stanley_control] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,842ms] [Warning] [omni.isaac.wheeled_robots.controllers.wheel_base_pose_controller] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,842ms] [Warning] [omni.isaac.wheeled_robots.impl] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,842ms] [Warning] [omni.isaac.wheeled_robots.robots] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,843ms] [Warning] [omni.isaac.wheeled_robots.robots.holonomic_robot_usd_setup] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,843ms] [Warning] [omni.isaac.wheeled_robots.robots.wheeled_robot] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+[4.856s] [ext: omni.sensors.nv.common-2.7.0-coreapi] startup
+[4.868s] [ext: isaacsim.app.about-2.0.11] startup
+[4.869s] [ext: omni.kit.manipulator.prim.fabric-107.0.4] startup
+[4.872s] [ext: isaacsim.sensors.physics-0.3.27] startup
+[4.877s] [ext: omni.kit.manipulator.prim.usd-107.0.3] startup
+[4.880s] [ext: omni.sensors.net-0.4.0-coreapi] startup
+[4.883s] [ext: omni.sensors.nv.materials-1.6.0-coreapi] startup
+[4.888s] [ext: omni.isaac.window.about-2.0.7] startup
+2025-12-08T23:09:48Z [4,878ms] [Warning] [omni.isaac.window.about] omni.isaac.window.about has been deprecated in favor of isaacsim.app.about. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,879ms] [Warning] [omni.isaac.window.about.about] omni.isaac.window.about.about has been deprecated in favor of isaacsim.app.about.about. Please update your code accordingly.
+[4.891s] [ext: omni.kit.manipulator.camera-106.0.4] startup
+[4.895s] [ext: isaacsim.robot.policy.examples-4.1.11] startup
+[4.896s] [ext: omni.kit.manipulator.prim-107.0.0] startup
+[4.898s] [ext: omni.kit.manipulator.selection-106.0.1] startup
+[4.899s] [ext: omni.sensors.nv.ids-1.5.0-coreapi] startup
+[4.901s] [ext: omni.sensors.nv.wpm-2.5.0-coreapi] startup
+[4.904s] [ext: omni.sensors.nv.lidar-2.7.0-coreapi] startup
+[4.910s] [ext: omni.isaac.quadruped-3.0.7] startup
+2025-12-08T23:09:48Z [4,898ms] [Warning] [omni.isaac.quadruped] omni.isaac.quadruped has been deprecated in favor of isaacsim.robot.policy.examples. Please update your code accordingly.
+[4.911s] [ext: omni.isaac.assets_check-0.3.13] startup
+2025-12-08T23:09:48Z [4,900ms] [Warning] [omni.isaac.assets_check] omni.isaac.assets_check has been deprecated in favor of isaacsim.asset.browser. Please update your code accordingly.
+[4.914s] [ext: isaacsim.gui.content_browser-0.1.9] startup
+[4.917s] [ext: isaacsim.util.debug_draw-3.1.0] startup
+[4.920s] [ext: omni.sensors.nv.radar-2.8.0-coreapi] startup
+[4.923s] [ext: omni.isaac.franka-1.0.7] startup
+2025-12-08T23:09:48Z [4,911ms] [Warning] [omni.isaac.franka] omni.isaac.franka has been deprecated in favor of isaacsim.robot.manipulators.examples.franka. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,911ms] [Warning] [omni.isaac.franka.franka] omni.isaac.franka has been deprecated in favor of isaacsim.robot.manipulators.examples.franka. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,912ms] [Warning] [omni.isaac.franka.kinematics_solver] omni.isaac.franka has been deprecated in favor of isaacsim.robot.manipulators.examples.franka. Please update your code accordingly.
+[4.925s] [ext: isaacsim.gui.property-1.1.3] startup
+[4.927s] [ext: isaacsim.sensors.physx-2.2.27] startup
+[4.931s] [ext: isaacsim.sensors.camera-1.3.1] startup
+[4.941s] [ext: isaacsim.sensors.rtx-15.5.0] startup
+[4.948s] [ext: isaacsim.core.cloner-1.4.9] startup
+[4.953s] [ext: omni.kit.property.isaac-1.0.6] startup
+2025-12-08T23:09:48Z [4,940ms] [Warning] [omni.kit.property.isaac] omni.kit.property.isaac has been deprecated in favor of isaacsim.gui.property. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,942ms] [Warning] [omni.kit.property.isaac.widgets] omni.kit.property.isaac.widgets has been deprecated in favor of isaacsim.gui.property.widgets. Please update your code accordingly.
+[4.955s] [ext: omni.isaac.range_sensor-4.0.6] startup
+2025-12-08T23:09:48Z [4,944ms] [Warning] [omni.isaac.range_sensor] omni.isaac.range_sensor has been deprecated in favor of isaacsim.sensors.physx. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,944ms] [Warning] [omni.isaac.range_sensor.commands] omni.isaac.range_sensor.commands has been deprecated in favor of isaacsim.sensors.physx.commands. Please update your code accordingly.
+[4.957s] [ext: omni.kit.viewport.menubar.camera-107.0.3] startup
+[4.964s] [ext: omni.isaac.sensor-13.0.7] startup
+2025-12-08T23:09:48Z [4,953ms] [Warning] [omni.isaac.sensor] omni.isaac.sensor has been deprecated in favor of isaacsim.sensors.camera, isaacsim.sensors.physics, isaacsim.sensors.physx, and isaacsim.sensors.rtx. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,953ms] [Warning] [omni.isaac.sensor.camera] omni.isaac.sensor.camera has been deprecated in favor of isaacsim.sensors.camera.camera. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,953ms] [Warning] [omni.isaac.sensor.camera_view] omni.isaac.sensor.camera_view has been deprecated in favor of isaacsim.sensors.camera.camera_view. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,953ms] [Warning] [omni.isaac.sensor.commands] omni.isaac.sensor.commands has been deprecated in favor of isaacsim.sensors.physics.commands, isaacsim.sensors.physx.commands, and isaacsim.sensors.rtx.commands. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,953ms] [Warning] [omni.isaac.sensor.contact_sensor] omni.isaac.sensor.contact_sensor has been deprecated in favor of isaacsim.sensors.physics.contact_sensor. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,953ms] [Warning] [omni.isaac.sensor.imu_sensor] omni.isaac.sensor.imu_sensor has been deprecated in favor of isaacsim.sensors.physics.imu_sensor. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,953ms] [Warning] [omni.isaac.sensor.lidar_rtx] omni.isaac.sensor.lidar_rtx has been deprecated in favor of isaacsim.sensors.rtx.lidar_rtx. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,953ms] [Warning] [omni.isaac.sensor.rotating_lidar_physX] omni.isaac.sensor.imu_sensor has been deprecated in favor of isaacsim.sensors.physix.rotating_lidar_physX. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,954ms] [Warning] [omni.isaac.sensor.scripts.samples.contact_sensor] omni.isaac.sensor.scripts.samples.contact_sensor has been deprecated in favor of isaacsim.sensors.physics.scripts.samples.contact_sensor. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,954ms] [Warning] [omni.isaac.sensor.scripts.samples.imu_sensor] omni.isaac.sensor.scripts.samples.imu_sensor has been deprecated in favor of isaacsim.sensors.physics.scripts.samples.imu_sensor. Please update your code accordingly.
+2025-12-08T23:09:48Z [4,954ms] [Warning] [omni.isaac.sensor.scripts.samples.lightbeam_sensor] omni.isaac.sensor.scripts.samples.lightbeam_sensor has been deprecated in favor of isaacsim.sensors.physx.scripts.samples.lightbeam_sensor. Please update your code accordingly.
+[4.967s] [ext: omni.isaac.cloner-1.0.7] startup
+2025-12-08T23:09:48Z [4,956ms] [Warning] [omni.isaac.cloner] omni.isaac.cloner has been deprecated in favor of isaacsim.core.cloner. Please update your code accordingly.
+[4.969s] [ext: omni.kit.viewport.menubar.render-107.0.9] startup
+[4.979s] [ext: omni.kit.viewport.menubar.settings-107.0.3] startup
+[4.982s] [ext: isaacsim.replicator.writers-1.0.15] startup
+[4.994s] [ext: omni.kit.window.console-1.1.4] startup
+[4.999s] [ext: omni.kit.window.status_bar-0.1.8] startup
+[5.002s] [ext: omni.kit.viewport.actions-107.0.2] startup
+[5.008s] [ext: isaacsim.replicator.domain_randomization-1.0.16] startup
+[5.011s] [ext: isaacsim.replicator.examples-1.1.31] startup
+[5.014s] [ext: omni.ocio-0.1.1] startup
+[5.017s] [ext: omni.rtx.window.settings-0.6.19] startup
+[5.029s] [ext: omni.kit.viewport.menubar.display-107.0.3] startup
+[5.035s] [ext: omni.kit.window.toolbar-2.0.0] startup
+[5.041s] [ext: omni.replicator.isaac-2.0.8] startup
+2025-12-08T23:09:48Z [5,029ms] [Warning] [omni.replicator.isaac] omni.replicator.isaac has been deprecated in favor of isaacsim.replicator.domain_randomization, isaacsim.replicator.examples, isaacsim.replicator.writers. Please update your code accordingly.
+[5.042s] [ext: omni.replicator.replicator_yaml-2.0.11] startup
+[5.058s] [ext: omni.rtx.settings.core-0.6.5] startup
+[5.064s] [ext: omni.usd.metrics.assembler.ui-107.3.1] startup
+[5.073s] [ext: omni.isaac.surface_gripper-2.0.6] startup
+2025-12-08T23:09:48Z [5,061ms] [Warning] [omni.isaac.surface_gripper] omni.isaac.surface_gripper has been deprecated in favor of isaacsim.robot.surface_gripper. Please update your code accordingly.
+[5.074s] [ext: semantics.schema.editor-2.0.1] startup
+[5.079s] [ext: omni.kit.ui.actions-1.0.5] startup
+[5.081s] [ext: semantics.schema.property-2.0.1] startup
+[5.082s] [ext: omni.isaac.universal_robots-1.0.6] startup
+2025-12-08T23:09:48Z [5,070ms] [Warning] [omni.isaac.universal_robots] omni.isaac.universal_robots has been deprecated in favor of isaacsim.robot.manipulators.examples.universal_robots. Please update your code accordingly.
+2025-12-08T23:09:48Z [5,070ms] [Warning] [omni.isaac.universal_robots.kinematics_solver] omni.isaac.franka has been deprecated in favor of isaacsim.robot.manipulators.examples.universal_robots. Please update your code accordingly.
+2025-12-08T23:09:48Z [5,071ms] [Warning] [omni.isaac.universal_robots.ur10] omni.isaac.franka has been deprecated in favor of isaacsim.robot.manipulators.examples.universal_robots. Please update your code accordingly.
+[5.084s] [ext: omni.isaac.core-4.0.7] startup
+2025-12-08T23:09:48Z [5,073ms] [Warning] [omni.isaac.core.physics_context.physics_context] omni.isaac.core.physics_context.physics_context has been deprecated in favor of isaacsim.core.api.physics_context.physics_context. Please update your code accordingly.
+2025-12-08T23:09:48Z [5,073ms] [Warning] [omni.isaac.core.simulation_context.simulation_context] omni.isaac.core.simulation_context.simulation_context has been deprecated in favor of isaacsim.core.api.simulation_context.simulation_context. Please update your code accordingly.
+2025-12-08T23:09:48Z [5,073ms] [Warning] [omni.isaac.core.world.world] omni.isaac.core.world.world has been deprecated in favor of isaacsim.core.api.world.world. Please update your code accordingly.
+2025-12-08T23:09:48Z [5,073ms] [Warning] [omni.isaac.core] omni.isaac.core has been deprecated in favor of isaacsim.core.api. Please update your code accordingly.
+[5.086s] [ext: isaacsim.gui.sensors.icon-2.0.3] startup
+[5.090s] [ext: isaacsim.core.experimental.materials-0.3.0] startup
+[5.094s] [ext: omni.kit.menu.common-2.0.0] startup
+[5.097s] [ext: isaacsim.exp.base-5.0.0] startup
+[5.098s] [ext: isaacsim.exp.base.python-5.0.0] startup
+[5.099s] Simulation App Starting
+2025-12-08T23:09:48Z [5,151ms] [Warning] [usdrt.population.plugin] using high frequency span is disabled
+2025-12-08T23:09:48Z [5,174ms] [Warning] [omni.fabric.plugin] Warning: attribute viewportHandle not found for bucket id 9
+
+[5.225s] app ready
+2025-12-08T23:09:48Z [5,302ms] [Warning] [carb] Acquiring non optional plugin interface which is not listed as dependency: [carb::dictionary::ISerializer v1.1] (plugin: carb.dictionary.serializer-json.plugin), by client: carb.scenerenderer-rtx.plugin. Add it to CARB_PLUGIN_IMPL_DEPS() macro of a client.
+2025-12-08T23:09:50Z [7,087ms] [Warning] [usdrt.hydra.fabric_scene_delegate.plugin] using high frequency span is disabled
+2025-12-08T23:09:50Z [7,087ms] [Warning] [usdrt.hydra.fabric_scene_delegate.plugin] using high frequency span is disabled
+2025-12-08T23:09:50Z [7,088ms] [Warning] [usdrt.hydra.fabric_scene_delegate.plugin] using high frequency span with attrs is disabled
+2025-12-08T23:09:50Z [7,110ms] [Warning] [usdrt.hydra.fabric_scene_delegate.plugin] using high frequency span is disabled
+2025-12-08T23:09:50Z [7,111ms] [Warning] [usdrt.hydra.fabric_scene_delegate.plugin] using high frequency span is disabled
+[7.353s] Simulation App Startup Complete
+✓ World created
+✓ Lighting added
+✓ Leatherback loaded from /home/jayoungh/PersonalPorjects/Leatherback-main/source/Leatherback/Leatherback/tasks/direct/leatherback/custom_assets/leatherback_simple_better.usd
+✓ Leatherback loaded from https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.0/Isaac/Robots/NVIDIA/Leatherback/leatherback.usd
+2025-12-08T23:09:51Z [8,566ms] [Warning] [omni.isaac.core.articulations.articulation] omni.isaac.core.articulations.articulation.Articulation has been deprecated in favor of isaacsim.core.prims.SingleArticulation Please update your code accordingly.
+2025-12-08T23:09:51Z [8,567ms] [Warning] [omni.isaac.core.articulations.articulation_gripper] omni.isaac.core.articulations.articulation_gripper has been deprecated in favor of isaacsim.core.api.articulations.articulation_gripper. Please update your code accordingly.
+2025-12-08T23:09:51Z [8,567ms] [Warning] [omni.isaac.core.articulations.articulation_subset] omni.isaac.core.articulations.articulation_subset has been deprecated in favor of isaacsim.core.api.articulations.articulation_subset. Please update your code accordingly.
+2025-12-08T23:09:51Z [8,567ms] [Warning] [omni.isaac.core.articulations.articulation_view] omni.isaac.core.articulations.articulation_view.ArticulationView has been deprecated in favor of isaacsim.core.prims.Articulation. Please update your code accordingly.
+2025-12-08T23:09:51Z [8,567ms] [Warning] [omni.isaac.core.objects.capsule] omni.isaac.core.objects.capsule has been deprecated in favor of isaacsim.core.api.objects.capsule. Please update your code accordingly.
+2025-12-08T23:09:51Z [8,567ms] [Warning] [omni.isaac.core.objects.cone] omni.isaac.core.objects.cone has been deprecated in favor of isaacsim.core.api.objects.cone. Please update your code accordingly.
+2025-12-08T23:09:51Z [8,568ms] [Warning] [omni.isaac.core.objects.cuboid] omni.isaac.core.objects.cuboid has been deprecated in favor of isaacsim.core.api.objects.cuboid. Please update your code accordingly.
+2025-12-08T23:09:51Z [8,568ms] [Warning] [omni.isaac.core.objects.cylinder] omni.isaac.core.objects.cylinder has been deprecated in favor of isaacsim.core.api.objects.cylinder. Please update your code accordingly.
+2025-12-08T23:09:51Z [8,568ms] [Warning] [omni.isaac.core.objects.ground_plane] omni.isaac.core.objects.ground_plane has been deprecated in favor of isaacsim.core.api.objects.ground_plane. Please update your code accordingly.
+2025-12-08T23:09:51Z [8,568ms] [Warning] [omni.isaac.core.objects.sphere] omni.isaac.core.objects.sphere has been deprecated in favor of isaacsim.core.api.objects.sphere. Please update your code accordingly.
+✓ Self-collisions disabled for Leatherback via PhysX API
+Increasing visualizer/solver iterations for stability...
+Enabling CCD on robot links...
+Configuring physics drives...
+  Configured throttle drive: Wheel__Knuckle__Front_Left
+  Configured throttle drive: Wheel__Knuckle__Front_Right
+  Configured throttle drive: Wheel__Upright__Rear_Right
+  Configured throttle drive: Wheel__Upright__Rear_Left
+  Configured steering drive: Knuckle__Upright__Front_Right
+  Configured steering drive: Knuckle__Upright__Front_Left
+2025-12-08T23:09:51Z [8,754ms] [Warning] [usdrt.hydra.fabric_scene_delegate.plugin] using high frequency span with attrs is disabled
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,489ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Rear_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Right).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Stiffness attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+2025-12-08T23:09:52Z [9,490ms] [Warning] [omni.physx.plugin] Damping attribute is unsupported for articulation joints and will be ignored (/World/Leatherback/Joints/Shock__Front_Left).
+✓ Found throttle indices: [25, 24, 13, 16]
+✓ Found steering indices: [19, 22]
+Spawning obstacles...
+  Obstacle 0 at [-6.99251733  7.98299565]
+  Obstacle 1 at [-2.9947302  -4.62255926]
+  Obstacle 2 at [-2.77874389 -7.7958287 ]
+  Obstacle 3 at [9.77035931 8.6744319 ]
+  Obstacle 4 at [-3.06097274 -6.48429135]
+✓ Leatherback environment ready!
+2025-12-08T23:09:52Z [9,749ms] [Warning] [isaacsim.sensors.camera.camera] 'verticalAperture' (1.5290800094604493) and 'horizontalAperture' (2.0954999923706055) are inconsistent with the pixel resolution aspect ratio (1.0). Setting 'verticalAperture' to 2.0954999923706055 to ensure square pixels.
+Using cuda device
+Wrapping the env in a VecTransposeImage.
+Training for 100000 steps...
+Environment reset. First waypoint at [ 5.         -0.75942993]
+Logging to ./leatherback_tensorboard/PPO_6
+2025-12-08T23:09:54Z [10,956ms] [Warning] [usdrt.population.plugin] [UsdNoticeHandler] Unhandled attribute type VtArray<std::string> (prim attribute: omni:rtx:material:db:flattener:transmittance_color)
+2025-12-08T23:09:54Z [10,956ms] [Warning] [usdrt.population.plugin] [UsdNoticeHandler] Unhandled attribute type VtArray<std::string> (prim attribute: omni:rtx:material:db:flattener:ior_constant)
+2025-12-08T23:09:54Z [10,956ms] [Warning] [usdrt.population.plugin] [UsdNoticeHandler] Unhandled attribute type VtArray<std::string> (prim attribute: omni:rtx:material:db:flattener:reflection_roughness_constant)
+2025-12-08T23:09:54Z [10,984ms] [Warning] [rtx.postprocessing.plugin] DLSS increasing input dimensions: Render resolution of (64, 64) is below minimal input resolution of 300.
+DEBUG: Traversing Robot Hierarchy...
+  HIERARCHY: /World/Leatherback
+  HIERARCHY: /World/Leatherback/Rigid_Bodies
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Chassis
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Camera_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Camera_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Camera_Chase
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Lidar
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Electronics_Mounting
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Electronics_Mounting/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Electronics_Mounting/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Electronics_Mounting/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Electronics_Mounting/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Electronics_Mounting/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Electronics_Mounting/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Electronics_Mounting/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Chassis/Electronics_Mounting/Electronics_Mounting/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Right/Suspension_Arm_Rear_Lower_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Right/Upright_Rear_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Right/Suspension_Arm_Rear_Upper_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Right/Wheel_Rear_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Lower/Shock_Rear_Right_Lower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Right_Upper/Shock_Rear_Right_Upper
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Lower_Left/Suspension_Arm_Rear_Lower_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Rear_Left/Upright_Rear_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Rear_Upper_Left/Suspension_Arm_Rear_Upper_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Rear_Left/Wheel_Rear_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Lower/Shock_Rear_Left_Lower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Rear_Left_Upper/Shock_Rear_Left_Upper
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Right/Suspension_Arm_Front_Lower_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Right/Upright_Front_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Right/Suspension_Arm_Front_Upper_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Right/Steering_Knuckle_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Right/Wheel_Front_Right
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Lower/Shock_Front_Right_Lower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Right_Upper/Shock_Front_Right_Upper
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Lower_Left/Suspension_Arm_Front_Lower_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Upright_Front_Left/Upright_Front_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Suspension_Arm_Front_Upper_Left/Suspension_Arm_Front_Upper_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Steering_Knuckle_Left/Steering_Knuckle_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Wheel_Front_Left/Wheel_Front_Left
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Lower/Shock_Front_Left_Lower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/San_Marino
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/San_Marino/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Cornflower
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Cornflower/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Shady_Lady
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Shady_Lady/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Gray_Nurse
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Gray_Nurse/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Tropical_Blue
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Tropical_Blue/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Gray
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Gray/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Selective_Yellow
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Selective_Yellow/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Tangerine
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Looks/Tangerine/Shader
+  HIERARCHY: /World/Leatherback/Rigid_Bodies/Shock_Front_Left_Upper/Shock_Front_Left_Upper
+  HIERARCHY: /World/Leatherback/Joints
+  HIERARCHY: /World/Leatherback/Joints/Chassis__Arm_Rear_Lower_Right
+  HIERARCHY: /World/Leatherback/Joints/Chassis__Arm_Rear_Lower_Left
+  HIERARCHY: /World/Leatherback/Joints/Chassis__Arm_Front_Lower_Right
+  HIERARCHY: /World/Leatherback/Joints/Chassis__Arm_Front_Lower_Left
+  HIERARCHY: /World/Leatherback/Joints/Upright__Arm__Rear_Lower_Right
+  HIERARCHY: /World/Leatherback/Joints/Shock__Arm__Rear_Lower_Right
+  HIERARCHY: /World/Leatherback/Joints/Upright__Arm__Rear_Lower_Left
+  HIERARCHY: /World/Leatherback/Joints/Shock__Arm__Rear_Lower_Left
+  HIERARCHY: /World/Leatherback/Joints/Upright__Arm__Front_Lower_Right
+  HIERARCHY: /World/Leatherback/Joints/Shock__Arm__Front_Lower_Right
+  HIERARCHY: /World/Leatherback/Joints/Upright__Arm__Front_Lower_Left
+  HIERARCHY: /World/Leatherback/Joints/Shock__Arm__Front_Lower_Left
+  HIERARCHY: /World/Leatherback/Joints/Upright__Arm__Rear_Upper_Right
+  HIERARCHY: /World/Leatherback/Joints/Wheel__Upright__Rear_Right
+  HIERARCHY: /World/Leatherback/Joints/Shock__Rear_Right
+  HIERARCHY: /World/Leatherback/Joints/Upright__Arm__Rear_Upper_Left
+  HIERARCHY: /World/Leatherback/Joints/Wheel__Upright__Rear_Left
+  HIERARCHY: /World/Leatherback/Joints/Shock__Rear_Left
+  HIERARCHY: /World/Leatherback/Joints/Upright__Arm__Front_Upper_Right
+  HIERARCHY: /World/Leatherback/Joints/Knuckle__Upright__Front_Right
+  HIERARCHY: /World/Leatherback/Joints/Shock__Front_Right
+  HIERARCHY: /World/Leatherback/Joints/Upright__Arm__Front_Upper_Left
+  HIERARCHY: /World/Leatherback/Joints/Knuckle__Upright__Front_Left
+  HIERARCHY: /World/Leatherback/Joints/Shock__Front_Left
+  HIERARCHY: /World/Leatherback/Joints/Wheel__Knuckle__Front_Right
+  HIERARCHY: /World/Leatherback/Joints/Wheel__Knuckle__Front_Left
+  HIERARCHY: /World/Leatherback/Joints/Chassis__Arm_Rear_Upper_Right
+  HIERARCHY: /World/Leatherback/Joints/Chassis__Arm_Rear_Upper_Left
+  HIERARCHY: /World/Leatherback/Joints/Chassis__Arm_Front_Upper_Right
+  HIERARCHY: /World/Leatherback/Joints/Chassis__Arm_Front_Upper_Left
+  HIERARCHY: /World/Leatherback/Joints/Shock__Chassis__Rear_Upper_Right
+  HIERARCHY: /World/Leatherback/Joints/Shock__Chassis__Rear_Upper_Left
+  HIERARCHY: /World/Leatherback/Joints/Shock__Chassis__Front_Upper_Left
+  HIERARCHY: /World/Leatherback/Joints/Shock__Chassis__Front_Upper_Right
+  HIERARCHY: /World/Leatherback/Rubber_Asphalt
+  HIERARCHY: /World/Leatherback/CollisionGroup
+  HIERARCHY: /World/Leatherback/Camera
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]: Traceback (most recent call last):
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:   File "/home/jayoungh/PersonalPorjects/Autonomous-driving-ML-ROS2-GAZEBO/train_sb3.py", line 53, in <module>
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:     main()
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:   File "/home/jayoungh/PersonalPorjects/Autonomous-driving-ML-ROS2-GAZEBO/train_sb3.py", line 43, in main
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:     model.learn(total_timesteps=total_timesteps, progress_bar=True)
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:   File "/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/python/lib/python3.11/site-packages/stable_baselines3/ppo/ppo.py", line 311, in learn
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:     return super().learn(
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:            ^^^^^^^^^^^^^^
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:   File "/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/python/lib/python3.11/site-packages/stable_baselines3/common/on_policy_algorithm.py", line 324, in learn
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:     continue_training = self.collect_rollouts(self.env, callback, self.rollout_buffer, n_rollout_steps=self.n_steps)
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:   File "/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/python/lib/python3.11/site-packages/stable_baselines3/common/on_policy_algorithm.py", line 218, in collect_rollouts
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:     new_obs, rewards, dones, infos = env.step(clipped_actions)
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:                                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:   File "/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/python/lib/python3.11/site-packages/stable_baselines3/common/vec_env/base_vec_env.py", line 222, in step
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:     return self.step_wait()
+2025-12-08T23:09:54Z [11,043ms] [Error] [omni.kit.app._impl] [py stderr]:            ^^^^^^^^^^^^^^^^
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:   File "/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/python/lib/python3.11/site-packages/stable_baselines3/common/vec_env/vec_transpose.py", line 97, in step_wait
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:     observations, rewards, dones, infos = self.venv.step_wait()
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:                                           ^^^^^^^^^^^^^^^^^^^^^
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:   File "/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/python/lib/python3.11/site-packages/stable_baselines3/common/vec_env/dummy_vec_env.py", line 59, in step_wait
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:     obs, self.buf_rews[env_idx], terminated, truncated, self.buf_infos[env_idx] = self.envs[env_idx].step(  # type: ignore[assignment]
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:   File "/home/jayoungh/PersonalPorjects/Autonomous-driving-ML-ROS2-GAZEBO/isaac_leatherback_env.py", line 516, in step
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:     _, rot = xforms_utils.get_world_pose(prim_path="/World/Leatherback/Chassis")
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:   File "/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/exts/isaacsim.core.utils/isaacsim/core/utils/xforms.py", line 183, in get_world_pose
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:     result_transform = _get_world_pose_transform_w_scale(prim_path, fabric)
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:   File "/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/exts/isaacsim.core.utils/isaacsim/core/utils/xforms.py", line 93, in _get_world_pose_transform_w_scale
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]:     raise Exception("Prim path is not valid")
+2025-12-08T23:09:54Z [11,044ms] [Error] [omni.kit.app._impl] [py stderr]: Exception: Prim path is not valid
+2025-12-08T23:09:55Z [11,878ms] [Warning] [omni.graph.core.plugin] Could not find category 'Replicator:Annotators' for removal
+2025-12-08T23:09:55Z [11,878ms] [Warning] [omni.graph.core.plugin] Could not find category 'Replicator:Annotators' for removal
+2025-12-08T23:09:55Z [11,878ms] [Warning] [omni.graph.core.plugin] Could not find category 'Replicator:Annotators' for removal
+2025-12-08T23:09:55Z [11,878ms] [Warning] [omni.graph.core.plugin] Could not find category 'Replicator:Annotators' for removal
+2025-12-08T23:09:55Z [11,878ms] [Warning] [omni.graph.core.plugin] Could not find category 'Replicator:Annotators' for removal
+2025-12-08T23:09:55Z [11,878ms] [Warning] [omni.graph.core.plugin] Could not find category 'Replicator:Annotators' for removal
+2025-12-08T23:09:55Z [11,878ms] [Warning] [omni.graph.core.plugin] Could not find category 'Replicator:Annotators' for removal
+2025-12-08T23:09:55Z [11,878ms] [Warning] [omni.graph.core.plugin] Could not find category 'Replicator:Annotators' for removal
+2025-12-08T23:09:55Z [11,878ms] [Warning] [omni.graph.core.plugin] Could not find category 'Replicator:Annotators' for removal
+2025-12-08T23:09:55Z [11,878ms] [Warning] [omni.graph.core.plugin] Could not find category 'Replicator:Annotators' for removal
+2025-12-08T23:09:55Z [11,878ms] [Warning] [omni.graph.core.plugin] Could not find category 'Replicator:Annotators' for removal
+2025-12-08T23:09:55Z [11,878ms] [Warning] [omni.graph.core.plugin] Could not find category 'Replicator:Annotators' for removal
+2025-12-08T23:09:55Z [11,878ms] [Warning] [omni.graph.core.plugin] Could not find category 'Replicator:Core' for removal
+2025-12-08T23:09:55Z [11,880ms] [Warning] [omni.graph.core.plugin] Could not find category 'animation' for removal
+2025-12-08T23:09:55Z [11,880ms] [Warning] [omni.physx.plugin] USD stage detach not called, holding a loose ptr to a stage!
+2025-12-08T23:09:55Z [11,886ms] [Warning] [carb] Client omni.syntheticdata.plugin Failed to acquire interface [omni::graph::core::INode v4.10] while unloading all plugins
+2025-12-08T23:09:55Z [0ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash] A crash has occurred.  If a debugger should be attached, please set the '/crashreporter/debuggerAttachTimeoutMs' setting to a timeout in milliseconds.  This can be used to allow the crash reporter to wait for up to that long for a debugger to attach before processing or sending the crash report.
+2025-12-08T23:09:55Z [37ms] [Error] [carb.crashreporter-breakpad.plugin] [crash] Wrote dump file '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/f5c6022c-dc41-4bc6-d2315eb5-3ed84afd.dmp'
+2025-12-08T23:09:55Z [38ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash] preventing upload of minidump due to user opt-out: '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/f5c6022c-dc41-4bc6-d2315eb5-3ed84afd.dmp'
+2025-12-08T23:09:55Z [39ms] [Error] [carb.crashreporter-breakpad.plugin] [crash]     dump file size is 3846704 bytes, file is readable.
+2025-12-08T23:09:55Z [41ms] [Fatal] [carb.crashreporter-breakpad.plugin] [crash] Crash detected in pid 156352 thread 156352
+2025-12-08T23:09:55Z [42ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash] Crash metadata:
+2025-12-08T23:09:55Z [43ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  BuildGitlabJobID = '182268558'
+2025-12-08T23:09:55Z [44ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  CarbSdkVersion = '206.4+release.9396.3c6f8191.gl'
+2025-12-08T23:09:55Z [45ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  CrashTime = 'Mon Dec  8 23:09:55 2025 GMT'
+2025-12-08T23:09:55Z [46ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  DriverShaderCacheWrapper = 'disabled'
+2025-12-08T23:09:55Z [47ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  DumpId = 'f5c6022c-dc41-4bc6-d2315eb5-3ed84afd'
+2025-12-08T23:09:55Z [48ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  LastUploadStatus = '0'
+2025-12-08T23:09:55Z [49ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  ProductName = 'OmniverseKit'
+2025-12-08T23:09:55Z [50ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  PythonTracebackStatus = ''py-spy' successfully wrote info to '/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/data/Kit/Isaac-Sim Python/5.0/f5c6022c-dc41-4bc6-d2315eb5-3ed84afd.py.txt''
+2025-12-08T23:09:55Z [51ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  RetryCount = '0'
+2025-12-08T23:09:55Z [52ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  StartupTime = '1765235383'
+2025-12-08T23:09:55Z [53ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  UploadSuccessful = '0'
+2025-12-08T23:09:55Z [53ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  UptimeSeconds = '12'
+2025-12-08T23:09:55Z [54ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  UserStory = ''
+2025-12-08T23:09:55Z [55ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  UserStoryStatus = 'Running in headless mode; not gathering user story'
+2025-12-08T23:09:55Z [56ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  Version = '107.3.1+production.206797.8131b85d.gl'
+2025-12-08T23:09:55Z [57ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  aftermath_enabled = '1'
+2025-12-08T23:09:55Z [58ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  aftermath_flags = '3'
+2025-12-08T23:09:55Z [59ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  aftermath_status = 'auto-enabled'
+2025-12-08T23:09:55Z [60ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  aftermath_version = '2024.1'
+2025-12-08T23:09:55Z [61ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  appName = 'Isaac-Sim Python'
+2025-12-08T23:09:55Z [62ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  appState = 'started'
+2025-12-08T23:09:55Z [63ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  appVersion = '5.0.0'
+2025-12-08T23:09:55Z [64ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  autoloadExts = ''
+2025-12-08T23:09:55Z [65ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  buildBranch = 'production'
+2025-12-08T23:09:55Z [66ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  buildCi = 'gl'
+2025-12-08T23:09:55Z [67ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  buildConfig = 'release'
+2025-12-08T23:09:55Z [68ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  buildGitlabJobName = 'kit-build-release-linux-x86_64'
+2025-12-08T23:09:55Z [69ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  buildGitlabJobStage = 'kit-build'
+2025-12-08T23:09:55Z [70ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  buildGitlabPipelineID = '30713850'
+2025-12-08T23:09:55Z [71ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  buildHash = '8131b85d'
+2025-12-08T23:09:55Z [72ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  buildMajor = '107'
+2025-12-08T23:09:55Z [73ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  buildMinor = '3'
+2025-12-08T23:09:55Z [74ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  buildNumber = '206797'
+2025-12-08T23:09:55Z [75ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  buildPatch = '1'
+2025-12-08T23:09:55Z [76ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  buildVersion = '107.3.1'
+2025-12-08T23:09:55Z [77ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  carboniteFrameworkVersion = '206.4+release.9396.3c6f8191.gl'
+2025-12-08T23:09:55Z [78ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  carboniteSdkVersion = '206.4+release.9396.3c6f8191.gl'
+2025-12-08T23:09:55Z [79ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  commandLine = '/home/<username>/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/kit/python/bin/python3 -u train_sb3.py'
+2025-12-08T23:09:55Z [80ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  cpuCoreLimited = '16'
+2025-12-08T23:09:55Z [81ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  cpuId = 'Intel64 Family 25 Model 117 Stepping 2'
+2025-12-08T23:09:55Z [82ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  cpuLogicalCoresBareMetal = '16'
+2025-12-08T23:09:55Z [83ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  cpuName = 'AMD Ryzen 7 8700F 8-Core Processor'
+2025-12-08T23:09:55Z [84ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  cpuPhysicalCoresBareMetal = '8'
+2025-12-08T23:09:55Z [85ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  cpuUsageQuota = '-1.000000'
+2025-12-08T23:09:55Z [86ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  cpuVendor = 'AuthenticAMD'
+2025-12-08T23:09:55Z [87ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  desktopOrigin = '(0, 0)'
+2025-12-08T23:09:55Z [88ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  desktopSize = '1920x1080'
+2025-12-08T23:09:55Z [89ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  displayCount = '1'
+2025-12-08T23:09:55Z [90ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  displayRes_0 = '1920x1080x32bit@60Hz'
+2025-12-08T23:09:55Z [91ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  environmentName = 'Individual'
+2025-12-08T23:09:55Z [92ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  externalBuild = '1'
+2025-12-08T23:09:55Z [93ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  gpuDriver_0 = '580.95'
+2025-12-08T23:09:55Z [94ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  gpuVRAM_0 = '17103323136'
+2025-12-08T23:09:55Z [95ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  gpu_0 = 'NVIDIA GeForce RTX 5060 Ti'
+2025-12-08T23:09:55Z [96ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  kitRendererDriverVersion = '580.95'
+2025-12-08T23:09:55Z [97ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  lastCommand = 'CreateNodeCommand(graph=?,node_path=/Orchestrator/OgnReadFabricTime,node_type=omni.replicator.core.ReadFabricTime,create_usd=True)'
+2025-12-08T23:09:55Z [98ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  lastCommands = 'CreateAttrCommand(node=?,attr_name=state:_sdp_intergraph_downstream_node_handles_,attr_type=?,attr_port=?,attr_default=?,attr_extended_type=?),Group,CreateGraphAsNodeCommand(graph_path=/Orchestrator,node_name=Orchestrator,evaluator_name=push,is_global_graph=True,backed_by_usd=True,fc_backing_type=?,pipeline_stage=?,evaluation_mode=?,graph=?),CreateNodeCommand(graph=?,node_path=/Orchestrator/OgnReadFabricTime,node_type=omni.replicator.core.ReadFabricTime,create_usd=True)'
+2025-12-08T23:09:55Z [99ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  lib_isaacSim_buildBranch = 'HEAD'
+2025-12-08T23:09:55Z [100ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  lib_isaacSim_buildDate = 'Thu Jul 31 02:50:55 2025 +0000'
+2025-12-08T23:09:55Z [101ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  lib_isaacSim_buildHash = '184afb1'
+2025-12-08T23:09:55Z [102ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  lib_isaacSim_buildRepo = 'https://gitlab-ci-token:glcbt-64_VDfMLKcrxVTx6vasJknB@gitlab-master.nvidia.com/omniverse/isaac/omni_isaac_sim.git'
+2025-12-08T23:09:55Z [103ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  lib_isaacSim_buildVersion = '5.0.0-rc.45'
+2025-12-08T23:09:55Z [104ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  lib_physx_buildBranch = 'HEAD'
+2025-12-08T23:09:55Z [105ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  lib_physx_buildDate = 'Jul-23-2025'
+2025-12-08T23:09:55Z [106ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  lib_physx_buildHash = '214216c'
+2025-12-08T23:09:55Z [107ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  lib_physx_buildRepo = 'gitlab-master.nvidia.com/omniverse/physics'
+2025-12-08T23:09:55Z [108ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  lib_physx_buildVersion = '107.3.18'
+2025-12-08T23:09:55Z [109ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  memoryStats = '(avail/total) RAM: 17.6244/30.9055GB, Swap: 5.8339/8GB, VM: 1.71799e+10/1.71799e+10GB'
+2025-12-08T23:09:55Z [110ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  nvidia-smi = '
+==============NVSMI LOG==============
+
+Timestamp                                 : Mon Dec  8 18:09:44 2025
+Driver Version                            : 580.95.05
+CUDA Version                              : 13.0
+
+Attached GPUs                             : 1
+GPU 00000000:01:00.0
+    Product Name                          : NVIDIA GeForce RTX 5060 Ti
+    Product Brand                         : GeForce
+    Product Architecture                  : Blackwell
+    Display Mode                          : Requested functionality has been deprecated
+    Display Attached                      : Yes
+    Display Active                        : Enabled
+    Persistence Mode                      : Disabled
+    Addressing Mode                       : HMM
+    MIG Mode
+        Current                           : N/A
+        Pending                           : N/A
+    Accounting Mode                       : Disabled
+    Accounting Mode Buffer Size           : 4000
+    Driver Model
+        Current                           : N/A
+        Pending                           : N/A
+    Serial Number                         : 0
+    GPU UUID                              : GPU-0b2ad9dd-913a-cb2a-0783-15d8a00616b9
+    GPU PDI                               : 0x967514170163a26b
+    Minor Number                          : 0
+    VBIOS Version                         : 98.06.39.00.C6
+    MultiGPU Board                        : No
+    Board ID                              : 0x100
+    Board Part Number                     : N/A
+    GPU Part Number                       : 2D04-300-A1
+    FRU Part Number                       : N/A
+    Platform Info
+        Chassis Serial Number             : 
+        Slot Number                       : 0
+        Tray Index                        : 0
+        Host ID                           : 1
+        Peer Type                         : Direct Connected
+        Module Id                         : 1
+        GPU Fabric GUID                   : 0x0000000000000000
+    Inforom Version
+        Image Version                     : G005.0000.98.01
+        OEM Object                        : 2.1
+        ECC Object                        : N/A
+        Power Management Object           : N/A
+    Inforom BBX Object Flush
+        Latest Timestamp                  : N/A
+        Latest Duration                   : N/A
+    GPU Operation Mode
+        Current                           : N/A
+        Pending                           : N/A
+    GPU C2C Mode                          : Disabled
+    GPU Virtualization Mode
+        Virtualization Mode               : None
+        Host VGPU Mode                    : N/A
+        vGPU Heterogeneous Mode           : N/A
+    GPU Recovery Action                   : None
+    GSP Firmware Version                  : 580.95.05
+    IBMNPU
+        Relaxed Ordering Mode             : N/A
+    PCI
+        Bus                               : 0x01
+        Device                            : 0x00
+        Domain                            : 0x0000
+        Base Classcode                    : 0x3
+        Sub Classcode                     : 0x0
+        Device Id                         : 0x2D0410DE
+        Bus Id                            : 00000000:01:00.0
+        Sub System Id                     : 0x53511462
+        GPU Link Info
+            PCIe Generation
+                Max                       : 4
+                Current                   : 4
+                Device Current            : 4
+                Device Max                : 5
+                Host Max                  : 4
+            Link Width
+                Max                       : 16x
+                Current                   : 8x
+        Bridge Chip
+            Type                          : N/A
+            Firmware                      : N/A
+        Replays Since Reset               : 0
+        Replay Number Rollovers           : 0
+        Tx Throughput                     : 50861 KB/s
+        Rx Throughput                     : 57403 KB/s
+        Atomic Caps Outbound              : N/A
+        Atomic Caps Inbound               : FETCHADD_32 FETCHADD_64 SWAP_32 SWAP_64 CAS_32 CAS_64 
+    Fan Speed                             : 0 %
+    Performance State                     : P1
+    Clocks Event Reasons
+        Idle                              : Not Active
+        Applications Clocks Setting       : Not Active
+        SW Power Cap                      : Not Active
+        HW Slowdown                       : Not Active
+            HW Thermal Slowdown           : Not Active
+            HW Power Brake Slowdown       : Not Active
+        Sync Boost                        : Not Active
+        SW Thermal Slowdown               : Not Active
+        Display Clock Setting             : Not Active
+    Clocks Event Reasons Counters
+        SW Power Capping                  : 7684499340 us
+        Sync Boost                        : 0 us
+        SW Thermal Slowdown               : 0 us
+        HW Thermal Slowdown               : 0 us
+        HW Power Braking                  : 0 us
+    Sparse Operation Mode                 : N/A
+    FB Memory Usage
+        Total                             : 16311 MiB
+        Reserved                          : 472 MiB
+        Used                              : 697 MiB
+        Free                              : 15144 MiB
+    BAR1 Memory Usage
+        Total                             : 16384 MiB
+        Used                              : 35 MiB
+        Free                              : 16349 MiB
+    Conf Compute Protected Memory Usage
+        Total                             : 0 MiB
+        Used                              : 0 MiB
+        Free                              : 0 MiB
+    Compute Mode                          : Default
+    Utilization
+        GPU                               : 1 %
+        Memory                            : 0 %
+        Encoder                           : 0 %
+        Decoder                           : 0 %
+        JPEG                              : 0 %
+        OFA                               : 0 %
+    Encoder Stats
+        Active Sessions                   : 0
+        Average FPS                       : 0
+        Average Latency                   : 0
+    FBC Stats
+        Active Sessions                   : 0
+        Average FPS                       : 0
+        Average Latency                   : 0
+    DRAM Encryption Mode
+        Current                           : Disabled
+        Pending                           : Disabled
+    ECC Mode
+        Current                           : N/A
+        Pending                           : N/A
+    ECC Errors
+        Volatile
+            SRAM Correctable              : N/A
+            SRAM Uncorrectable Parity     : N/A
+            SRAM Uncorrectable SEC-DED    : N/A
+            DRAM Correctable              : N/A
+            DRAM Uncorrectable            : N/A
+        Aggregate
+            SRAM Correctable              : N/A
+            SRAM Uncorrectable Parity     : N/A
+            SRAM Uncorrectable SEC-DED    : N/A
+            DRAM Correctable              : N/A
+            DRAM Uncorrectable            : N/A
+            SRAM Threshold Exceeded       : N/A
+        Aggregate Uncorrectable SRAM Sources
+            SRAM L2                       : N/A
+            SRAM SM                       : N/A
+            SRAM Microcontroller          : N/A
+            SRAM PCIE                     : N/A
+            SRAM Other                    : N/A
+        Channel Repair Pending            : No
+        TPC Repair Pending                : No
+    Retired Pages
+        Single Bit ECC                    : N/A
+        Double Bit ECC                    : N/A
+        Pending Page Blacklist            : N/A
+    Remapped Rows                         : N/A
+    Temperature
+        GPU Current Temp                  : 45 C
+        GPU T.Limit Temp                  : 41 C
+        GPU Shutdown T.Limit Temp         : -5 C
+        GPU Slowdown T.Limit Temp         : -2 C
+        GPU Max Operating T.Limit Temp    : 0 C
+        GPU Target Temperature            : N/A
+        Memory Current Temp               : N/A
+        Memory Max Operating T.Limit Temp : N/A
+    GPU Power Readings
+        Average Power Draw                : 20.65 W
+        Instantaneous Power Draw          : 27.73 W
+        Current Power Limit               : 180.00 W
+        Requested Power Limit             : 180.00 W
+        Default Power Limit               : 180.00 W
+        Min Power Limit                   : 150.00 W
+        Max Power Limit                   : 180.00 W
+    GPU Memory Power Readings 
+        Average Power Draw                : N/A
+        Instantaneous Power Draw          : N/A
+    Module Power Readings
+        Average Power Draw                : N/A
+        Instantaneous Power Draw          : N/A
+        Current Power Limit               : N/A
+        Requested Power Limit             : N/A
+        Default Power Limit               : N/A
+        Min Power Limit                   : N/A
+        Max Power Limit                   : N/A
+    Power Smoothing                       : N/A
+    Workload Power Profiles
+        Requested Profiles                : N/A
+        Enforced Profiles                 : N/A
+    Clocks
+        Graphics                          : 2167 MHz
+        SM                                : 2167 MHz
+        Memory                            : 13801 MHz
+        Video                             : 1935 MHz
+    Applications Clocks
+        Graphics                          : N/A
+        Memory                            : N/A
+    Default Applications Clocks
+        Graphics                          : N/A
+        Memory                            : N/A
+    Deferred Clocks
+        Memory                            : N/A
+    Max Clocks
+        Graphics                          : 3090 MHz
+        SM                                : 3090 MHz
+        Memory                            : 14001 MHz
+        Video                             : 3090 MHz
+    Max Customer Boost Clocks
+        Graphics                          : N/A
+    Clock Policy
+        Auto Boost                        : N/A
+        Auto Boost Default                : N/A
+    Fabric
+        State                             : N/A
+        Status                            : N/A
+        CliqueId                          : N/A
+        ClusterUUID                       : N/A
+        Health
+            Summary                       : N/A
+            Bandwidth                     : N/A
+            Route Recovery in progress    : N/A
+            Route Unhealthy               : N/A
+            Access Timeout Recovery       : N/A
+            Incorrect Configuration       : N/A
+    Processes
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 3264
+            Type                          : G
+            Name                          : ............./Xorg
+            Used GPU Memory               : 178 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 3537
+            Type                          : G
+            Name                          : ......../gnome-shell
+            Used GPU Memory               : 69 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 4121
+            Type                          : G
+            Name                          : ............/xdg-desktop-portal-gnome
+            Used GPU Memory               : 2 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 9096
+            Type                          : G
+            Name                          : ....................../antigravity
+            Used GPU Memory               : 21 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 20894
+            Type                          : G
+            Name                          : ....................../antigravity
+            Used GPU Memory               : 130 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 55430
+            Type                          : G
+            Name                          : ......../wezterm-gui
+            Used GPU Memory               : 6 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 147885
+            Type                          : G
+            Name                          : ................../chrome
+            Used GPU Memory               : 40 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 156352
+            Type                          : C+G
+            Name                          : .............................................................................../python3
+            Used GPU Memory               : 135 MiB
+    Capabilities
+        EGM                               : disabled
+
+'
+2025-12-08T23:09:55Z [111ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  osDistro = 'ubuntu'
+2025-12-08T23:09:55Z [112ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  osName = '24.04.3 LTS (Noble Numbat)'
+2025-12-08T23:09:55Z [113ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  osVersion = '24.04.3'
+2025-12-08T23:09:55Z [114ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  portableMode = '1'
+2025-12-08T23:09:55Z [115ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  primaryDisplayRes = '1920x1080x32bit@60Hz'
+2025-12-08T23:09:55Z [116ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  runEnvironment = 'Individual'
+2025-12-08T23:09:55Z [117ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  runningInContainer = '0'
+2025-12-08T23:09:55Z [118ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  shaderdb_debugSymbols = '0'
+2025-12-08T23:09:55Z [118ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  shaderdb_dumpIncludeOverrides = '0'
+2025-12-08T23:09:55Z [119ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  shaderdb_dumpIntermediates = '0'
+2025-12-08T23:09:55Z [120ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  shaderdb_obfuscateCode = '1'
+2025-12-08T23:09:55Z [121ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  shaderdb_optimizationLevel = '1'
+2025-12-08T23:09:55Z [122ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  systemInfo = '
+|---------------------------------------------------------------------------------------------|
+| Driver Version: 580.95.05     | Graphics API: Vulkan
+|=============================================================================================|
+| GPU | Name                             | Active | LDA | GPU Memory | Vendor-ID | LUID       |
+|     |                                  |        |     |            | Device-ID | UUID       |
+|     |                                  |        |     |            | Bus-ID    |            |
+|---------------------------------------------------------------------------------------------|
+| 0   | NVIDIA GeForce RTX 5060 Ti       | Yes: 0 |     | 16311   MB | 10de      | 0          |
+|     |                                  |        |     |            | 2d04      | 0b2ad9dd.. |
+|     |                                  |        |     |            | 1         |            |
+|=============================================================================================|
+| OS: 24.04.3 LTS (Noble Numbat) ubuntu, Version: 24.04.3, Kernel: 6.14.0-36-generic
+| XServer Vendor: The X.Org Foundation, XServer Version: 12101011 (1.21.1.11)
+| Processor: AMD Ryzen 7 8700F 8-Core Processor
+| Cores: 8 | Logical Cores: 16
+|---------------------------------------------------------------------------------------------|
+| Total Memory (MB): 31647 | Free Memory: 22245
+| Total Page/Swap (MB): 8191 | Free Page/Swap: 5973
+|---------------------------------------------------------------------------------------------|
+'
+2025-12-08T23:09:55Z [123ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  telemetrySessionId = '5661243694026988637'
+2025-12-08T23:09:55Z [124ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  terminatedByAbort = '0'
+2025-12-08T23:09:55Z [125ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  totalRamBareMetalMB = '31647'
+2025-12-08T23:09:55Z [126ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  totalRamLimitedMB = '31647'
+2025-12-08T23:09:55Z [127ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  totalSwapBareMetalMB = '8191'
+2025-12-08T23:09:55Z [128ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  totalSwapLimitedMB = '8191'
+2025-12-08T23:09:55Z [129ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  userId = 'default'
+2025-12-08T23:09:55Z [130ms] [Warning] [carb.crashreporter-breakpad.plugin] [crash]  workingDirectory = '/home/<username>/PersonalPorjects/Autonomous-driving-ML-ROS2-GAZEBO'
+2025-12-08T23:09:55Z [131ms] [Fatal] [carb.crashreporter-breakpad.plugin] [crash] Thread 156352 backtrace follows:
+2025-12-08T23:09:56Z [255ms] [Fatal] [carb.crashreporter-breakpad.plugin] 000: libc.so.6!__sigaction+0x50 (libc_sigaction.c:?)
+2025-12-08T23:09:56Z [261ms] [Fatal] [carb.crashreporter-breakpad.plugin] 001: libomni.syntheticdata.plugin.so!std::__throw_bad_variant_access(char const*)+0xaff89 (??:?)
+2025-12-08T23:09:56Z [265ms] [Fatal] [carb.crashreporter-breakpad.plugin] 002: libomni.syntheticdata.plugin.so!std::__throw_bad_variant_access(char const*)+0xb037a (??:?)
+2025-12-08T23:09:56Z [271ms] [Fatal] [carb.crashreporter-breakpad.plugin] 003: libomni.graph.core.plugin.so!std::__detail::_Map_base<omni::graph::core::GraphPipelineStage, std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex>, std::allocator<std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex> >, std::__detail::_Select1st, std::equal_to<omni::graph::core::GraphPipelineStage>, std::hash<omni::graph::core::GraphPipelineStage>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](omni::graph::core::GraphPipelineStage&&)+0x43259 (??:?)
+2025-12-08T23:09:56Z [278ms] [Fatal] [carb.crashreporter-breakpad.plugin] 004: libomni.graph.core.plugin.so!std::__detail::_Map_base<omni::graph::core::GraphPipelineStage, std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex>, std::allocator<std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex> >, std::__detail::_Select1st, std::equal_to<omni::graph::core::GraphPipelineStage>, std::hash<omni::graph::core::GraphPipelineStage>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](omni::graph::core::GraphPipelineStage&&)+0x604cd (??:?)
+2025-12-08T23:09:56Z [284ms] [Fatal] [carb.crashreporter-breakpad.plugin] 005: libomni.graph.core.plugin.so!std::__detail::_Map_base<omni::graph::core::GraphPipelineStage, std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex>, std::allocator<std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex> >, std::__detail::_Select1st, std::equal_to<omni::graph::core::GraphPipelineStage>, std::hash<omni::graph::core::GraphPipelineStage>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](omni::graph::core::GraphPipelineStage&&)+0x5f14b (??:?)
+2025-12-08T23:09:56Z [292ms] [Fatal] [carb.crashreporter-breakpad.plugin] 006: libomni.graph.core.plugin.so!std::__detail::_Map_base<omni::graph::core::GraphPipelineStage, std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex>, std::allocator<std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex> >, std::__detail::_Select1st, std::equal_to<omni::graph::core::GraphPipelineStage>, std::hash<omni::graph::core::GraphPipelineStage>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](omni::graph::core::GraphPipelineStage&&)+0x5fc7d (??:?)
+2025-12-08T23:09:56Z [299ms] [Fatal] [carb.crashreporter-breakpad.plugin] 007: libomni.graph.core.plugin.so!std::vector<unsigned long, std::allocator<unsigned long> >::_M_default_append(unsigned long)+0x1825d (??:?)
+2025-12-08T23:09:56Z [306ms] [Fatal] [carb.crashreporter-breakpad.plugin] 008: libomni.graph.core.plugin.so!std::vector<unsigned long, std::allocator<unsigned long> >::_M_default_append(unsigned long)+0x185cd (??:?)
+2025-12-08T23:09:56Z [313ms] [Fatal] [carb.crashreporter-breakpad.plugin] 009: libomni.graph.core.plugin.so!std::__detail::_Map_base<omni::graph::core::GraphPipelineStage, std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex>, std::allocator<std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex> >, std::__detail::_Select1st, std::equal_to<omni::graph::core::GraphPipelineStage>, std::hash<omni::graph::core::GraphPipelineStage>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](omni::graph::core::GraphPipelineStage&&)+0x5fd97 (??:?)
+2025-12-08T23:09:56Z [319ms] [Fatal] [carb.crashreporter-breakpad.plugin] 010: libomni.graph.core.plugin.so!std::__detail::_Map_base<omni::graph::core::GraphPipelineStage, std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex>, std::allocator<std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex> >, std::__detail::_Select1st, std::equal_to<omni::graph::core::GraphPipelineStage>, std::hash<omni::graph::core::GraphPipelineStage>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](omni::graph::core::GraphPipelineStage&&)+0x5f14b (??:?)
+2025-12-08T23:09:56Z [326ms] [Fatal] [carb.crashreporter-breakpad.plugin] 011: libomni.graph.core.plugin.so!std::__detail::_Map_base<omni::graph::core::GraphPipelineStage, std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex>, std::allocator<std::pair<omni::graph::core::GraphPipelineStage const, std::recursive_mutex> >, std::__detail::_Select1st, std::equal_to<omni::graph::core::GraphPipelineStage>, std::hash<omni::graph::core::GraphPipelineStage>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](omni::graph::core::GraphPipelineStage&&)+0x5fc7d (??:?)
+2025-12-08T23:09:56Z [333ms] [Fatal] [carb.crashreporter-breakpad.plugin] 012: libomni.graph.core.plugin.so!carbOnPluginPreStartup+0x1d4f (??:?)
+2025-12-08T23:09:56Z [340ms] [Fatal] [carb.crashreporter-breakpad.plugin] 013: libomni.graph.core.plugin.so!carbOnPluginShutdown+0x22b (??:?)
+2025-12-08T23:09:56Z [352ms] [Fatal] [carb.crashreporter-breakpad.plugin] 014: libcarb.so!omniCoreStart+0x617a (??:?)
+2025-12-08T23:09:56Z [364ms] [Fatal] [carb.crashreporter-breakpad.plugin] 015: libcarb.so!quickReleaseFrameworkAndTerminate+0x10305 (??:?)
+2025-12-08T23:09:56Z [377ms] [Fatal] [carb.crashreporter-breakpad.plugin] 016: libcarb.so!omniCoreStart+0x106fc (??:?)
+2025-12-08T23:09:56Z [389ms] [Fatal] [carb.crashreporter-breakpad.plugin] 017: libcarb.so!quickReleaseFrameworkAndTerminate+0xa6d5 (??:?)
+2025-12-08T23:09:56Z [399ms] [Fatal] [carb.crashreporter-breakpad.plugin] 018: libcarb.scripting-python.plugin.so!carbOnPluginStartup+0x1691 (??:?)
+2025-12-08T23:09:56Z [408ms] [Fatal] [carb.crashreporter-breakpad.plugin] 019: libcarb.scripting-python.plugin.so!std::__detail::_Map_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, void*>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, void*> >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)+0x5d26 (??:?)
+2025-12-08T23:09:56Z [463ms] [Fatal] [carb.crashreporter-breakpad.plugin] 020: libpython3.11.so.1.0!cfunction_call+0x37 (/builds/omniverse/externals/python-build/_build/Python-3.11.13/Objects/methodobject.c:542)
+2025-12-08T23:09:56Z [496ms] [Fatal] [carb.crashreporter-breakpad.plugin] 021: libpython3.11.so.1.0!_PyObject_Call+0x58 (/builds/omniverse/externals/python-build/_build/Python-3.11.13/./Include/internal/pycore_ceval.h:123)
+2025-12-08T23:09:56Z [613ms] [Fatal] [carb.crashreporter-breakpad.plugin] 022: libpython3.11.so.1.0!atexit_callfuncs+0x6d (/builds/omniverse/externals/python-build/_build/Python-3.11.13/./Modules/atexitmodule.c:99)
+2025-12-08T23:09:56Z [714ms] [Fatal] [carb.crashreporter-breakpad.plugin] 023: libpython3.11.so.1.0!Py_FinalizeEx+0xae (/builds/omniverse/externals/python-build/_build/Python-3.11.13/Python/pylifecycle.c:1791)
+2025-12-08T23:09:56Z [842ms] [Fatal] [carb.crashreporter-breakpad.plugin] 024: libpython3.11.so.1.0!Py_RunMain+0x3d8 (/builds/omniverse/externals/python-build/_build/Python-3.11.13/Modules/main.c:686)
+2025-12-08T23:09:56Z [963ms] [Fatal] [carb.crashreporter-breakpad.plugin] 025: libpython3.11.so.1.0!Py_BytesMain+0x43 (/builds/omniverse/externals/python-build/_build/Python-3.11.13/Modules/main.c:739)
+2025-12-08T23:09:56Z [1,001ms] [Fatal] [carb.crashreporter-breakpad.plugin] 026: libc.so.6!__libc_init_first+0x8a (./csu/../sysdeps/x86/libc-start.c:74)
+2025-12-08T23:09:56Z [1,039ms] [Fatal] [carb.crashreporter-breakpad.plugin] 027: libc.so.6!__libc_start_main+0x8b (./csu/../csu/libc-start.c:128)
+2025-12-08T23:09:56Z [1,043ms] [Fatal] [carb.crashreporter-breakpad.plugin] 028: python3!_start+0x29 (??:?)
+/home/jayoungh/isaac-sim/isaac-sim-standalone-5.0.0-linux-x86_64/python.sh: line 55: 156352 Segmentation fault      (core dumped) $python_exe "$@" $args
+There was an error running python

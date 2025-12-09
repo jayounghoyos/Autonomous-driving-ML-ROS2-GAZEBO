@@ -131,7 +131,7 @@ class LeatherbackEnv(gym.Env):
                 # Apply Drive API if not present
                 drive = UsdPhysics.DriveAPI.Apply(prim, "angular")
                 drive.GetStiffnessAttr().Set(0.0)      # Allow free spinning
-                drive.GetDampingAttr().Set(500.0)      # Some resistance
+                drive.GetDampingAttr().Set(10.0)       # SPEED FIX: Reduced drag
                 # Mark as velocity drive? Not strictly needed if stiffness is 0
                 print(f"  Configured throttle drive: {joint_name}")
             else:
@@ -235,15 +235,16 @@ class LeatherbackEnv(gym.Env):
                 
     def _enable_ccd(self):
         """Enable Continuous Collision Detection on all robot links"""
-        print("Enabling CCD on robot links...")
-        from pxr import UsdPhysics, PhysxSchema, Usd
-        # Traverse all children of the robot
-        robot_prim = self.world.stage.GetPrimAtPath("/World/Leatherback")
-        for prim in Usd.PrimRange(robot_prim):
-            if prim.IsA(UsdPhysics.RigidBodyAPI):
-                 physx_rb = PhysxSchema.PhysxRigidBodyAPI.Apply(prim)
-                 physx_rb.GetEnableCCDAttr().Set(True)
-                 print(f"  + CCD enabled for {prim.GetName()}")
+        # print("Enabling CCD on robot links...")
+        # from pxr import UsdPhysics, PhysxSchema, Usd
+        # # Traverse all children of the robot
+        # robot_prim = self.world.stage.GetPrimAtPath("/World/Leatherback")
+        # for prim in Usd.PrimRange(robot_prim):
+        #     if prim.IsA(UsdPhysics.RigidBodyAPI):
+        #          physx_rb = PhysxSchema.PhysxRigidBodyAPI.Apply(prim)
+        #          physx_rb.GetEnableCCDAttr().Set(True)
+        #          # print(f"  + CCD enabled for {prim.GetName()}")
+        pass
 
             
     def _spawn_obstacles(self):
@@ -289,7 +290,8 @@ class LeatherbackEnv(gym.Env):
         # Note: In Isaac Sim 4.0/5.0 Articulation class handles pose reading
         # But for world pose sometimes it's better to use get_world_pose from utils
         import isaacsim.core.utils.xforms as xforms_utils
-        position, orientation = xforms_utils.get_world_pose(prim_path="/World/Leatherback")
+        # TRACKING FIX: Target the rigid body 'Chassis' not the container
+        position, orientation = xforms_utils.get_world_pose(prim_path="/World/Leatherback/Rigid_Bodies/Chassis")
         
         # Calculate heading
         w, x, y, z = orientation
@@ -388,10 +390,14 @@ class LeatherbackEnv(gym.Env):
         progress = self.prev_distance - distance
         progress_reward = progress * 10.0
         
+        # Time penalty (Encourage speed)
+        time_penalty = -0.05
+        
         # Heading reward
         heading_reward = np.exp(-abs(heading_error)) * 0.5
         
         # Goal reached
+        goal_bonus = 0.0
         if distance < self.position_tolerance:
             self.current_waypoint_idx += 1
             if self.current_waypoint_idx < self.num_waypoints:
@@ -402,12 +408,10 @@ class LeatherbackEnv(gym.Env):
             
             goal_bonus = 50.0
             print(f"✓ Waypoint {self.current_waypoint_idx}/{self.num_waypoints} reached!")
-        else:
-            goal_bonus = 0.0
         
         self.prev_distance = distance
         
-        return progress_reward + heading_reward + goal_bonus
+        return progress_reward + heading_reward + goal_bonus + time_penalty
     
     def reset(self, seed=None, options=None):
         """Reset environment"""
@@ -446,8 +450,10 @@ class LeatherbackEnv(gym.Env):
         self.prev_action = action
         
         # Scale actions
-        throttle = np.clip(action[0], -1.0, 1.0) * 30.0  # Reduced from 50.0 for stability
-        steering = np.clip(action[1], -1.0, 1.0) * 0.75  # ±0.75 rad
+        # SPEED FIX: Increased torque limits (Kept as requested)
+        throttle = np.clip(action[0], -1.0, 1.0) * 100.0
+        # STEERING REVERT: Back to original direction per user request
+        steering = np.clip(action[1], -1.0, 1.0) * 0.75   # Back to Positive
         
         # Apply to robot
         self._apply_action(throttle, steering)
@@ -457,7 +463,8 @@ class LeatherbackEnv(gym.Env):
         
         # Get robot position for geofence and goal check
         import isaacsim.core.utils.xforms as xforms_utils
-        robot_pos, _ = xforms_utils.get_world_pose(prim_path="/World/Leatherback")
+        # Use Chassis for actual physics position
+        robot_pos, _ = xforms_utils.get_world_pose(prim_path="/World/Leatherback/Rigid_Bodies/Chassis")
         
         # Initialize termination and truncation flags
         terminated = False
@@ -494,7 +501,28 @@ class LeatherbackEnv(gym.Env):
             terminated = True
             print("Left Arena (Geofence Violation) - Resetting")
             
-        # Update previous distance for next step's progress reward
+        # Flip Check (Safety)
+        # Check standard Z-up vector from orientation
+        # orientation is quaternion [w, x, y, z]
+        _, rot = xforms_utils.get_world_pose(prim_path="/World/Leatherback/Rigid_Bodies/Chassis")
+        # Rotate up vector (0,0,1) by quaternion
+        # Simplified: Check if Z component of local up is negative (upside down)
+        # Actually just check roll/pitch from quat, or raw Z height if it drops too low (falling)
+        if robot_pos[2] < 0.0: # Falling through floor
+             terminated = True
+             reward -= 50.0
+             print("Fell through world!")
+             
+        # Check if flipped (Up axis pointing down)
+        # q = [w, x, y, z]
+        # z-axis transform roughly: 1 - 2(x^2 + y^2) 
+        # If this is negative, we are > 90 deg tipped
+        w, x, y, z = rot
+        z_axis_z = 1.0 - 2.0 * (x*x + y*y)
+        if z_axis_z < 0.3: # Tilted more than ~70 degrees
+             terminated = True
+             reward -= 50.0
+             print("Robot Flipped! Resetting.")
         self.prev_distance = dist_to_goal
             
         return obs, reward, terminated, truncated, {}
