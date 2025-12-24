@@ -118,11 +118,11 @@ class LeatherbackEnvCfg:
     # Action Configuration
     # =========================================================================
 
-    # Max throttle velocity (rad/s for wheel joints)
-    max_throttle: float = 100.0
+    # Max throttle velocity (rad/s for wheel joints) - reduced for stability
+    max_throttle: float = 30.0
 
-    # Max steering angle (radians)
-    max_steering: float = 0.75
+    # Max steering angle (radians) - kept within safe PhysX limits
+    max_steering: float = 0.5
 
     # =========================================================================
     # Reward Configuration

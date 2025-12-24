@@ -71,7 +71,15 @@ fi
 # -----------------------------------------------------------------------------
 # 4. Project Setup
 # -----------------------------------------------------------------------------
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Get script directory (compatible with bash and zsh)
+if [ -n "${BASH_SOURCE[0]:-}" ]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+elif [ -n "${(%):-%x}" 2>/dev/null ]; then
+    SCRIPT_DIR="$(cd "$(dirname "${(%):-%x}")" && pwd)"
+else
+    # Fallback: assume script is in PROJECT_ROOT/scripts
+    SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+fi
 export PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 export PYTHONPATH="$PROJECT_ROOT:$PYTHONPATH"
 

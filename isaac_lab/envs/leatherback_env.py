@@ -16,7 +16,11 @@ import gymnasium as gym
 import numpy as np
 from gymnasium import spaces
 
-from .leatherback_env_cfg import LeatherbackEnvCfg
+# Handle both module import and direct execution
+try:
+    from .leatherback_env_cfg import LeatherbackEnvCfg
+except ImportError:
+    from leatherback_env_cfg import LeatherbackEnvCfg
 
 
 class LeatherbackEnv(gym.Env):
@@ -108,6 +112,10 @@ class LeatherbackEnv(gym.Env):
         from omni.isaac.core.articulations import Articulation
         from omni.isaac.core.objects import VisualSphere, FixedCuboid
 
+        # Ackermann controller for proper vehicle control
+        from isaacsim.robot.wheeled_robots.controllers.ackermann_controller import AckermannController
+        from isaacsim.core.utils.types import ArticulationAction
+
         # Store for later use
         self._World = World
         self._get_assets_root_path = get_assets_root_path
@@ -120,6 +128,8 @@ class LeatherbackEnv(gym.Env):
         self._Articulation = Articulation
         self._VisualSphere = VisualSphere
         self._FixedCuboid = FixedCuboid
+        self._AckermannController = AckermannController
+        self._ArticulationAction = ArticulationAction
 
     def _setup_world(self) -> None:
         """Create the simulation world."""
@@ -294,6 +304,17 @@ class LeatherbackEnv(gym.Env):
         print(f"  Throttle indices: {self._throttle_indices}")
         print(f"  Steering indices: {self._steering_indices}")
 
+        # Initialize Ackermann controller with Leatherback geometry
+        # Leatherback specs: wheel_base=1.65m, track_width=1.25m, wheel_radius=0.25m
+        self._ackermann_controller = self._AckermannController(
+            name="leatherback_controller",
+            wheel_base=1.65,
+            track_width=1.25,
+            front_wheel_radius=0.25,
+            back_wheel_radius=0.25,
+        )
+        print("  Ackermann controller initialized")
+
     def _define_spaces(self) -> None:
         """Define observation and action spaces."""
         obs_dict = {
@@ -414,21 +435,57 @@ class LeatherbackEnv(gym.Env):
         return obs
 
     def _apply_action(self, action: np.ndarray) -> None:
-        """Apply throttle and steering action to robot."""
-        throttle = float(np.clip(action[0], -1.0, 1.0)) * self.cfg.max_throttle
-        steering = float(np.clip(action[1], -1.0, 1.0)) * self.cfg.max_steering
+        """Apply throttle and steering action using Ackermann controller."""
+        # Clamp actions to [-1, 1] range
+        throttle_norm = float(np.clip(action[0], -1.0, 1.0))
+        steering_norm = float(np.clip(action[1], -1.0, 1.0))
 
-        # Apply velocity to wheels
-        velocity_targets = np.full(4, throttle, dtype=np.float32)
-        self._robot.set_joint_velocities(
-            velocity_targets, joint_indices=self._throttle_indices
-        )
+        # Convert to physical units
+        # Forward velocity in rad/s (wheel angular velocity)
+        forward_vel = throttle_norm * self.cfg.max_throttle
+        # Steering angle in radians
+        steering_angle = steering_norm * self.cfg.max_steering
 
-        # Apply position to steering
-        steering_targets = np.full(2, steering, dtype=np.float32)
-        self._robot.set_joint_positions(
-            steering_targets, joint_indices=self._steering_indices
+        # Use Ackermann controller to compute proper wheel commands
+        # forward() expects: [steering_angle, steering_velocity, forward_vel, acceleration, dt]
+        controller_input = [
+            steering_angle,       # Desired steering angle (rad)
+            0.0,                  # Steering velocity (rad/s) - 0 for position control
+            forward_vel,          # Forward velocity (rad/s)
+            0.0,                  # Acceleration (not used)
+            self.cfg.physics_dt,  # Delta time
+        ]
+
+        # Get articulation action from controller
+        # Returns ArticulationAction with steering positions and wheel velocities
+        ackermann_action = self._ackermann_controller.forward(controller_input)
+
+        # Extract values from controller output
+        # Ackermann controller outputs: [left_steer, right_steer] positions and [4 wheel] velocities
+        steer_positions = ackermann_action.joint_positions
+        wheel_velocities = ackermann_action.joint_velocities
+
+        # Create full joint arrays for all DOFs
+        num_dofs = self._robot.num_dof
+        full_positions = np.zeros(num_dofs, dtype=np.float32)
+        full_velocities = np.zeros(num_dofs, dtype=np.float32)
+
+        # Map steering positions to correct indices
+        if steer_positions is not None and len(steer_positions) >= 2:
+            for i, idx in enumerate(self._steering_indices[:2]):
+                full_positions[idx] = float(steer_positions[i])
+
+        # Map wheel velocities to correct indices
+        if wheel_velocities is not None and len(wheel_velocities) >= 4:
+            for i, idx in enumerate(self._throttle_indices[:4]):
+                full_velocities[idx] = float(wheel_velocities[i])
+
+        # Create and apply the action with proper joint indices
+        robot_action = self._ArticulationAction(
+            joint_positions=full_positions,
+            joint_velocities=full_velocities,
         )
+        self._robot.apply_action(robot_action)
 
     def _calculate_reward(self, distance: float, terminated: bool) -> float:
         """Calculate reward for current step."""
@@ -511,17 +568,22 @@ class LeatherbackEnv(gym.Env):
             np.sin(random_yaw / 2),
         ])
 
+        # Reset Ackermann controller
+        self._ackermann_controller.reset()
+
         # Reset robot pose
         self._robot.set_world_pose(
             position=np.array(self.cfg.robot_init_pos),
             orientation=orientation,
         )
 
-        # Zero velocities
-        all_indices = self._throttle_indices + self._steering_indices
-        self._robot.set_joint_velocities(
-            np.zeros(len(all_indices)), joint_indices=all_indices
+        # Reset all joint states to zero using apply_action with zero velocities
+        num_dofs = self._robot.num_dof
+        zero_action = self._ArticulationAction(
+            joint_positions=np.zeros(num_dofs, dtype=np.float32),
+            joint_velocities=np.zeros(num_dofs, dtype=np.float32),
         )
+        self._robot.apply_action(zero_action)
 
         # Generate new waypoints
         self._waypoints = self._generate_waypoints()

@@ -183,6 +183,7 @@ def main() -> int:
         episode_length_s=env_config.get("episode_length_s", 60.0),
         goal_tolerance=env_config.get("goal_tolerance", 0.5),
         num_waypoints=env_config.get("num_waypoints", 10),
+        waypoint_spacing=env_config.get("waypoint_spacing", 5.0),
         arena_radius=env_config.get("arena_radius", 12.0),
     )
 
