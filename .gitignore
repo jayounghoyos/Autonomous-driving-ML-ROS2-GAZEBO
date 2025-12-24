@@ -1,9 +1,11 @@
-# ROS 2 Build Artifacts
-build/
-install/
-log/
+# =============================================================================
+# Leatherback RL Project - .gitignore
+# Isaac Sim 5.1.0 + Isaac Lab + ROS2 Jazzy
+# =============================================================================
 
+# -----------------------------------------------------------------------------
 # Python
+# -----------------------------------------------------------------------------
 __pycache__/
 *.py[cod]
 *$py.class
@@ -11,31 +13,97 @@ __pycache__/
 .Python
 *.egg-info/
 dist/
+build/
 *.egg
+.eggs/
+*.whl
 
+# Virtual environments
+env/
+venv/
+env_*/
+.venv/
+
+# -----------------------------------------------------------------------------
+# ROS2 Build Artifacts
+# -----------------------------------------------------------------------------
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# -----------------------------------------------------------------------------
 # Training Artifacts
-models/*.zip
-models/*.pt
-tensorboard_logs/PPO_*/
+# -----------------------------------------------------------------------------
+# Trained models (large files)
+models/**/*.zip
+models/**/*.pt
+models/**/*.onnx
+!models/.gitkeep
+
+# TensorBoard logs
+logs/
+!logs/.gitkeep
+
+# Checkpoints
 *.ckpt
 
-# IDE
+# -----------------------------------------------------------------------------
+# Isaac Sim
+# -----------------------------------------------------------------------------
+# Isaac Sim cache
+.isaac_sim/
+.omni/
+.nvidia/
+*.usd.tmp
+*.usda.tmp
+*.usdc.tmp
+
+# Extension cache
+exts/
+extscache/
+
+# -----------------------------------------------------------------------------
+# IDE / Editors
+# -----------------------------------------------------------------------------
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+.spyproject/
+.ropeproject/
 
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# -----------------------------------------------------------------------------
 # OS
+# -----------------------------------------------------------------------------
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Gazebo
-.gazebo/
+# -----------------------------------------------------------------------------
+# Debug / Temp Files
+# -----------------------------------------------------------------------------
+*.log
+*.txt.bak
+debug_*.txt
+detailed_log.txt
+hierarchy.txt
+*.tmp
 
-# Datasets (optional - uncomment if datasets are large)
+# -----------------------------------------------------------------------------
+# Large Assets (if applicable)
+# -----------------------------------------------------------------------------
 # datasets/
+# *.usd
+# *.fbx
+# *.obj
 
-# Keep these directories but ignore contents
-models/.gitkeep
-tensorboard_logs/.gitkeep
+# -----------------------------------------------------------------------------
+# Keep directories with .gitkeep
+# -----------------------------------------------------------------------------
+!models/.gitkeep
+!logs/.gitkeep

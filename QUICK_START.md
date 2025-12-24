@@ -1,230 +1,206 @@
-#  Quick Start - RL Training
+# Quick Start Guide
 
-## Ready to Run Commands
+Complete setup guide for the Leatherback autonomous driving project using Isaac Sim 5.1.0, Isaac Lab, and ROS2 Jazzy.
 
-### **Test Gazebo Environment (Do This First!)**
+## Prerequisites
 
-```bash
-# Terminal 1: Launch test world
-cd ~/PersonalPorjects/Autonomous-driving-ML-ROS2-GAZEBO
-gz sim src/vehicle_gazebo/worlds/rl_test_world.sdf
-```
+- Ubuntu 24.04 LTS
+- NVIDIA GPU with 16GB+ VRAM
+- Python 3.11
+- NVIDIA Driver 580.65.06+
 
-You should see:
-- Gray ground plane (30×30m)
-- Green goal cylinder at (10, 10)
-- Red obstacle box at (5, 0)
-- Green car with black LiDAR on top
+## Step 1: System Preparation
 
-**Test the car manually:**
-```bash
-# Terminal 2: Move the car with keyboard
-ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args --remap /cmd_vel:=/cmd_vel
-```
-
-**Check LiDAR data:**
-```bash
-# Terminal 3: Verify LiDAR is publishing
-ros2 topic echo /scan --once
-```
-
----
-
-### **Start RL Training (Once Gazebo Test Works)**
+### Install NVIDIA Driver
 
 ```bash
-# Terminal 1: Launch Gazebo (headless for faster training)
-gz sim -s src/vehicle_gazebo/worlds/rl_training_world.sdf
+# Check current driver
+nvidia-smi
 
-# Terminal 2: Start training with 8 parallel environments
-source ~/ros2-ml-env/bin/activate
-source install/setup.zsh
-ros2 run rl_training train_ppo \
-  --n-envs 8 \
-  --timesteps 500000 \
-  --device cuda \
-  --save-dir models/ppo_navigation \
-  --log-dir logs/ppo_navigation
-
-# Terminal 3: Monitor training progress
-source ~/ros2-ml-env/bin/activate
-tensorboard --logdir logs/ppo_navigation
-# Open: http://localhost:6006
+# If needed, install latest driver
+sudo apt install nvidia-driver-580
+sudo reboot
 ```
 
----
+### Install Python 3.11
 
-## Training Parameters
-
-### Default (Good Starting Point)
-- **Environments**: 8 parallel
-- **Timesteps**: 500,000 (~2-3 days)
-- **Device**: CUDA (RTX 5060 Ti)
-- **Learning Rate**: 3e-4
-
-### Quick Test (Validate Setup)
 ```bash
-# Just 10k steps to verify everything works
-ros2 run rl_training train_ppo --n-envs 4 --timesteps 10000 --device cuda
+sudo apt install python3.11 python3.11-venv python3.11-dev
 ```
 
-### Extended Training (For Best Results)
+### Install ROS2 Jazzy
+
 ```bash
-# 2 million steps, 16 environments
-ros2 run rl_training train_ppo --n-envs 16 --timesteps 2000000 --device cuda
+# Add ROS2 repository
+sudo apt update && sudo apt install software-properties-common
+sudo add-apt-repository universe
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+sudo sh -c 'echo "deb http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list'
+
+# Install ROS2 Jazzy
+sudo apt update
+sudo apt install ros-jazzy-desktop ros-jazzy-vision-msgs ros-jazzy-ackermann-msgs
+
+# Add to bashrc
+echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
+source ~/.bashrc
 ```
 
----
+## Step 2: Isaac Sim 5.1.0 (Standalone)
+
+Your Isaac Sim is already installed at:
+```
+~/isaac-sim/isaac-sim-standalone-5.1.0-linux-x86_64
+```
+
+### Verify Installation
+
+```bash
+# Launch Isaac Sim
+~/isaac-sim/isaac-sim-standalone-5.1.0-linux-x86_64/isaac-sim.sh
+```
+
+## Step 3: Isaac Lab Setup
+
+### Clone and Install
+
+```bash
+git clone https://github.com/isaac-sim/IsaacLab.git ~/IsaacLab
+cd ~/IsaacLab
+
+# Install with Stable-Baselines3 support
+./isaaclab.sh --install sb3
+```
+
+### Verify Isaac Lab
+
+```bash
+./isaaclab.sh -p scripts/tutorials/00_sim/create_empty.py
+```
+
+## Step 4: Project Setup
+
+### Source Environment
+
+```bash
+cd ~/Autonomous-driving-ML-ROS2-GAZEBO
+source scripts/setup_isaac_env.sh
+```
+
+This sets up:
+- `$ISAAC_SIM_PATH` - Path to Isaac Sim
+- `$ISAAC_PYTHON` - Isaac Sim's Python interpreter
+- `$ISAACLAB_PATH` - Path to Isaac Lab
+- ROS2 Jazzy environment
+
+## Step 5: Training
+
+### Quick Training Test
+
+```bash
+# Test environment (100 steps)
+$ISAAC_PYTHON isaac_lab/envs/leatherback_env.py --headless --steps 100
+```
+
+### Full Training (Headless)
+
+```bash
+$ISAAC_PYTHON training/train_ppo.py --headless --timesteps 500000
+```
+
+### Training with GUI
+
+```bash
+$ISAAC_PYTHON training/train_ppo.py
+```
+
+### Monitor Training
+
+```bash
+# In another terminal
+tensorboard --logdir logs/tensorboard
+# Open http://localhost:6006 in browser
+```
+
+## Step 6: Evaluation
+
+```bash
+$ISAAC_PYTHON training/evaluate.py --model models/ppo/final_model.zip --episodes 10
+```
+
+## Step 7: ROS2 Integration (Optional)
+
+### Build ROS2 Workspace
+
+```bash
+cd ros2_ws
+source /opt/ros/jazzy/setup.bash
+colcon build
+source install/setup.bash
+```
+
+### Launch Isaac-ROS Bridge
+
+```bash
+# Terminal 1: Isaac Sim with ROS2
+ros2 run isaac_ros_bridge isaac_publisher
+
+# Terminal 2: Send commands
+ros2 topic pub /cmd_vel geometry_msgs/Twist "{linear: {x: 1.0}, angular: {z: 0.5}}"
+```
 
 ## What to Expect
 
-### Phase 1: First 10 Minutes (0-10k steps)
-- Agent explores randomly
-- Lots of collisions
-- Reward very low (-50 to 0)
-- **This is normal!**
+### Training Phases
 
-### Phase 2: First Hour (10k-50k steps)
-- Agent learns to avoid walls
-- Starts moving toward goal sometimes
-- Reward slowly increasing
-- Success rate: ~10-20%
-
-### Phase 3: First Day (50k-200k steps)
-- Smooth obstacle avoidance
-- Reaches goal regularly
-- Reward stabilizing around +20-50
-- Success rate: ~40-60%
-
-### Phase 4: Full Training (200k-500k steps)
-- Near-optimal paths
-- Rarely collides
-- Reward: +50-80
-- Success rate: ~80%+
-
----
-
-## Monitoring Training
-
-### TensorBoard Metrics to Watch
-
-1. **rollout/ep_rew_mean**: Average episode reward
-   - Should increase over time
-   - Target: +50 or higher
-
-2. **rollout/ep_len_mean**: Average episode length
-   - Should decrease (faster to goal)
-   - Target: <500 steps
-
-3. **train/policy_loss**: Policy network loss
-   - Should decrease and stabilize
-   - Spikes are normal
-
-4. **train/value_loss**: Value network loss
-   - Should decrease and stabilize
-
----
+| Phase | Timesteps | Behavior | Reward |
+|-------|-----------|----------|--------|
+| 1: Random | 0-10k | Random exploration, collisions | -50 to 0 |
+| 2: Learning | 10k-50k | Avoids walls, sometimes reaches goal | 0 to +20 |
+| 3: Improving | 50k-200k | Regular goal reaching | +20 to +50 |
+| 4: Converging | 200k-500k | Optimal paths, 80%+ success | +50 to +80 |
 
 ## Troubleshooting
 
-### "No module named 'gymnasium'"
+### Isaac Sim Won't Start
+
 ```bash
-source ~/ros2-ml-env/bin/activate
-pip install gymnasium stable-baselines3
+# Check GLIBC version (needs 2.35+)
+ldd --version
+
+# Check GPU memory
+nvidia-smi
 ```
 
-### "CUDA out of memory"
-Reduce parallel environments:
+### Python Version Mismatch
+
 ```bash
-ros2 run rl_training train_ppo --n-envs 4 --device cuda
+# Verify Python 3.11
+python --version
+
+# If wrong, activate correct environment
+source ~/env_isaaclab/bin/activate
 ```
 
-### Gazebo crashes / freezes
-Use headless mode:
+### ROS2 Not Found
+
 ```bash
-gz sim -s  # Server only, no GUI
+# Source ROS2
+source /opt/ros/jazzy/setup.bash
+
+# Verify
+ros2 --version
 ```
 
-### Training is very slow
-- Check GPU usage: `nvidia-smi`
-- Reduce `n_envs` if CPU bottlenecked
-- Try `--device cpu` to isolate GPU issues
+### Training Crashes
 
-### Robot doesn't move
-```bash
-# Check topics are published
-ros2 topic list
+- Reduce `num_envs` in config
+- Enable `--headless` mode
+- Check GPU memory with `nvidia-smi`
 
-# Verify cmd_vel works
-ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 1.0}}" --once
-```
+## Next Steps
 
----
-
-## File Locations
-
-### Models (Checkpoints)
-- `models/ppo_navigation/ppo_checkpoint_50000_steps.zip`
-- `models/ppo_navigation/ppo_checkpoint_100000_steps.zip`
-- `models/ppo_navigation/best_model/best_model.zip`  (best performance)
-- `models/ppo_navigation/final_model.zip`
-
-### Logs (TensorBoard)
-- `logs/ppo_navigation/PPO_*/events.out.tfevents.*`
-
-### Training Worlds
-- `src/vehicle_gazebo/worlds/rl_test_world.sdf` - Manual testing
-- `src/vehicle_gazebo/worlds/rl_training_world.sdf` - Parallel training
-
-### Vehicle Model
-- `src/vehicle_description/urdf/rl_training_car.sdf`
-
----
-
-## Next Steps After Training
-
-### 1. Test Trained Agent
-```bash
-# TODO: Create inference node
-# ros2 run rl_training test_agent --model models/ppo_navigation/best_model/best_model.zip
-```
-
-### 2. Add Obstacle Randomization
-Edit `rl_training_world.sdf` or create Python script to spawn random obstacles
-
-### 3. Add Moving Obstacles
-Implement dynamic obstacles with velocity plugins
-
-### 4. Improve Reward Function
-Tune based on training results:
-- Increase goal reward if agent doesn't reach it
-- Increase collision penalty if too risky
-- Add smoothness reward for better paths
-
----
-
-## Success Criteria
-
- **Environment launches without errors**
- **LiDAR data visible in RViz / topic echo**
- **Robot responds to /cmd_vel commands**
- **Training starts and shows progress bar**
- **TensorBoard shows reward curves**
- **Checkpoints save every 50k steps**
- **Agent reaches goal >50% after 200k steps**
- **Agent reaches goal >80% after 500k steps**
-
----
-
-## Expo Demo Plan
-
-1. **Live Training Visualization**: Show TensorBoard curves
-2. **Click-to-Navigate**: Set goal, watch agent drive
-3. **Obstacle Challenge**: Add random boxes, agent avoids
-4. **Comparison**: Show random policy vs trained policy
-5. **Architecture Diagram**: Explain RL training loop
-
----
-
-**Current Status**:  Ready to test!
-**Next Command**: Launch `rl_test_world.sdf` in Gazebo
+1. Modify reward function in `isaac_lab/envs/leatherback_env_cfg.py`
+2. Add obstacles or complexity to training
+3. Try different RL algorithms (SAC, TD3)
+4. Deploy trained model to real robot via ROS2

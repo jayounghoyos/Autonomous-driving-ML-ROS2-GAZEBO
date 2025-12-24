@@ -1,0 +1,55 @@
+# PPO Training Configuration for Leatherback Navigation
+# Isaac Sim 5.1.0 + Stable-Baselines3
+
+# ============================================================================
+# Environment Settings
+# ============================================================================
+env:
+  num_envs: 1           # Single env for SB3 (use VecEnv for parallel)
+  use_camera: false     # Disable for faster training
+  use_lidar: false
+  episode_length_s: 60.0
+  goal_tolerance: 0.5
+  num_waypoints: 10
+  arena_radius: 12.0
+
+# ============================================================================
+# PPO Hyperparameters
+# ============================================================================
+ppo:
+  policy: "MlpPolicy"
+  learning_rate: 0.0003
+  n_steps: 2048           # Steps per rollout
+  batch_size: 64          # Minibatch size
+  n_epochs: 10            # Epochs per update
+  gamma: 0.99             # Discount factor
+  gae_lambda: 0.95        # GAE lambda
+  clip_range: 0.2         # PPO clip range
+  ent_coef: 0.01          # Entropy coefficient (exploration)
+  vf_coef: 0.5            # Value function coefficient
+  max_grad_norm: 0.5      # Gradient clipping
+
+# ============================================================================
+# Training Settings
+# ============================================================================
+training:
+  total_timesteps: 1000000
+  eval_freq: 10000        # Steps between evaluations
+  n_eval_episodes: 5      # Episodes per evaluation
+  checkpoint_freq: 50000  # Steps between checkpoints
+  log_interval: 10        # Log every N updates
+
+# ============================================================================
+# Paths (relative to project root)
+# ============================================================================
+paths:
+  save_dir: "models/ppo"
+  log_dir: "logs/ppo"
+  tensorboard_dir: "logs/tensorboard"
+
+# ============================================================================
+# Hardware
+# ============================================================================
+hardware:
+  device: "auto"          # "cuda", "cpu", or "auto"
+  seed: 42                # Random seed (null for random)

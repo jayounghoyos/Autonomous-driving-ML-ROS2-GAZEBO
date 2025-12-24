@@ -1,0 +1,76 @@
+[project]
+name = "leatherback-rl"
+version = "2.0.0"
+description = "Autonomous driving RL with Isaac Sim 5.1.0 and Isaac Lab"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "jayounghoyos", email = "jayoungh@eafit.edu.co"}
+]
+keywords = ["autonomous-driving", "reinforcement-learning", "isaac-sim", "isaac-lab", "ros2"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "torch>=2.7.0",
+    "gymnasium>=1.0.0",
+    "stable-baselines3>=2.4.0",
+    "numpy>=1.26.0",
+    "pyyaml>=6.0.2",
+    "tensorboard>=2.18.0",
+    "tqdm>=4.67.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "black>=24.10.0",
+    "isort>=5.13.0",
+    "mypy>=1.13.0",
+]
+perception = [
+    "opencv-python>=4.10.0",
+    "ultralytics>=8.3.0",
+]
+
+[project.urls]
+Repository = "https://github.com/jayounghoyos/Autonomous-driving-ML-ROS2-GAZEBO"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["isaac_lab*", "training*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+exclude = '''
+/(
+    \.git
+    | \.venv
+    | build
+    | dist
+    | logs
+    | models
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+skip = [".git", ".venv", "build", "dist"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_ignores = true
+ignore_missing_imports = true

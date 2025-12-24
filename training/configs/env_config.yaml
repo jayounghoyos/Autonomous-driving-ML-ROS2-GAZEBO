@@ -1,0 +1,72 @@
+# Environment Configuration for Leatherback Navigation
+# These settings override defaults in LeatherbackEnvCfg
+
+# ============================================================================
+# Task Configuration
+# ============================================================================
+navigation:
+  goal_tolerance: 0.5       # Meters to waypoint
+  num_waypoints: 10
+  waypoint_spacing: 5.0     # Meters between waypoints
+  waypoint_lateral_range: 3.0
+  arena_radius: 12.0        # Geofence boundary
+
+# ============================================================================
+# Robot Configuration
+# ============================================================================
+robot:
+  # Use default NVIDIA cloud asset (null) or specify custom path
+  usd_path: null
+  init_position: [0.0, 0.0, 0.05]
+  randomize_heading: true
+
+# ============================================================================
+# Obstacles
+# ============================================================================
+obstacles:
+  num_obstacles: 5
+  spawn_radius_min: 5.0
+  spawn_radius_max: 10.0
+  size: [1.0, 1.0, 1.0]
+
+# ============================================================================
+# Sensors (Optional)
+# ============================================================================
+sensors:
+  use_camera: false
+  camera_resolution: [64, 64]
+  camera_position: [0.5, 0.0, 1.0]
+
+  use_lidar: false
+  lidar_num_points: 360
+  lidar_max_range: 20.0
+  lidar_position: [0.0, 0.0, 1.2]
+
+# ============================================================================
+# Rewards
+# ============================================================================
+rewards:
+  progress_scale: 10.0
+  goal_bonus: 50.0
+  time_penalty: -0.05
+  heading_scale: 0.5
+  collision_penalty: -50.0
+
+# ============================================================================
+# Physics
+# ============================================================================
+physics:
+  solver_type: "TGS"
+  disable_self_collisions: true
+  throttle_stiffness: 0.0
+  throttle_damping: 10.0
+  steering_stiffness: 10000.0
+  steering_damping: 1000.0
+
+# ============================================================================
+# Termination
+# ============================================================================
+termination:
+  flip_threshold: 0.3
+  fall_threshold: 0.0
+  episode_length_s: 60.0

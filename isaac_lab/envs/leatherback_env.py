@@ -1,0 +1,676 @@
+"""
+Leatherback RL Environment for Isaac Sim 5.1.0 + Isaac Lab.
+
+This module implements a Gymnasium-compatible environment for training
+autonomous navigation with the NVIDIA Leatherback vehicle.
+
+Based on Isaac Lab patterns for compatibility with Stable-Baselines3.
+"""
+
+from __future__ import annotations
+
+import os
+from typing import Any
+
+import gymnasium as gym
+import numpy as np
+from gymnasium import spaces
+
+from .leatherback_env_cfg import LeatherbackEnvCfg
+
+
+class LeatherbackEnv(gym.Env):
+    """Leatherback autonomous vehicle navigation environment.
+
+    This environment uses Isaac Sim 5.1.0 for physics simulation and
+    follows Gymnasium API for compatibility with RL libraries.
+
+    Args:
+        cfg: Environment configuration dataclass.
+        headless: Whether to run without GUI.
+        render_mode: Gymnasium render mode (unused, kept for API compatibility).
+    """
+
+    metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 30}
+
+    def __init__(
+        self,
+        cfg: LeatherbackEnvCfg | None = None,
+        headless: bool = False,
+        render_mode: str | None = None,
+    ):
+        super().__init__()
+
+        # Use default config if none provided
+        self.cfg = cfg if cfg is not None else LeatherbackEnvCfg()
+        self.render_mode = render_mode
+        self._headless = headless
+
+        print(f"Initializing Leatherback environment (headless={headless})...")
+
+        # Initialize Isaac Sim - must be done before any other imports
+        from isaacsim import SimulationApp
+
+        self._sim_app = SimulationApp({"headless": headless})
+
+        # Import Isaac modules after SimulationApp initialization
+        self._import_isaac_modules()
+
+        # Create world and scene
+        self._setup_world()
+
+        # Load robot
+        self._load_robot()
+
+        # Configure physics
+        self._configure_physics()
+
+        # Setup sensors (optional)
+        self._setup_sensors()
+
+        # Spawn obstacles
+        self._spawn_obstacles()
+
+        # Create goal marker
+        self._create_goal_marker()
+
+        # Initialize world
+        self._world.reset()
+
+        # Get joint indices after world initialization
+        self._get_joint_indices()
+
+        # Define spaces
+        self._define_spaces()
+
+        # Initialize state variables
+        self._step_count = 0
+        self._prev_action = np.zeros(2, dtype=np.float32)
+        self._prev_distance = 0.0
+        self._waypoints: np.ndarray | None = None
+        self._current_waypoint_idx = 0
+
+        print("Leatherback environment initialized successfully!")
+
+    def _import_isaac_modules(self) -> None:
+        """Import Isaac Sim modules after SimulationApp is created."""
+        # Core APIs
+        from isaacsim.core.api import World
+        from isaacsim.storage.native import get_assets_root_path
+        import isaacsim.core.utils.stage as stage_utils
+        import isaacsim.core.utils.prims as prim_utils
+        import isaacsim.core.utils.xforms as xforms_utils
+
+        # USD/PhysX
+        from pxr import UsdLux, UsdPhysics, PhysxSchema
+
+        # Core objects (use omni.isaac.core for Articulation)
+        from omni.isaac.core.articulations import Articulation
+        from omni.isaac.core.objects import VisualSphere, FixedCuboid
+
+        # Store for later use
+        self._World = World
+        self._get_assets_root_path = get_assets_root_path
+        self._stage_utils = stage_utils
+        self._prim_utils = prim_utils
+        self._xforms_utils = xforms_utils
+        self._UsdLux = UsdLux
+        self._UsdPhysics = UsdPhysics
+        self._PhysxSchema = PhysxSchema
+        self._Articulation = Articulation
+        self._VisualSphere = VisualSphere
+        self._FixedCuboid = FixedCuboid
+
+    def _setup_world(self) -> None:
+        """Create the simulation world."""
+        self._world = self._World()
+        self._world.scene.add_default_ground_plane()
+        self._stage = self._world.stage
+
+        # Add lighting
+        dome_light = self._UsdLux.DomeLight.Define(self._stage, "/World/DomeLight")
+        dome_light.CreateIntensityAttr(2000.0)
+        print("  World and lighting created")
+
+    def _load_robot(self) -> None:
+        """Load the Leatherback robot from assets."""
+        # Determine asset path
+        if self.cfg.robot_usd_path is not None:
+            leatherback_path = self.cfg.robot_usd_path
+        else:
+            assets_root = self._get_assets_root_path()
+            if assets_root is None:
+                raise RuntimeError(
+                    "Isaac Sim assets not configured! "
+                    "Run Isaac Sim once to download assets or set ISAAC_NUCLEUS_DIR."
+                )
+            leatherback_path = f"{assets_root}/Isaac/Robots/NVIDIA/Leatherback/leatherback.usd"
+
+        # Add robot to stage
+        self._stage_utils.add_reference_to_stage(leatherback_path, "/World/Leatherback")
+        print(f"  Robot loaded from: {leatherback_path}")
+
+        # Create Articulation wrapper
+        self._robot = self._Articulation(
+            prim_path="/World/Leatherback",
+            name="leatherback",
+        )
+        self._world.scene.add(self._robot)
+
+    def _configure_physics(self) -> None:
+        """Configure physics parameters for stable simulation."""
+        # Disable self-collisions
+        if self.cfg.disable_self_collisions:
+            prim = self._stage.GetPrimAtPath("/World/Leatherback")
+            if prim.IsValid():
+                physx_articulation = self._PhysxSchema.PhysxArticulationAPI.Apply(prim)
+                physx_articulation.GetEnabledSelfCollisionsAttr().Set(False)
+                print("  Self-collisions disabled")
+
+        # Configure solver
+        try:
+            self._world.get_physics_context().set_solver_type(self.cfg.solver_type)
+        except AttributeError:
+            # Fallback for different API versions
+            scene_prim = self._stage.GetPrimAtPath("/World/PhysicsScene")
+            if scene_prim.IsValid():
+                physx_scene = self._PhysxSchema.PhysxSceneAPI.Apply(scene_prim)
+                physx_scene.GetSolverTypeAttr().Set(self.cfg.solver_type)
+        print(f"  Physics solver: {self.cfg.solver_type}")
+
+        # Configure joint drives
+        self._configure_joint_drives()
+
+    def _configure_joint_drives(self) -> None:
+        """Configure drive parameters for throttle and steering joints."""
+        joints_path = "/World/Leatherback/Joints"
+
+        # Throttle joints (velocity control)
+        for joint_name in self.cfg.throttle_joint_names:
+            prim_path = f"{joints_path}/{joint_name}"
+            prim = self._stage.GetPrimAtPath(prim_path)
+            if prim.IsValid():
+                drive = self._UsdPhysics.DriveAPI.Apply(prim, "angular")
+                drive.GetStiffnessAttr().Set(self.cfg.throttle_stiffness)
+                drive.GetDampingAttr().Set(self.cfg.throttle_damping)
+
+        # Steering joints (position control)
+        for joint_name in self.cfg.steering_joint_names:
+            prim_path = f"{joints_path}/{joint_name}"
+            prim = self._stage.GetPrimAtPath(prim_path)
+            if prim.IsValid():
+                drive = self._UsdPhysics.DriveAPI.Apply(prim, "angular")
+                drive.GetStiffnessAttr().Set(self.cfg.steering_stiffness)
+                drive.GetDampingAttr().Set(self.cfg.steering_damping)
+
+        print("  Joint drives configured")
+
+    def _setup_sensors(self) -> None:
+        """Setup camera and LiDAR sensors if enabled."""
+        self._camera = None
+        self._lidar = None
+
+        if self.cfg.use_camera:
+            try:
+                from omni.isaac.sensor import Camera
+
+                self._camera = Camera(
+                    prim_path="/World/Leatherback/Rigid_Bodies/Chassis/Camera",
+                    name="rgb_camera",
+                    position=np.array(self.cfg.camera_position),
+                    frequency=20,
+                    resolution=self.cfg.camera_resolution,
+                    orientation=np.array([1.0, 0.0, 0.0, 0.0]),
+                )
+                self._camera.initialize()
+                print("  Camera initialized")
+            except Exception as e:
+                print(f"  Warning: Could not initialize camera: {e}")
+                self._camera = None
+
+        if self.cfg.use_lidar:
+            try:
+                from omni.isaac.sensor import LidarRtx
+
+                self._lidar = LidarRtx(
+                    prim_path="/World/Leatherback/Rigid_Bodies/Chassis/Lidar",
+                    name="lidar",
+                    position=np.array(self.cfg.lidar_position),
+                    orientation=np.array([1.0, 0.0, 0.0, 0.0]),
+                )
+                self._lidar.initialize()
+                self._lidar.add_range_data_to_frame()
+                print("  LiDAR initialized")
+            except Exception as e:
+                print(f"  Warning: Could not initialize LiDAR: {e}")
+                self._lidar = None
+
+    def _spawn_obstacles(self) -> None:
+        """Spawn obstacles in the environment."""
+        self._obstacles = []
+        for i in range(self.cfg.num_obstacles):
+            # Random position avoiding robot spawn area
+            while True:
+                angle = np.random.uniform(0, 2 * np.pi)
+                radius = np.random.uniform(
+                    self.cfg.obstacle_spawn_radius_min,
+                    self.cfg.obstacle_spawn_radius_max,
+                )
+                pos = np.array([radius * np.cos(angle), radius * np.sin(angle)])
+                if np.linalg.norm(pos) > self.cfg.obstacle_spawn_radius_min:
+                    break
+
+            obstacle = self._FixedCuboid(
+                prim_path=f"/World/Obstacle_{i}",
+                name=f"obstacle_{i}",
+                position=np.array([pos[0], pos[1], 0.5]),
+                scale=np.array(self.cfg.obstacle_size),
+                color=np.array([0.8, 0.2, 0.2]),
+            )
+            self._world.scene.add(obstacle)
+            self._obstacles.append(obstacle)
+
+        print(f"  {self.cfg.num_obstacles} obstacles spawned")
+
+    def _create_goal_marker(self) -> None:
+        """Create visual marker for current goal waypoint."""
+        self._goal_marker = self._VisualSphere(
+            prim_path="/World/GoalMarker",
+            name="goal_marker",
+            radius=0.3,
+            color=np.array([0.0, 1.0, 0.0]),
+            position=np.array([100.0, 100.0, 0.3]),  # Start hidden
+        )
+        self._world.scene.add(self._goal_marker)
+
+    def _get_joint_indices(self) -> None:
+        """Get DOF indices for throttle and steering joints."""
+        self._throttle_indices = [
+            self._robot.get_dof_index(name) for name in self.cfg.throttle_joint_names
+        ]
+        self._steering_indices = [
+            self._robot.get_dof_index(name) for name in self.cfg.steering_joint_names
+        ]
+        print(f"  Throttle indices: {self._throttle_indices}")
+        print(f"  Steering indices: {self._steering_indices}")
+
+    def _define_spaces(self) -> None:
+        """Define observation and action spaces."""
+        obs_dict = {
+            "vector": spaces.Box(
+                low=-np.inf,
+                high=np.inf,
+                shape=(self.cfg.vector_obs_size,),
+                dtype=np.float32,
+            ),
+        }
+
+        if self.cfg.use_camera:
+            obs_dict["image"] = spaces.Box(
+                low=0,
+                high=255,
+                shape=(*self.cfg.camera_resolution, 3),
+                dtype=np.uint8,
+            )
+
+        if self.cfg.use_lidar:
+            obs_dict["lidar"] = spaces.Box(
+                low=0.0,
+                high=self.cfg.lidar_max_range,
+                shape=(self.cfg.lidar_num_points,),
+                dtype=np.float32,
+            )
+
+        self.observation_space = spaces.Dict(obs_dict)
+        self.action_space = spaces.Box(
+            low=-1.0, high=1.0, shape=(2,), dtype=np.float32
+        )
+
+    def _generate_waypoints(self) -> np.ndarray:
+        """Generate navigation waypoints for the episode."""
+        waypoints = []
+        for i in range(self.cfg.num_waypoints):
+            x = (i + 1) * self.cfg.waypoint_spacing
+            y = np.random.uniform(
+                -self.cfg.waypoint_lateral_range,
+                self.cfg.waypoint_lateral_range,
+            )
+            waypoints.append([x, y])
+        return np.array(waypoints, dtype=np.float32)
+
+    def _get_robot_pose(self) -> tuple[np.ndarray, np.ndarray]:
+        """Get robot position and orientation."""
+        return self._xforms_utils.get_world_pose(
+            prim_path="/World/Leatherback/Rigid_Bodies/Chassis"
+        )
+
+    def _get_observation(self) -> dict[str, np.ndarray]:
+        """Compute current observation."""
+        position, orientation = self._get_robot_pose()
+
+        # Calculate heading from quaternion [w, x, y, z]
+        w, x, y, z = orientation
+        heading = np.arctan2(2.0 * (w * z + x * y), 1.0 - 2.0 * (y * y + z * z))
+
+        # Get current waypoint
+        current_waypoint = self._waypoints[self._current_waypoint_idx]
+
+        # Calculate goal-relative observations
+        goal_vector = current_waypoint - position[:2]
+        distance = np.linalg.norm(goal_vector)
+        target_heading = np.arctan2(goal_vector[1], goal_vector[0])
+        heading_error = np.arctan2(
+            np.sin(target_heading - heading), np.cos(target_heading - heading)
+        )
+
+        vector_obs = np.array(
+            [
+                distance,
+                np.cos(heading_error),
+                np.sin(heading_error),
+                self._prev_action[0],
+                self._prev_action[1],
+            ],
+            dtype=np.float32,
+        )
+
+        obs = {"vector": vector_obs}
+
+        # Camera observation
+        if self.cfg.use_camera and self._camera is not None:
+            image = np.zeros((*self.cfg.camera_resolution, 3), dtype=np.uint8)
+            try:
+                rgba = self._camera.get_rgba()
+                if rgba is not None and rgba.size > 0:
+                    if len(rgba.shape) == 1:
+                        expected_size = self.cfg.camera_resolution[0] * self.cfg.camera_resolution[1] * 4
+                        if rgba.size == expected_size:
+                            rgba = rgba.reshape((*self.cfg.camera_resolution, 4))
+                    if len(rgba.shape) == 3 and rgba.shape[2] >= 3:
+                        image = rgba[:, :, :3].astype(np.uint8)
+            except Exception:
+                pass
+            obs["image"] = image
+
+        # LiDAR observation
+        if self.cfg.use_lidar and self._lidar is not None:
+            lidar_data = np.zeros(self.cfg.lidar_num_points, dtype=np.float32)
+            try:
+                frame = self._lidar.get_current_frame()
+                raw_data = frame.get("range") or frame.get("depth")
+                if raw_data is not None and raw_data.size > 0:
+                    if raw_data.size != self.cfg.lidar_num_points:
+                        indices = np.linspace(
+                            0, raw_data.size - 1, self.cfg.lidar_num_points, dtype=int
+                        )
+                        lidar_data = raw_data[indices]
+                    else:
+                        lidar_data = raw_data
+                    lidar_data = np.clip(lidar_data, 0.0, self.cfg.lidar_max_range)
+            except Exception:
+                pass
+            obs["lidar"] = lidar_data
+
+        return obs
+
+    def _apply_action(self, action: np.ndarray) -> None:
+        """Apply throttle and steering action to robot."""
+        throttle = float(np.clip(action[0], -1.0, 1.0)) * self.cfg.max_throttle
+        steering = float(np.clip(action[1], -1.0, 1.0)) * self.cfg.max_steering
+
+        # Apply velocity to wheels
+        velocity_targets = np.full(4, throttle, dtype=np.float32)
+        self._robot.set_joint_velocities(
+            velocity_targets, joint_indices=self._throttle_indices
+        )
+
+        # Apply position to steering
+        steering_targets = np.full(2, steering, dtype=np.float32)
+        self._robot.set_joint_positions(
+            steering_targets, joint_indices=self._steering_indices
+        )
+
+    def _calculate_reward(self, distance: float, terminated: bool) -> float:
+        """Calculate reward for current step."""
+        reward = 0.0
+
+        # Progress reward
+        progress = self._prev_distance - distance
+        reward += progress * self.cfg.reward_progress_scale
+
+        # Heading alignment (extracted from observation)
+        # This is simplified - in practice you'd use the actual heading error
+
+        # Time penalty
+        reward += self.cfg.reward_time_penalty
+
+        # Termination penalty
+        if terminated:
+            reward += self.cfg.reward_collision_penalty
+
+        return reward
+
+    def _check_termination(
+        self, position: np.ndarray, orientation: np.ndarray
+    ) -> tuple[bool, bool, float]:
+        """Check termination conditions.
+
+        Returns:
+            terminated: Episode ended due to success/failure
+            truncated: Episode ended due to time limit
+            bonus: Additional reward (goal bonus)
+        """
+        terminated = False
+        truncated = False
+        bonus = 0.0
+
+        # Out of bounds
+        dist_from_origin = np.linalg.norm(position[:2])
+        if dist_from_origin > self.cfg.arena_radius:
+            terminated = True
+            print("  Out of bounds!")
+
+        # Fall detection
+        if position[2] < self.cfg.fall_threshold:
+            terminated = True
+            print("  Robot fell!")
+
+        # Flip detection
+        w, x, y, z = orientation
+        z_axis_z = 1.0 - 2.0 * (x * x + y * y)
+        if z_axis_z < self.cfg.flip_threshold:
+            terminated = True
+            print("  Robot flipped!")
+
+        # Time limit (max steps)
+        max_steps = int(self.cfg.episode_length_s / self.cfg.physics_dt / self.cfg.decimation)
+        if self._step_count >= max_steps:
+            truncated = True
+
+        return terminated, truncated, bonus
+
+    def reset(
+        self,
+        seed: int | None = None,
+        options: dict[str, Any] | None = None,
+    ) -> tuple[dict[str, np.ndarray], dict[str, Any]]:
+        """Reset environment to initial state."""
+        super().reset(seed=seed)
+
+        # Randomize initial heading
+        if self.cfg.randomize_heading:
+            random_yaw = np.random.uniform(0, 2 * np.pi)
+        else:
+            random_yaw = 0.0
+
+        # Quaternion from yaw [w, x, y, z]
+        orientation = np.array([
+            np.cos(random_yaw / 2),
+            0.0,
+            0.0,
+            np.sin(random_yaw / 2),
+        ])
+
+        # Reset robot pose
+        self._robot.set_world_pose(
+            position=np.array(self.cfg.robot_init_pos),
+            orientation=orientation,
+        )
+
+        # Zero velocities
+        all_indices = self._throttle_indices + self._steering_indices
+        self._robot.set_joint_velocities(
+            np.zeros(len(all_indices)), joint_indices=all_indices
+        )
+
+        # Generate new waypoints
+        self._waypoints = self._generate_waypoints()
+        self._current_waypoint_idx = 0
+
+        # Update goal marker
+        first_wp = self._waypoints[0]
+        self._goal_marker.set_world_pose(
+            position=np.array([first_wp[0], first_wp[1], 0.3])
+        )
+
+        # Reset state
+        self._step_count = 0
+        self._prev_action = np.zeros(2, dtype=np.float32)
+
+        # Step simulation to update state
+        self._world.step(render=not self._headless)
+
+        # Get initial observation
+        obs = self._get_observation()
+        self._prev_distance = obs["vector"][0]
+
+        print(f"Reset: First waypoint at ({first_wp[0]:.1f}, {first_wp[1]:.1f})")
+
+        return obs, {}
+
+    def step(
+        self, action: np.ndarray
+    ) -> tuple[dict[str, np.ndarray], float, bool, bool, dict[str, Any]]:
+        """Execute one environment step."""
+        self._step_count += 1
+        self._prev_action = action.copy()
+
+        # Apply action
+        self._apply_action(action)
+
+        # Step physics
+        self._world.step(render=not self._headless)
+
+        # Get state
+        position, orientation = self._get_robot_pose()
+        obs = self._get_observation()
+        distance = obs["vector"][0]
+
+        # Check waypoint progress
+        goal_bonus = 0.0
+        if distance < self.cfg.goal_tolerance:
+            self._current_waypoint_idx += 1
+            goal_bonus = self.cfg.reward_goal_bonus
+            print(f"  Waypoint {self._current_waypoint_idx}/{self.cfg.num_waypoints} reached!")
+
+            if self._current_waypoint_idx < self.cfg.num_waypoints:
+                next_wp = self._waypoints[self._current_waypoint_idx]
+                self._goal_marker.set_world_pose(
+                    position=np.array([next_wp[0], next_wp[1], 0.3])
+                )
+                # Recalculate observation with new waypoint
+                obs = self._get_observation()
+                distance = obs["vector"][0]
+
+        # Check termination
+        terminated, truncated, _ = self._check_termination(position, orientation)
+
+        # All waypoints completed
+        if self._current_waypoint_idx >= self.cfg.num_waypoints:
+            terminated = True
+            goal_bonus += self.cfg.reward_goal_bonus * 2  # Extra bonus for completing all
+            print("  All waypoints completed!")
+
+        # Calculate reward
+        reward = self._calculate_reward(distance, terminated)
+        reward += goal_bonus
+
+        # Update previous distance
+        self._prev_distance = distance
+
+        return obs, reward, terminated, truncated, {}
+
+    def render(self) -> np.ndarray | None:
+        """Render the environment."""
+        if self.render_mode == "rgb_array" and self._camera is not None:
+            return self._get_observation().get("image")
+        return None
+
+    def close(self) -> None:
+        """Clean up resources."""
+        if hasattr(self, "_sim_app") and self._sim_app is not None:
+            self._sim_app.close()
+
+    @property
+    def sim_app(self):
+        """Access to SimulationApp for external control."""
+        return self._sim_app
+
+
+# Register with Gymnasium
+def register_env():
+    """Register Leatherback environment with Gymnasium."""
+    gym.register(
+        id="Leatherback-v0",
+        entry_point="isaac_lab.envs.leatherback_env:LeatherbackEnv",
+        max_episode_steps=10000,
+    )
+
+
+if __name__ == "__main__":
+    """Test the environment."""
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Test Leatherback Environment")
+    parser.add_argument("--headless", action="store_true", help="Run without GUI")
+    parser.add_argument("--steps", type=int, default=500, help="Number of test steps")
+    args = parser.parse_args()
+
+    print("=" * 60)
+    print("Leatherback Environment Test")
+    print("=" * 60)
+
+    cfg = LeatherbackEnvCfg(use_camera=False, use_lidar=False)
+    env = LeatherbackEnv(cfg=cfg, headless=args.headless)
+
+    obs, info = env.reset()
+    print(f"Observation keys: {obs.keys()}")
+    print(f"Vector obs shape: {obs['vector'].shape}")
+
+    print(f"\nRunning {args.steps} steps...")
+    total_reward = 0.0
+
+    try:
+        for i in range(args.steps):
+            if not env.sim_app.is_running():
+                break
+
+            # Simple forward + oscillating steering
+            action = np.array([0.8, np.sin(i * 0.05) * 0.3], dtype=np.float32)
+            obs, reward, terminated, truncated, info = env.step(action)
+            total_reward += reward
+
+            if i % 50 == 0:
+                print(f"Step {i}: distance={obs['vector'][0]:.2f}m, reward={reward:.2f}")
+
+            if terminated or truncated:
+                print(f"Episode ended at step {i}")
+                obs, info = env.reset()
+                total_reward = 0.0
+
+    except KeyboardInterrupt:
+        print("\nInterrupted by user")
+
+    print(f"\nTotal reward: {total_reward:.2f}")
+    env.close()
+    print("Test complete!")
