@@ -216,7 +216,11 @@ class LeatherbackEnv(gym.Env):
         print("  Joint drives configured")
 
     def _setup_sensors(self) -> None:
-        """Setup camera and LiDAR sensors if enabled."""
+        """Setup camera and LiDAR sensors if enabled.
+
+        Note: Leatherback in Isaac Sim 5.1.0 has 4 built-in cameras.
+        We use the front camera for observations.
+        """
         self._camera = None
         self._lidar = None
 
@@ -224,16 +228,47 @@ class LeatherbackEnv(gym.Env):
             try:
                 from omni.isaac.sensor import Camera
 
-                self._camera = Camera(
-                    prim_path="/World/Leatherback/Rigid_Bodies/Chassis/Camera",
-                    name="rgb_camera",
-                    position=np.array(self.cfg.camera_position),
-                    frequency=20,
-                    resolution=self.cfg.camera_resolution,
-                    orientation=np.array([1.0, 0.0, 0.0, 0.0]),
-                )
-                self._camera.initialize()
-                print("  Camera initialized")
+                # Leatherback has built-in cameras - try to find them
+                # Common camera paths in Leatherback USD:
+                camera_paths = [
+                    "/World/Leatherback/Sensors/Camera_Front",
+                    "/World/Leatherback/Camera_Front",
+                    "/World/Leatherback/Rigid_Bodies/Chassis/Camera_Front",
+                    "/World/Leatherback/front_camera",
+                ]
+
+                camera_prim_path = None
+                for path in camera_paths:
+                    prim = self._stage.GetPrimAtPath(path)
+                    if prim.IsValid():
+                        camera_prim_path = path
+                        print(f"  Found built-in camera at: {path}")
+                        break
+
+                if camera_prim_path:
+                    # Use the built-in camera
+                    self._camera = Camera(
+                        prim_path=camera_prim_path,
+                        name="front_camera",
+                        frequency=30,
+                        resolution=self.cfg.camera_resolution,
+                    )
+                else:
+                    # Create new camera if no built-in found
+                    camera_prim_path = "/World/Leatherback/Rigid_Bodies/Chassis/FrontCamera"
+                    print(f"  No built-in camera found, creating at: {camera_prim_path}")
+
+                    self._camera = Camera(
+                        prim_path=camera_prim_path,
+                        name="front_camera",
+                        position=np.array(self.cfg.camera_position),
+                        frequency=30,
+                        resolution=self.cfg.camera_resolution,
+                        orientation=np.array([1.0, 0.0, 0.0, 0.0]),
+                    )
+
+                self._world.scene.add(self._camera)
+                print(f"  Camera initialized: {self.cfg.camera_resolution}")
             except Exception as e:
                 print(f"  Warning: Could not initialize camera: {e}")
                 self._camera = None
@@ -243,44 +278,108 @@ class LeatherbackEnv(gym.Env):
                 from omni.isaac.sensor import LidarRtx
 
                 self._lidar = LidarRtx(
-                    prim_path="/World/Leatherback/Rigid_Bodies/Chassis/Lidar",
+                    prim_path="/World/Leatherback/Rigid_Bodies/Chassis/TopLidar",
                     name="lidar",
                     position=np.array(self.cfg.lidar_position),
                     orientation=np.array([1.0, 0.0, 0.0, 0.0]),
                 )
-                self._lidar.initialize()
+                self._world.scene.add(self._lidar)
                 self._lidar.add_range_data_to_frame()
-                print("  LiDAR initialized")
+                print(f"  LiDAR initialized at {self.cfg.lidar_position}")
             except Exception as e:
                 print(f"  Warning: Could not initialize LiDAR: {e}")
                 self._lidar = None
 
     def _spawn_obstacles(self) -> None:
-        """Spawn obstacles in the environment."""
+        """Spawn randomized obstacles in the environment."""
         self._obstacles = []
-        for i in range(self.cfg.num_obstacles):
-            # Random position avoiding robot spawn area
-            while True:
+        self._obstacle_count = 0
+
+        # Random number of obstacles
+        num_obstacles = np.random.randint(
+            self.cfg.num_obstacles_min,
+            self.cfg.num_obstacles_max + 1
+        )
+
+        for i in range(num_obstacles):
+            self._spawn_single_obstacle(i)
+
+        self._obstacle_count = num_obstacles
+        print(f"  {num_obstacles} randomized obstacles spawned")
+
+    def _spawn_single_obstacle(self, index: int) -> None:
+        """Spawn a single randomized obstacle."""
+        # Random position avoiding robot spawn area
+        max_attempts = 50
+        for _ in range(max_attempts):
+            angle = np.random.uniform(0, 2 * np.pi)
+            radius = np.random.uniform(
+                self.cfg.obstacle_spawn_radius_min,
+                self.cfg.obstacle_spawn_radius_max,
+            )
+            pos = np.array([radius * np.cos(angle), radius * np.sin(angle)])
+
+            # Check minimum distance from robot spawn
+            if np.linalg.norm(pos) >= self.cfg.obstacle_min_spawn_distance:
+                break
+
+        # Random size
+        size = np.array([
+            np.random.uniform(self.cfg.obstacle_size_min[0], self.cfg.obstacle_size_max[0]),
+            np.random.uniform(self.cfg.obstacle_size_min[1], self.cfg.obstacle_size_max[1]),
+            np.random.uniform(self.cfg.obstacle_size_min[2], self.cfg.obstacle_size_max[2]),
+        ])
+
+        # Random color
+        if self.cfg.randomize_obstacle_colors:
+            # Generate varied colors (avoiding pure green which is goal marker)
+            color = np.array([
+                np.random.uniform(0.3, 0.9),
+                np.random.uniform(0.1, 0.5),
+                np.random.uniform(0.1, 0.7),
+            ])
+        else:
+            color = np.array([0.8, 0.2, 0.2])  # Default red
+
+        obstacle = self._FixedCuboid(
+            prim_path=f"/World/Obstacle_{index}",
+            name=f"obstacle_{index}",
+            position=np.array([pos[0], pos[1], size[2] / 2]),
+            scale=size,
+            color=color,
+        )
+        self._world.scene.add(obstacle)
+        self._obstacles.append(obstacle)
+
+    def _randomize_obstacles(self) -> None:
+        """Re-randomize obstacle positions on episode reset.
+
+        Note: Only changes positions, not scale, to avoid PhysX instability.
+        """
+        if not self.cfg.randomize_obstacles_on_reset:
+            return
+
+        for obstacle in self._obstacles:
+            # Random position - keep obstacles away from spawn area
+            max_attempts = 100
+            for _ in range(max_attempts):
                 angle = np.random.uniform(0, 2 * np.pi)
+                # Minimum 5m from origin to avoid spawn collisions
                 radius = np.random.uniform(
-                    self.cfg.obstacle_spawn_radius_min,
+                    max(5.0, self.cfg.obstacle_spawn_radius_min),
                     self.cfg.obstacle_spawn_radius_max,
                 )
                 pos = np.array([radius * np.cos(angle), radius * np.sin(angle)])
-                if np.linalg.norm(pos) > self.cfg.obstacle_spawn_radius_min:
+                if np.linalg.norm(pos) >= 5.0:
                     break
 
-            obstacle = self._FixedCuboid(
-                prim_path=f"/World/Obstacle_{i}",
-                name=f"obstacle_{i}",
-                position=np.array([pos[0], pos[1], 0.5]),
-                scale=np.array(self.cfg.obstacle_size),
-                color=np.array([0.8, 0.2, 0.2]),
-            )
-            self._world.scene.add(obstacle)
-            self._obstacles.append(obstacle)
-
-        print(f"  {self.cfg.num_obstacles} obstacles spawned")
+            # Update position only (scale changes cause physics issues)
+            try:
+                obstacle.set_world_pose(
+                    position=np.array([pos[0], pos[1], 0.75])
+                )
+            except Exception:
+                pass
 
     def _create_goal_marker(self) -> None:
         """Create visual marker for current goal waypoint."""
@@ -551,33 +650,34 @@ class LeatherbackEnv(gym.Env):
         seed: int | None = None,
         options: dict[str, Any] | None = None,
     ) -> tuple[dict[str, np.ndarray], dict[str, Any]]:
-        """Reset environment to initial state."""
+        """Reset environment to initial state.
+
+        Uses world.reset() to properly reset physics state and avoid
+        PhysX invalid transform errors.
+        """
         super().reset(seed=seed)
-
-        # Randomize initial heading
-        if self.cfg.randomize_heading:
-            random_yaw = np.random.uniform(0, 2 * np.pi)
-        else:
-            random_yaw = 0.0
-
-        # Quaternion from yaw [w, x, y, z]
-        orientation = np.array([
-            np.cos(random_yaw / 2),
-            0.0,
-            0.0,
-            np.sin(random_yaw / 2),
-        ])
 
         # Reset Ackermann controller
         self._ackermann_controller.reset()
 
-        # Reset robot pose
-        self._robot.set_world_pose(
-            position=np.array(self.cfg.robot_init_pos),
-            orientation=orientation,
+        # Randomize obstacles for this episode (before physics reset)
+        self._randomize_obstacles()
+
+        # Generate new waypoints
+        self._waypoints = self._generate_waypoints()
+        self._current_waypoint_idx = 0
+
+        # Update goal marker position
+        first_wp = self._waypoints[0]
+        self._goal_marker.set_world_pose(
+            position=np.array([first_wp[0], first_wp[1], 0.3])
         )
 
-        # Reset all joint states to zero using apply_action with zero velocities
+        # Use world.reset() for proper physics state reset
+        # This resets all articulations to their default states
+        self._world.reset()
+
+        # After world reset, apply zero velocities to ensure robot is stationary
         num_dofs = self._robot.num_dof
         zero_action = self._ArticulationAction(
             joint_positions=np.zeros(num_dofs, dtype=np.float32),
@@ -585,22 +685,12 @@ class LeatherbackEnv(gym.Env):
         )
         self._robot.apply_action(zero_action)
 
-        # Generate new waypoints
-        self._waypoints = self._generate_waypoints()
-        self._current_waypoint_idx = 0
+        # Step once to apply the reset
+        self._world.step(render=not self._headless)
 
-        # Update goal marker
-        first_wp = self._waypoints[0]
-        self._goal_marker.set_world_pose(
-            position=np.array([first_wp[0], first_wp[1], 0.3])
-        )
-
-        # Reset state
+        # Reset state variables
         self._step_count = 0
         self._prev_action = np.zeros(2, dtype=np.float32)
-
-        # Step simulation to update state
-        self._world.step(render=not self._headless)
 
         # Get initial observation
         obs = self._get_observation()

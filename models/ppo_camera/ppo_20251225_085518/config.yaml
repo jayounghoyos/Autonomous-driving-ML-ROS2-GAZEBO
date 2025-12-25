@@ -1,0 +1,56 @@
+env:
+  arena_radius: 25.0
+  camera_position:
+  - 0.8
+  - 0.0
+  - 0.8
+  camera_resolution:
+  - 64
+  - 64
+  episode_length_s: 120.0
+  goal_tolerance: 0.5
+  num_envs: 1
+  num_obstacles_max: 8
+  num_obstacles_min: 3
+  num_waypoints: 5
+  obstacle_min_spawn_distance: 2.0
+  obstacle_size_max:
+  - 2.0
+  - 2.0
+  - 1.5
+  obstacle_size_min:
+  - 0.5
+  - 0.5
+  - 0.5
+  obstacle_spawn_radius_max: 15.0
+  obstacle_spawn_radius_min: 3.0
+  randomize_obstacle_colors: true
+  randomize_obstacles_on_reset: true
+  use_camera: true
+  use_lidar: false
+  waypoint_spacing: 4.0
+hardware:
+  device: cuda
+  seed: 42
+paths:
+  log_dir: logs/ppo_camera
+  save_dir: models/ppo_camera
+  tensorboard_dir: logs/tensorboard
+ppo:
+  batch_size: 32
+  clip_range: 0.2
+  ent_coef: 0.02
+  gae_lambda: 0.95
+  gamma: 0.99
+  learning_rate: 0.0001
+  max_grad_norm: 0.5
+  n_epochs: 5
+  n_steps: 1024
+  policy: MultiInputPolicy
+  vf_coef: 0.5
+training:
+  checkpoint_freq: 25000
+  eval_freq: 10000
+  log_interval: 5
+  n_eval_episodes: 3
+  total_timesteps: 500000

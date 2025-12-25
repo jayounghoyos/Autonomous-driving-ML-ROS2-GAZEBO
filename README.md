@@ -103,7 +103,8 @@ source /opt/ros/jazzy/setup.bash
 colcon build
 source install/setup.bash
 ```
-
+### One of the first working versions
+![leatherback_training](/readmeDocumentation//training.gif)
 ## License
 
 MIT License

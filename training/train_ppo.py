@@ -143,6 +143,7 @@ def main() -> int:
     print(f"  Headless: {args.headless}")
     print(f"  Camera: {use_camera}")
     print(f"  LiDAR: {use_lidar}")
+    print(f"  Obstacles: {env_config.get('num_obstacles_min', 3)}-{env_config.get('num_obstacles_max', 8)} (randomized)")
     print(f"  Save dir: {save_dir}")
     if args.resume:
         print(f"  Resume from: {args.resume}")
@@ -185,6 +186,19 @@ def main() -> int:
         num_waypoints=env_config.get("num_waypoints", 10),
         waypoint_spacing=env_config.get("waypoint_spacing", 5.0),
         arena_radius=env_config.get("arena_radius", 12.0),
+        # Camera settings
+        camera_resolution=tuple(env_config.get("camera_resolution", [64, 64])),
+        camera_position=tuple(env_config.get("camera_position", [0.8, 0.0, 0.8])),
+        # Obstacle settings
+        num_obstacles_min=env_config.get("num_obstacles_min", 3),
+        num_obstacles_max=env_config.get("num_obstacles_max", 8),
+        obstacle_spawn_radius_min=env_config.get("obstacle_spawn_radius_min", 3.0),
+        obstacle_spawn_radius_max=env_config.get("obstacle_spawn_radius_max", 15.0),
+        obstacle_size_min=tuple(env_config.get("obstacle_size_min", [0.5, 0.5, 0.5])),
+        obstacle_size_max=tuple(env_config.get("obstacle_size_max", [2.0, 2.0, 1.5])),
+        randomize_obstacle_colors=env_config.get("randomize_obstacle_colors", True),
+        randomize_obstacles_on_reset=env_config.get("randomize_obstacles_on_reset", True),
+        obstacle_min_spawn_distance=env_config.get("obstacle_min_spawn_distance", 2.0),
     )
 
     # Create environment

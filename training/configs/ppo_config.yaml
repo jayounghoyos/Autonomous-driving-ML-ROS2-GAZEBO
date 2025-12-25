@@ -6,13 +6,28 @@
 # ============================================================================
 env:
   num_envs: 1           # Single env for SB3 (use VecEnv for parallel)
-  use_camera: false     # Disable for faster training
+  use_camera: false     # Set true for vision-based training (slower)
   use_lidar: false
   episode_length_s: 120.0    # Longer episodes for more waypoints
   goal_tolerance: 0.5
   num_waypoints: 5           # Reduced for smaller arena
   waypoint_spacing: 4.0      # 4m between waypoints
   arena_radius: 25.0         # 25m radius (supports up to x=20m)
+
+  # Camera settings (when use_camera: true)
+  camera_resolution: [64, 64]  # Width x Height
+  camera_position: [0.8, 0.0, 0.8]  # Forward, centered, elevated
+
+  # Obstacle settings (randomized each episode)
+  num_obstacles_min: 3
+  num_obstacles_max: 8
+  obstacle_spawn_radius_min: 6.0   # Minimum 6m from robot spawn
+  obstacle_spawn_radius_max: 18.0
+  obstacle_size_min: [0.5, 0.5, 0.5]
+  obstacle_size_max: [2.0, 2.0, 1.5]
+  randomize_obstacle_colors: true
+  randomize_obstacles_on_reset: true
+  obstacle_min_spawn_distance: 2.0
 
 # ============================================================================
 # PPO Hyperparameters

@@ -76,15 +76,26 @@ class LeatherbackEnvCfg:
     # Obstacle Configuration
     # =========================================================================
 
-    # Number of obstacles to spawn
-    num_obstacles: int = 5
+    # Number of obstacles range (randomized per episode)
+    num_obstacles_min: int = 3
+    num_obstacles_max: int = 8
 
     # Obstacle spawn radius (min/max from origin)
-    obstacle_spawn_radius_min: float = 5.0
-    obstacle_spawn_radius_max: float = 10.0
+    obstacle_spawn_radius_min: float = 6.0  # Minimum 6m to avoid robot spawn
+    obstacle_spawn_radius_max: float = 18.0
 
-    # Obstacle size [width, depth, height]
-    obstacle_size: tuple[float, float, float] = (1.0, 1.0, 1.0)
+    # Obstacle size range [min, max] for each dimension
+    obstacle_size_min: tuple[float, float, float] = (0.5, 0.5, 0.5)
+    obstacle_size_max: tuple[float, float, float] = (2.0, 2.0, 1.5)
+
+    # Randomize obstacle colors
+    randomize_obstacle_colors: bool = True
+
+    # Re-randomize obstacles each episode reset
+    randomize_obstacles_on_reset: bool = True
+
+    # Minimum distance from robot spawn point
+    obstacle_min_spawn_distance: float = 2.0
 
     # =========================================================================
     # Observation Configuration
