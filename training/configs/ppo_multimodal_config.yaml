@@ -38,7 +38,7 @@ env:
   # RGB Camera (84x84 - standard for vision RL)
   use_camera: true
   camera_resolution: [84, 84]
-  camera_position: [0.2, 0.0, 0.2]   # Front-mounted, slightly elevated
+  camera_position: [0.0, 0.0, 0.35]  # Center-mounted, elevated (won't clip through obstacles)
   camera_fov: 90.0                   # Wide field of view
 
   # LiDAR (180 points, 10m range)
@@ -200,7 +200,7 @@ ppo:
   #     vf: [256, 256]
 
 training:
-  total_timesteps: 1500000          # Longer for visual learning
+  total_timesteps: 2500000          # 2.5M for visual learning
   checkpoint_freq: 100000
   log_interval: 10
   eval_freq: 50000                  # Periodic evaluation

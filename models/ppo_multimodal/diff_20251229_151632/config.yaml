@@ -1,0 +1,124 @@
+env:
+  arena_radius: 30.0
+  camera_fov: 90.0
+  camera_position:
+  - 0.0
+  - 0.0
+  - 0.35
+  camera_resolution:
+  - 84
+  - 84
+  course_length: 20.0
+  course_width: 6.0
+  curriculum_end_difficulty: 0.7
+  curriculum_episodes_to_max: 600
+  curriculum_start_difficulty: 0.15
+  cylinder_height_max: 1.0
+  cylinder_height_min: 0.5
+  cylinder_radius_max: 0.35
+  cylinder_radius_min: 0.15
+  episode_length_s: 90.0
+  goal_obs_size: 6
+  goal_tolerance: 0.6
+  heading_gate: 0.65
+  lidar_max_range: 10.0
+  lidar_num_points: 180
+  lidar_position:
+  - 0.0
+  - 0.0
+  - 0.25
+  max_angular_velocity: 4.0
+  max_linear_velocity: 2.0
+  max_passage_width: 1.5
+  max_wheel_velocity: 20.0
+  min_passage_width: 0.65
+  num_envs: 1
+  num_obstacles_max: 30
+  num_obstacles_min: 8
+  num_waypoints: 3
+  obstacle_course_type: barn
+  obstacle_difficulty: 0.3
+  obstacle_min_spawn_distance: 1.2
+  obstacle_shape: mixed
+  obstacle_size_max:
+  - 0.5
+  - 0.5
+  - 0.8
+  obstacle_size_min:
+  - 0.25
+  - 0.25
+  - 0.4
+  obstacle_spawn_x_max: 18.0
+  obstacle_spawn_x_min: 1.5
+  obstacle_waypoint_clearance: 0.8
+  progress_gate: 0.008
+  randomize_obstacle_colors: true
+  randomize_obstacles_on_reset: true
+  reward_all_waypoints_bonus: 400.0
+  reward_away_penalty_scale: 12.0
+  reward_collision_penalty: -200.0
+  reward_heading_scale: 0.4
+  reward_obstacle_danger_zone: 1.0
+  reward_obstacle_penalty_max: 6.0
+  reward_progress_scale: 30.0
+  reward_reverse_penalty: -0.4
+  reward_smooth_scale: 0.08
+  reward_stuck_penalty: -2.5
+  reward_velocity_scale: 0.2
+  reward_waypoint_bonus: 250.0
+  spawn_obstacles_before_goals: true
+  stage1_episodes: 200
+  stage1_goal_distance_max: 6.0
+  stage1_goal_distance_min: 4.0
+  stage1_lateral_range: 1.0
+  stage1_num_waypoints: 1
+  stage2_episodes: 400
+  stage2_goal_spacing: 5.0
+  stage2_lateral_range: 1.5
+  stage2_num_waypoints: 2
+  stage3_episodes: 600
+  stage3_goal_spacing: 5.0
+  stage3_lateral_range: 2.0
+  stage3_num_waypoints: 3
+  stage4_goal_spacing: 5.0
+  stage4_lateral_range: 2.5
+  stage4_num_waypoints: 3
+  stuck_movement_threshold: 0.04
+  stuck_threshold_steps: 25
+  use_camera: true
+  use_curriculum: true
+  use_lidar: true
+  use_progressive_goals: true
+  waypoint_lateral_range: 2.0
+  waypoint_spacing: 5.0
+hardware:
+  device: cuda
+  seed: 42
+paths:
+  log_dir: logs/ppo_multimodal
+  save_dir: models/ppo_multimodal
+  tensorboard_dir: logs/tensorboard
+ppo:
+  batch_size: 64
+  clip_range: 0.2
+  ent_coef: 0.01
+  gae_lambda: 0.95
+  gamma: 0.995
+  learning_rate: 0.0001
+  max_grad_norm: 0.5
+  n_epochs: 10
+  n_steps: 2048
+  policy: MultiInputPolicy
+  vf_coef: 0.5
+robot:
+  robot_mass: 17.0
+  skid_steer_correction: 4.2
+  track_width: 0.37558
+  type: jackal
+  wheel_radius: 0.098
+  wheelbase: 0.262
+training:
+  checkpoint_freq: 100000
+  eval_freq: 50000
+  log_interval: 10
+  total_timesteps: 2500000
