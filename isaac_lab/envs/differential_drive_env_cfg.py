@@ -200,6 +200,10 @@ class DifferentialDriveEnvCfg:
 
     vector_obs_size: int = 5
 
+    # Multi-modal goal observation size (for camera+lidar mode)
+    # [dist_norm, sin(heading), cos(heading), progress, lin_vel, ang_vel]
+    goal_obs_size: int = 6
+
     # =========================================================================
     # Motor Configuration (Jackal specs)
     # =========================================================================
@@ -355,3 +359,105 @@ class DifferentialDriveEnvCfgBARN(DifferentialDriveEnvCfg):
 
     # Shorter episodes (need to be efficient)
     episode_length_s: float = 60.0
+
+
+@dataclass
+class DifferentialDriveEnvCfgMultiModal(DifferentialDriveEnvCfg):
+    """Multi-modal configuration with Camera + LiDAR + Goal info.
+
+    This configuration enables sensor fusion for robust navigation:
+    - RGB Camera (84x84): Visual features, semantic understanding
+    - LiDAR (180 points): Precise distance measurements
+    - Goal Info (6 values): Navigation direction and state
+
+    Observation space is a Dict compatible with SB3 MultiInputPolicy:
+    {
+        "camera": Box(0, 255, (84, 84, 3), uint8),
+        "lidar": Box(0, 10, (180,), float32),
+        "goal": Box(-1, 1, (6,), float32)
+    }
+    """
+
+    # =========================================================================
+    # Sensor Configuration
+    # =========================================================================
+
+    # Enable both sensors
+    use_camera: bool = True
+    use_lidar: bool = True
+
+    # Camera: 84x84 RGB (standard for vision RL)
+    camera_resolution: tuple[int, int] = (84, 84)
+    camera_position: tuple[float, float, float] = (0.2, 0.0, 0.2)  # Front-mounted, slightly elevated
+    camera_fov: float = 90.0  # Field of view in degrees
+
+    # LiDAR: 180 points, 10m range
+    lidar_num_points: int = 180
+    lidar_max_range: float = 10.0
+    lidar_position: tuple[float, float, float] = (0.0, 0.0, 0.25)
+
+    # Goal observation size: [dist, sin, cos, progress, lin_vel, ang_vel]
+    goal_obs_size: int = 6
+
+    # =========================================================================
+    # BARN-Style Obstacle Course
+    # =========================================================================
+
+    obstacle_course_type: Literal["random", "corridor", "maze", "barn"] = "barn"
+    obstacle_shape: Literal["cylinder", "cube", "mixed"] = "mixed"
+
+    # Difficulty and curriculum
+    use_curriculum: bool = True
+    curriculum_start_difficulty: float = 0.15
+    curriculum_end_difficulty: float = 0.75
+    curriculum_episodes_to_max: int = 600
+
+    # Obstacle counts
+    num_obstacles_min: int = 8
+    num_obstacles_max: int = 30
+
+    # Course dimensions
+    course_width: float = 8.0
+    course_length: float = 20.0
+
+    # =========================================================================
+    # Progressive Goals (same as v3)
+    # =========================================================================
+
+    use_progressive_goals: bool = True
+
+    # Stage 1: 1 close goal
+    stage1_episodes: int = 200
+    stage1_num_waypoints: int = 1
+    stage1_goal_distance_min: float = 4.0
+    stage1_goal_distance_max: float = 6.0
+    stage1_lateral_range: float = 1.0
+
+    # Stage 2: 2 goals
+    stage2_episodes: int = 400
+    stage2_num_waypoints: int = 2
+    stage2_goal_spacing: float = 5.0
+    stage2_lateral_range: float = 1.5
+
+    # Stage 3: 3 goals
+    stage3_episodes: int = 600
+    stage3_num_waypoints: int = 3
+    stage3_goal_spacing: float = 5.0
+    stage3_lateral_range: float = 2.0
+
+    # Stage 4: Full randomness
+    stage4_num_waypoints: int = 3
+    stage4_goal_spacing: float = 5.0
+    stage4_lateral_range: float = 2.5
+
+    # =========================================================================
+    # Navigation
+    # =========================================================================
+
+    num_waypoints: int = 3
+    waypoint_spacing: float = 5.0
+    waypoint_lateral_range: float = 2.0
+    goal_tolerance: float = 0.8
+
+    # Episode length
+    episode_length_s: float = 90.0  # Longer for visual learning

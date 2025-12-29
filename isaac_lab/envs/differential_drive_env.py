@@ -342,26 +342,70 @@ class DifferentialDriveEnv(gym.Env):
                     )
 
                 self._world.scene.add(self._camera)
-                print(f"  Camera: {self.cfg.camera_resolution}")
+                # CRITICAL: Initialize camera for it to work
+                self._camera.initialize()
+                self._camera.add_rgb_to_frame()
+                print(f"  Camera: {self.cfg.camera_resolution} - initialized")
             except Exception as e:
                 print(f"  Warning: Camera init failed: {e}")
+                import traceback
+                traceback.print_exc()
 
         if self.cfg.use_lidar:
+            self._lidar_annotator = None
+            self._lidar_render_product = None
             try:
-                from omni.isaac.sensor import LidarRtx
+                import omni.kit.commands
+                from pxr import Gf
+                import omni.replicator.core as rep
 
                 lidar_path = f"{self._chassis_path}/TopLidar"
-                self._lidar = LidarRtx(
-                    prim_path=lidar_path,
-                    name="lidar",
-                    position=np.array(self.cfg.lidar_position),
-                    orientation=np.array([1.0, 0.0, 0.0, 0.0]),
+
+                # Create RTX LiDAR using official Isaac Sim command
+                # Using Example_Rotary_2D for 2D horizontal scan (single plane, 360°)
+                # This is required for FlatScan annotator which only works with 2D LiDAR
+                _, self._lidar_prim = omni.kit.commands.execute(
+                    "IsaacSensorCreateRtxLidar",
+                    path=lidar_path,
+                    parent=None,
+                    config="Example_Rotary_2D",  # 2D 360° rotating LiDAR (horizontal plane only)
+                    translation=tuple(self.cfg.lidar_position),
+                    orientation=Gf.Quatd(1.0, 0.0, 0.0, 0.0),
                 )
-                self._world.scene.add(self._lidar)
-                self._lidar.add_range_data_to_frame()
-                print(f"  LiDAR: {self.cfg.lidar_num_points} points")
+
+                # Create render product (required for annotators)
+                self._lidar_render_product = rep.create.render_product(
+                    self._lidar_prim.GetPath(), [1, 1], name="LidarRenderProduct"
+                )
+
+                # Try FlatScan annotator first (provides per-tick data, more immediate)
+                # This is better for 2D navigation use cases
+                # NOTE: Isaac Sim 5.1 uses simpler annotator names without "RtxSensorCpu" prefix
+                try:
+                    self._lidar_annotator = rep.AnnotatorRegistry.get_annotator(
+                        "IsaacComputeRTXLidarFlatScan"
+                    )
+                    self._lidar_annotator.attach(self._lidar_render_product)
+                    self._lidar_annotator_type = "FlatScan"
+                    print(f"  LiDAR: RTX LiDAR with FlatScan annotator (per-tick)")
+                except Exception as e1:
+                    print(f"  FlatScan annotator failed: {e1}, trying ScanBuffer...")
+                    # Fallback to ScanBuffer (waits for full rotation)
+                    self._lidar_annotator = rep.AnnotatorRegistry.get_annotator(
+                        "IsaacCreateRTXLidarScanBuffer"
+                    )
+                    self._lidar_annotator.attach(self._lidar_render_product)
+                    self._lidar_annotator_type = "ScanBuffer"
+                    print(f"  LiDAR: RTX LiDAR with ScanBuffer annotator (full rotation)")
+
+                print(f"  Config: Example_Rotary_2D (360° horizontal plane)")
+
             except Exception as e:
                 print(f"  Warning: LiDAR init failed: {e}")
+                import traceback
+                traceback.print_exc()
+                self._lidar_annotator = None
+                self._lidar_render_product = None
 
     def _spawn_obstacles(self) -> None:
         """Spawn BARN-style obstacle course.
@@ -388,14 +432,19 @@ class DifferentialDriveEnv(gym.Env):
         # Get course type
         course_type = getattr(self.cfg, 'obstacle_course_type', 'random')
 
-        if course_type == "barn":
-            self._spawn_barn_obstacles(num_obstacles, difficulty)
-        elif course_type == "corridor":
-            self._spawn_corridor_obstacles(num_obstacles, difficulty)
-        elif course_type == "maze":
-            self._spawn_maze_obstacles(num_obstacles, difficulty)
-        else:
-            self._spawn_random_obstacles(num_obstacles)
+        try:
+            if course_type == "barn":
+                self._spawn_barn_obstacles(num_obstacles, difficulty)
+            elif course_type == "corridor":
+                self._spawn_corridor_obstacles(num_obstacles, difficulty)
+            elif course_type == "maze":
+                self._spawn_maze_obstacles(num_obstacles, difficulty)
+            else:
+                self._spawn_random_obstacles(num_obstacles)
+        except Exception as e:
+            print(f"  [ERROR] Obstacle spawning failed: {e}")
+            import traceback
+            traceback.print_exc()
 
         print(f"  {len(self._obstacles)} obstacles spawned (difficulty={difficulty:.2f})")
 
@@ -418,19 +467,9 @@ class DifferentialDriveEnv(gym.Env):
         Obstacles should spawn BEFORE the furthest goal, not behind it.
         This ensures all obstacles are relevant for navigation.
         """
-        # Check if progressive goals enabled
-        use_progressive = getattr(self.cfg, 'use_progressive_goals', False)
-
-        if use_progressive:
-            # Get current stage goal parameters
-            num_wp, spacing, _ = self._get_progressive_goal_params()
-            furthest_goal_x = num_wp * spacing
-            # Spawn obstacles up to 1m before the furthest goal
-            spawn_limit = max(3.0, furthest_goal_x - 1.0)
-        else:
-            # Use config value
-            spawn_limit = getattr(self.cfg, 'obstacle_spawn_x_max', 18.0)
-
+        # Use config value - don't depend on progressive goals during init
+        # because waypoints aren't generated until reset()
+        spawn_limit = getattr(self.cfg, 'obstacle_spawn_x_max', 18.0)
         return spawn_limit
 
     def _spawn_barn_obstacles(self, num_obstacles: int, difficulty: float) -> None:
@@ -837,31 +876,72 @@ class DifferentialDriveEnv(gym.Env):
         self._world.scene.add(self._goal_marker)
 
     def _define_spaces(self) -> None:
-        """Define observation and action spaces."""
-        obs_dict = {
-            "vector": spaces.Box(
-                low=-np.inf,
-                high=np.inf,
-                shape=(self.cfg.vector_obs_size,),
-                dtype=np.float32,
-            ),
-        }
+        """Define observation and action spaces.
 
-        if self.cfg.use_camera:
-            obs_dict["image"] = spaces.Box(
-                low=0,
-                high=255,
-                shape=(*self.cfg.camera_resolution, 3),
-                dtype=np.uint8,
-            )
+        Supports two modes:
+        1. Multi-modal (camera + lidar + goal): For SB3 MultiInputPolicy
+           - "camera": (84, 84, 3) RGB image
+           - "lidar": (180,) distance readings
+           - "goal": (6,) navigation state [dist, sin, cos, progress, lin_vel, ang_vel]
 
-        if self.cfg.use_lidar:
-            obs_dict["lidar"] = spaces.Box(
-                low=0.0,
-                high=self.cfg.lidar_max_range,
-                shape=(self.cfg.lidar_num_points,),
-                dtype=np.float32,
-            )
+        2. Single-sensor modes: Original behavior with "vector" + optional sensors
+        """
+        # Check if multi-modal mode (both camera and lidar enabled)
+        self._multi_modal = self.cfg.use_camera and self.cfg.use_lidar
+
+        if self._multi_modal:
+            # Multi-modal observation space for SB3 MultiInputPolicy
+            goal_obs_size = getattr(self.cfg, 'goal_obs_size', 6)
+
+            obs_dict = {
+                # RGB Camera image
+                "camera": spaces.Box(
+                    low=0,
+                    high=255,
+                    shape=(self.cfg.camera_resolution[0], self.cfg.camera_resolution[1], 3),
+                    dtype=np.uint8,
+                ),
+                # LiDAR scan (normalized)
+                "lidar": spaces.Box(
+                    low=0.0,
+                    high=1.0,  # Normalized by max_range
+                    shape=(self.cfg.lidar_num_points,),
+                    dtype=np.float32,
+                ),
+                # Goal/navigation info
+                "goal": spaces.Box(
+                    low=-1.0,
+                    high=1.0,
+                    shape=(goal_obs_size,),
+                    dtype=np.float32,
+                ),
+            }
+        else:
+            # Original single-sensor mode
+            obs_dict = {
+                "vector": spaces.Box(
+                    low=-np.inf,
+                    high=np.inf,
+                    shape=(self.cfg.vector_obs_size,),
+                    dtype=np.float32,
+                ),
+            }
+
+            if self.cfg.use_camera:
+                obs_dict["image"] = spaces.Box(
+                    low=0,
+                    high=255,
+                    shape=(*self.cfg.camera_resolution, 3),
+                    dtype=np.uint8,
+                )
+
+            if self.cfg.use_lidar:
+                obs_dict["lidar"] = spaces.Box(
+                    low=0.0,
+                    high=self.cfg.lidar_max_range,
+                    shape=(self.cfg.lidar_num_points,),
+                    dtype=np.float32,
+                )
 
         self.observation_space = spaces.Dict(obs_dict)
 
@@ -942,8 +1022,35 @@ class DifferentialDriveEnv(gym.Env):
         """Get robot position and orientation."""
         return self._xforms_utils.get_world_pose(prim_path=self._chassis_path)
 
+    def _extract_nav_info(self, obs: dict[str, np.ndarray]) -> tuple[float, float]:
+        """Extract navigation info (distance, heading_alignment) from observation.
+
+        Handles both multi-modal and single-sensor observation formats.
+
+        Returns:
+            (distance, heading_alignment): Raw distance in meters and cos(heading_error)
+        """
+        if "goal" in obs:
+            # Multi-modal mode: goal = [dist_norm, sin, cos, progress, lin_vel, ang_vel]
+            dist_normalized = obs["goal"][0]
+            distance = dist_normalized * self.cfg.arena_radius
+            heading_alignment = obs["goal"][2]  # cos(heading_error)
+        else:
+            # Single-sensor mode: vector = [dist, cos, sin, prev_lin, prev_ang]
+            distance = obs["vector"][0]
+            heading_alignment = obs["vector"][1]  # cos(heading_error)
+        return distance, heading_alignment
+
     def _get_observation(self) -> dict[str, np.ndarray]:
-        """Compute current observation."""
+        """Compute current observation.
+
+        In multi-modal mode (camera + lidar), returns:
+        - "camera": (84, 84, 3) RGB image
+        - "lidar": (180,) normalized distance readings [0, 1]
+        - "goal": (6,) navigation state [dist_norm, sin, cos, progress, lin_vel_norm, ang_vel_norm]
+
+        In single-sensor mode, returns original format with "vector" key.
+        """
         position, orientation = self._get_robot_pose()
 
         # Heading from quaternion [w, x, y, z]
@@ -959,6 +1066,100 @@ class DifferentialDriveEnv(gym.Env):
             np.sin(target_heading - heading), np.cos(target_heading - heading)
         )
 
+        # Multi-modal mode: camera + lidar + goal
+        if getattr(self, '_multi_modal', False):
+            # Get camera image
+            camera_obs = np.zeros((self.cfg.camera_resolution[0], self.cfg.camera_resolution[1], 3), dtype=np.uint8)
+            camera_valid = False
+            if self._camera is not None:
+                try:
+                    rgba = self._camera.get_rgba()
+                    if rgba is not None and rgba.size > 0:
+                        if len(rgba.shape) == 1:
+                            expected_size = self.cfg.camera_resolution[0] * self.cfg.camera_resolution[1] * 4
+                            if rgba.size == expected_size:
+                                rgba = rgba.reshape((self.cfg.camera_resolution[0], self.cfg.camera_resolution[1], 4))
+                        if len(rgba.shape) == 3 and rgba.shape[2] >= 3:
+                            camera_obs = rgba[:, :, :3].astype(np.uint8)
+                            camera_valid = np.mean(camera_obs) > 0  # Check not all zeros
+                except Exception as e:
+                    if self._step_count < 5:
+                        print(f"  Camera error: {e}")
+
+
+            # Get LiDAR data (normalized to [0, 1])
+            lidar_obs = np.ones(self.cfg.lidar_num_points, dtype=np.float32)  # Default to max range
+            lidar_valid = False
+
+            # Use annotator-based approach (official Isaac Sim 5.x method)
+            if self._lidar_annotator is not None:
+                try:
+                    # Get data from annotator (official approach)
+                    lidar_data = self._lidar_annotator.get_data()
+
+
+                    # Extract distance/range data from annotator output
+                    raw_data = None
+                    if isinstance(lidar_data, dict):
+                        # FlatScan uses 'linearDepthData', ScanBuffer uses 'distance'
+                        # Order matters: try FlatScan keys first, then ScanBuffer
+                        for key in ["linearDepthData", "distance", "range", "data", "buffer"]:
+                            if key in lidar_data:
+                                data = lidar_data[key]
+                                if data is not None and hasattr(data, 'size') and data.size > 0:
+                                    raw_data = np.asarray(data).flatten()
+                                    # Filter out invalid readings (0 or negative)
+                                    valid_mask = raw_data > 0.01
+                                    if np.any(valid_mask):
+                                        break
+                                    else:
+                                        # All invalid, try next key
+                                        raw_data = None
+
+                    elif hasattr(lidar_data, 'size') and lidar_data.size > 0:
+                        raw_data = np.asarray(lidar_data).flatten()
+
+                    if raw_data is not None and raw_data.size > 0:
+                        # Replace invalid readings (<=0) with max range
+                        raw_data = np.where(raw_data > 0.01, raw_data, self.cfg.lidar_max_range)
+
+                        # Resample to desired number of points
+                        if raw_data.size != self.cfg.lidar_num_points:
+                            indices = np.linspace(0, raw_data.size - 1, self.cfg.lidar_num_points, dtype=int)
+                            lidar_data_resampled = raw_data[indices]
+                        else:
+                            lidar_data_resampled = raw_data
+                        # Normalize to [0, 1]
+                        lidar_obs = np.clip(lidar_data_resampled / self.cfg.lidar_max_range, 0.0, 1.0).astype(np.float32)
+                        lidar_valid = np.mean(lidar_obs) < 0.99  # Check not all at max range
+
+                except Exception as e:
+                    if self._step_count < 5:
+                        print(f"  LiDAR annotator error: {e}")
+                        import traceback
+                        traceback.print_exc()
+
+            # Goal observation: [dist_norm, sin, cos, progress, lin_vel_norm, ang_vel_norm]
+            max_dist = getattr(self.cfg, 'arena_radius', 25.0)
+            num_waypoints = len(self._waypoints)
+            progress = self._current_waypoint_idx / max(num_waypoints, 1)
+
+            goal_obs = np.array([
+                np.clip(distance / max_dist, 0.0, 1.0),      # Normalized distance
+                np.sin(heading_error),                       # Sin of heading error
+                np.cos(heading_error),                       # Cos of heading error
+                progress,                                    # Waypoint progress [0, 1]
+                self._prev_action[0],                        # Previous linear vel (already [-1, 1])
+                self._prev_action[1],                        # Previous angular vel (already [-1, 1])
+            ], dtype=np.float32)
+
+            return {
+                "camera": camera_obs,
+                "lidar": lidar_obs,
+                "goal": goal_obs,
+            }
+
+        # Original single-sensor mode
         vector_obs = np.array(
             [
                 distance,
@@ -988,12 +1189,22 @@ class DifferentialDriveEnv(gym.Env):
                 pass
             obs["image"] = image
 
-        # LiDAR
-        if self.cfg.use_lidar and self._lidar is not None:
+        # LiDAR (single-sensor mode uses same annotator approach)
+        if self.cfg.use_lidar and self._lidar_annotator is not None:
             lidar_data = np.zeros(self.cfg.lidar_num_points, dtype=np.float32)
             try:
-                frame = self._lidar.get_current_frame()
-                raw_data = frame.get("range") or frame.get("depth")
+                annotator_data = self._lidar_annotator.get_data()
+                raw_data = None
+                if isinstance(annotator_data, dict):
+                    for key in ["distance", "range", "linearDepthData", "data", "buffer"]:
+                        if key in annotator_data:
+                            data = annotator_data[key]
+                            if data is not None and hasattr(data, 'size') and data.size > 0:
+                                raw_data = np.asarray(data).flatten()
+                                break
+                elif hasattr(annotator_data, 'size') and annotator_data.size > 0:
+                    raw_data = np.asarray(annotator_data).flatten()
+
                 if raw_data is not None and raw_data.size > 0:
                     if raw_data.size != self.cfg.lidar_num_points:
                         indices = np.linspace(
@@ -1102,7 +1313,7 @@ class DifferentialDriveEnv(gym.Env):
         # 2. CONDITIONAL: Heading bonus (ONLY if making progress)
         # =====================================================
         # Get heading alignment from observation (cos(heading_error))
-        heading_alignment = obs["vector"][1]  # cos(heading_error), range [-1, 1]
+        _, heading_alignment = self._extract_nav_info(obs)  # cos(heading_error), range [-1, 1]
 
         if progress > self.cfg.progress_gate:
             # Robot is actually moving toward goal - reward good heading
@@ -1249,7 +1460,7 @@ class DifferentialDriveEnv(gym.Env):
 
         # Get initial observation and position
         obs = self._get_observation()
-        self._prev_distance = obs["vector"][0]
+        self._prev_distance, _ = self._extract_nav_info(obs)
         position, _ = self._get_robot_pose()
         self._prev_position = position.copy()
 
@@ -1273,7 +1484,7 @@ class DifferentialDriveEnv(gym.Env):
         # Get state
         position, orientation = self._get_robot_pose()
         obs = self._get_observation()
-        distance = obs["vector"][0]
+        distance, _ = self._extract_nav_info(obs)
 
         # Check waypoint progress
         goal_bonus = 0.0
@@ -1289,7 +1500,7 @@ class DifferentialDriveEnv(gym.Env):
                     position=np.array([next_wp[0], next_wp[1], 0.3])
                 )
                 obs = self._get_observation()
-                distance = obs["vector"][0]
+                distance, _ = self._extract_nav_info(obs)
 
         # Check termination
         terminated, truncated, _ = self._check_termination(position, orientation)

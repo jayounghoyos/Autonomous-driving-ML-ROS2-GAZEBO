@@ -76,24 +76,54 @@ def main() -> int:
 
     # Create environment WITH GUI
     print("\nCreating environment with GUI...")
+
+    use_camera = env_config.get("use_camera", False)
+    use_lidar = env_config.get("use_lidar", True)
+    multi_modal = use_camera and use_lidar
+
     env_cfg = DifferentialDriveEnvCfg(
         robot_type=robot_config.get("type", "jackal"),
         wheel_radius=robot_config.get("wheel_radius", 0.098),
         track_width=robot_config.get("track_width", 0.37558),
         wheelbase=robot_config.get("wheelbase", 0.262),
         skid_steer_correction=robot_config.get("skid_steer_correction", 4.2),
-        use_camera=env_config.get("use_camera", True),
-        use_lidar=env_config.get("use_lidar", True),
+        use_camera=use_camera,
+        use_lidar=use_lidar,
+        camera_resolution=tuple(env_config.get("camera_resolution", [84, 84])),
+        camera_position=tuple(env_config.get("camera_position", [0.2, 0.0, 0.2])),
+        goal_obs_size=env_config.get("goal_obs_size", 6),
         episode_length_s=env_config.get("episode_length_s", 120.0),
         goal_tolerance=env_config.get("goal_tolerance", 0.5),
         num_waypoints=env_config.get("num_waypoints", 5),
         waypoint_spacing=env_config.get("waypoint_spacing", 4.0),
+        waypoint_lateral_range=env_config.get("waypoint_lateral_range", 2.0),
         arena_radius=env_config.get("arena_radius", 25.0),
         lidar_num_points=env_config.get("lidar_num_points", 180),
-        lidar_max_range=env_config.get("lidar_max_range", 20.0),
-        num_obstacles_min=env_config.get("num_obstacles_min", 3),
-        num_obstacles_max=env_config.get("num_obstacles_max", 8),
+        lidar_max_range=env_config.get("lidar_max_range", 10.0),
+        lidar_position=tuple(env_config.get("lidar_position", [0.0, 0.0, 0.25])),
+        # Progressive goals
+        use_progressive_goals=env_config.get("use_progressive_goals", False),
+        stage1_episodes=env_config.get("stage1_episodes", 200),
+        stage1_num_waypoints=env_config.get("stage1_num_waypoints", 1),
+        stage2_episodes=env_config.get("stage2_episodes", 400),
+        stage2_num_waypoints=env_config.get("stage2_num_waypoints", 2),
+        stage3_episodes=env_config.get("stage3_episodes", 600),
+        stage3_num_waypoints=env_config.get("stage3_num_waypoints", 3),
+        stage4_num_waypoints=env_config.get("stage4_num_waypoints", 3),
+        # Obstacles
+        obstacle_course_type=env_config.get("obstacle_course_type", "barn"),
+        obstacle_shape=env_config.get("obstacle_shape", "mixed"),
+        num_obstacles_min=env_config.get("num_obstacles_min", 8),
+        num_obstacles_max=env_config.get("num_obstacles_max", 30),
+        use_curriculum=env_config.get("use_curriculum", False),
+        obstacle_difficulty=env_config.get("obstacle_difficulty", 0.3),
+        randomize_obstacles_on_reset=env_config.get("randomize_obstacles_on_reset", True),
     )
+
+    if multi_modal:
+        print(f"  Mode: MULTI-MODAL (camera {env_cfg.camera_resolution} + lidar + goal)")
+    else:
+        print(f"  Mode: {'LiDAR' if use_lidar else 'Vector'} only")
 
     env = DifferentialDriveEnv(cfg=env_cfg, headless=False)
 
@@ -144,15 +174,22 @@ def main() -> int:
                 step += 1
                 done = terminated or truncated
 
-                # Track waypoints
-                if obs["vector"][0] < env.cfg.goal_tolerance:
+                # Track waypoints (handle both multi-modal and single-sensor modes)
+                if "goal" in obs:
+                    # Multi-modal: goal[0] is normalized distance
+                    dist_normalized = obs["goal"][0]
+                    dist = dist_normalized * env.cfg.arena_radius
+                else:
+                    # Single-sensor: vector[0] is raw distance
+                    dist = obs["vector"][0]
+
+                if dist < env.cfg.goal_tolerance:
                     waypoints_this_ep += 1
 
                 if args.slow:
                     time.sleep(0.02)
 
                 if step % 200 == 0:
-                    dist = obs["vector"][0]
                     print(f"  Step {step}: dist={dist:.1f}m, reward={episode_reward:.1f}")
 
             total_waypoints += waypoints_this_ep

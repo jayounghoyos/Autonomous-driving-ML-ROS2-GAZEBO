@@ -145,10 +145,16 @@ def main() -> int:
     print(f"    Wheel radius: {robot_config.get('wheel_radius', 0.098)}m")
     print(f"    Track width:  {robot_config.get('track_width', 0.37558)}m")
     print(f"    Wheelbase:    {robot_config.get('wheelbase', 0.262)}m")
+    # Check if multi-modal mode
+    multi_modal = use_camera and use_lidar
     print(f"  Sensors:")
     print(f"    Camera: {use_camera}" + (f" ({env_config.get('camera_resolution', [64,64])})" if use_camera else ""))
     print(f"    LiDAR:  {use_lidar}" + (f" ({env_config.get('lidar_num_points', 180)} points)" if use_lidar else ""))
-    print(f"    Vector: True (distance, heading, prev_action)")
+    if multi_modal:
+        print(f"    Mode: MULTI-MODAL (camera + lidar + goal)")
+        print(f"    Goal obs: {env_config.get('goal_obs_size', 6)} values [dist, sin, cos, progress, vel]")
+    else:
+        print(f"    Vector: True (distance, heading, prev_action)")
     print(f"  Obstacle Course:")
     print(f"    Type: {env_config.get('obstacle_course_type', 'barn')}")
     print(f"    Shape: {env_config.get('obstacle_shape', 'cylinder')}")
@@ -202,6 +208,8 @@ def main() -> int:
         lidar_num_points=env_config.get("lidar_num_points", 180),
         lidar_max_range=env_config.get("lidar_max_range", 10.0),
         lidar_position=tuple(env_config.get("lidar_position", [0.0, 0.0, 0.20])),
+        # Multi-modal goal observation size
+        goal_obs_size=env_config.get("goal_obs_size", 6),
         # Navigation
         episode_length_s=env_config.get("episode_length_s", 120.0),
         goal_tolerance=env_config.get("goal_tolerance", 0.5),

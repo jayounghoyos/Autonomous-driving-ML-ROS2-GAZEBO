@@ -1,0 +1,215 @@
+# Multi-Modal Navigation: Camera + LiDAR + Goal
+# ============================================================
+#
+# Sensor Fusion Configuration:
+# - RGB Camera (84x84): Visual features, semantic understanding
+# - LiDAR (180 points): Precise distance measurements
+# - Goal Info (6 values): Navigation state and direction
+#
+# Observation Space (SB3 MultiInputPolicy compatible):
+#   camera: Box(0, 255, (84, 84, 3), uint8)
+#   lidar:  Box(0, 1, (180,), float32) - normalized
+#   goal:   Box(-1, 1, (6,), float32)
+#
+# Goal observation: [dist_norm, sin(heading), cos(heading),
+#                    progress, prev_lin_vel, prev_ang_vel]
+#
+# Benefits:
+# - Camera: Rich visual features, obstacle types, textures
+# - LiDAR: Reliable distance (handles camera blind spots)
+# - Goal: Robot knows WHERE to go (not just what it sees)
+# ============================================================
+
+robot:
+  type: "jackal"
+  wheel_radius: 0.098
+  track_width: 0.37558
+  wheelbase: 0.262
+  robot_mass: 17.0
+  skid_steer_correction: 4.2
+
+env:
+  num_envs: 1
+
+  # ===========================================
+  # MULTI-MODAL SENSORS
+  # ===========================================
+
+  # RGB Camera (84x84 - standard for vision RL)
+  use_camera: true
+  camera_resolution: [84, 84]
+  camera_position: [0.2, 0.0, 0.2]   # Front-mounted, slightly elevated
+  camera_fov: 90.0                   # Wide field of view
+
+  # LiDAR (180 points, 10m range)
+  use_lidar: true
+  lidar_num_points: 180
+  lidar_max_range: 10.0
+  lidar_position: [0.0, 0.0, 0.25]   # Top-mounted
+
+  # Goal observation size
+  goal_obs_size: 6
+
+  # Episode settings
+  episode_length_s: 90.0             # Longer for visual learning
+  goal_tolerance: 0.6
+  arena_radius: 30.0
+
+  # Motor limits (Jackal specs)
+  max_wheel_velocity: 20.0
+  max_linear_velocity: 2.0
+  max_angular_velocity: 4.0
+
+  # ===========================================
+  # PROGRESSIVE GOAL CURRICULUM
+  # ===========================================
+
+  use_progressive_goals: true
+
+  # Stage 1: Episodes 0-200 (1 close goal)
+  stage1_episodes: 200
+  stage1_num_waypoints: 1
+  stage1_goal_distance_min: 4.0
+  stage1_goal_distance_max: 6.0
+  stage1_lateral_range: 1.0
+
+  # Stage 2: Episodes 200-400 (2 goals)
+  stage2_episodes: 400
+  stage2_num_waypoints: 2
+  stage2_goal_spacing: 5.0
+  stage2_lateral_range: 1.5
+
+  # Stage 3: Episodes 400-600 (3 goals)
+  stage3_episodes: 600
+  stage3_num_waypoints: 3
+  stage3_goal_spacing: 5.0
+  stage3_lateral_range: 2.0
+
+  # Stage 4: Episodes 600+ (3 goals, max randomness)
+  stage4_num_waypoints: 3
+  stage4_goal_spacing: 5.0
+  stage4_lateral_range: 2.5
+
+  # Fallback
+  num_waypoints: 3
+  waypoint_spacing: 5.0
+  waypoint_lateral_range: 2.0
+
+  # ===========================================
+  # OBSTACLE COURSE (BARN-style)
+  # ===========================================
+
+  obstacle_course_type: "barn"
+  obstacle_shape: "mixed"
+
+  # Obstacle curriculum
+  obstacle_difficulty: 0.3
+  use_curriculum: true
+  curriculum_start_difficulty: 0.15
+  curriculum_end_difficulty: 0.70    # Slightly easier for visual learning
+  curriculum_episodes_to_max: 600
+
+  # Obstacle counts
+  num_obstacles_min: 8
+  num_obstacles_max: 30
+
+  # Cylinder dimensions
+  cylinder_radius_min: 0.15
+  cylinder_radius_max: 0.35
+  cylinder_height_min: 0.5
+  cylinder_height_max: 1.0
+
+  # Cube dimensions
+  obstacle_size_min: [0.25, 0.25, 0.4]
+  obstacle_size_max: [0.5, 0.5, 0.8]
+
+  # Course dimensions
+  course_width: 6.0
+  course_length: 20.0
+
+  # Obstacle spawn region
+  obstacle_spawn_x_min: 1.5
+  obstacle_spawn_x_max: 18.0
+  spawn_obstacles_before_goals: true
+
+  # Passage width
+  min_passage_width: 0.65
+  max_passage_width: 1.5
+
+  # Safety clearances
+  obstacle_min_spawn_distance: 1.2
+  obstacle_waypoint_clearance: 0.8
+  randomize_obstacles_on_reset: true
+  randomize_obstacle_colors: true
+
+  # ===========================================
+  # REWARD CONFIGURATION
+  # ===========================================
+
+  reward_progress_scale: 30.0
+  reward_away_penalty_scale: 12.0
+
+  reward_heading_scale: 0.4
+  reward_velocity_scale: 0.2
+  reward_smooth_scale: 0.08
+  progress_gate: 0.008
+  heading_gate: 0.65
+
+  reward_reverse_penalty: -0.4
+
+  reward_waypoint_bonus: 250.0
+  reward_all_waypoints_bonus: 400.0
+  reward_collision_penalty: -200.0
+
+  reward_obstacle_danger_zone: 1.0
+  reward_obstacle_penalty_max: 6.0
+
+  reward_stuck_penalty: -2.5
+  stuck_threshold_steps: 25
+  stuck_movement_threshold: 0.04
+
+ppo:
+  # MultiInputPolicy handles Dict observation space automatically
+  # - Uses NatureCNN for "camera" key
+  # - Uses MLP for "lidar" and "goal" keys
+  # - Concatenates features and feeds to policy
+  policy: "MultiInputPolicy"
+
+  # Lower learning rate for visual features
+  learning_rate: 0.0001
+
+  # Larger buffer for visual diversity
+  n_steps: 2048
+  batch_size: 64                    # Smaller batch for VRAM
+  n_epochs: 10
+
+  gamma: 0.995
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.01                    # Lower entropy for vision (more deterministic)
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+
+  # Policy network kwargs (optional custom architecture)
+  # policy_kwargs:
+  #   features_extractor_class: "NatureCNN"
+  #   features_extractor_kwargs:
+  #     features_dim: 256
+  #   net_arch:
+  #     pi: [256, 256]
+  #     vf: [256, 256]
+
+training:
+  total_timesteps: 1500000          # Longer for visual learning
+  checkpoint_freq: 100000
+  log_interval: 10
+  eval_freq: 50000                  # Periodic evaluation
+
+paths:
+  save_dir: "models/ppo_multimodal"
+  log_dir: "logs/ppo_multimodal"
+  tensorboard_dir: "logs/tensorboard"
+
+hardware:
+  device: "cuda"
+  seed: 42
