@@ -141,8 +141,10 @@ def main() -> int:
     print(f"  Config: {args.config}")
     print(f"  Timesteps: {total_timesteps:,}")
     print(f"  Headless: {args.headless}")
-    print(f"  Camera: {use_camera}")
-    print(f"  LiDAR: {use_lidar}")
+    print(f"  Sensors:")
+    print(f"    Camera: {use_camera}" + (f" ({env_config.get('camera_resolution', [64,64])})" if use_camera else ""))
+    print(f"    LiDAR:  {use_lidar}" + (f" ({env_config.get('lidar_num_points', 180)} points)" if use_lidar else ""))
+    print(f"    Vector: True (distance, heading, prev_action)")
     print(f"  Obstacles: {env_config.get('num_obstacles_min', 3)}-{env_config.get('num_obstacles_max', 8)} (randomized)")
     print(f"  Save dir: {save_dir}")
     if args.resume:
@@ -189,6 +191,10 @@ def main() -> int:
         # Camera settings
         camera_resolution=tuple(env_config.get("camera_resolution", [64, 64])),
         camera_position=tuple(env_config.get("camera_position", [0.8, 0.0, 0.8])),
+        # LiDAR settings
+        lidar_num_points=env_config.get("lidar_num_points", 180),
+        lidar_max_range=env_config.get("lidar_max_range", 20.0),
+        lidar_position=tuple(env_config.get("lidar_position", [0.0, 0.0, 1.0])),
         # Obstacle settings
         num_obstacles_min=env_config.get("num_obstacles_min", 3),
         num_obstacles_max=env_config.get("num_obstacles_max", 8),

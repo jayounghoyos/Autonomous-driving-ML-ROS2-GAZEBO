@@ -1,0 +1,136 @@
+# BARN-Style Obstacle Course Training Configuration
+# Based on: https://www.cs.utexas.edu/~xiao/BARN/BARN.html
+#
+# Features:
+# - Cylindrical obstacles (like BARN)
+# - LiDAR-based navigation
+# - Curriculum learning (start easy, get harder)
+# - Dense obstacle course with narrow passages
+
+robot:
+  type: "jackal"
+  wheel_radius: 0.098
+  track_width: 0.37558
+  wheelbase: 0.262
+  robot_mass: 17.0
+  skid_steer_correction: 4.2
+
+env:
+  num_envs: 1
+
+  # LiDAR only (no camera for BARN-style)
+  use_camera: false
+  use_lidar: true
+  lidar_num_points: 180
+  lidar_max_range: 10.0
+
+  # Navigation task
+  episode_length_s: 90.0       # Longer for obstacle navigation
+  goal_tolerance: 0.8          # Slightly easier goal tolerance
+  num_waypoints: 3             # Navigate through course
+  waypoint_spacing: 5.0
+  waypoint_lateral_range: 2.0  # Waypoints along corridor
+  arena_radius: 25.0
+
+  # Motor limits
+  max_wheel_velocity: 20.0
+  max_linear_velocity: 2.0
+  max_angular_velocity: 4.0
+
+  # ===========================================
+  # BARN-Style Obstacle Course
+  # ===========================================
+  obstacle_course_type: "barn"   # Options: "random", "corridor", "maze", "barn"
+  obstacle_shape: "cylinder"     # Cylindrical obstacles like BARN
+
+  # Difficulty and curriculum
+  obstacle_difficulty: 0.3       # Starting difficulty
+  use_curriculum: true           # Enable curriculum learning
+  curriculum_start_difficulty: 0.2
+  curriculum_end_difficulty: 0.8
+  curriculum_episodes_to_max: 400
+
+  # Obstacle counts (interpolated by difficulty)
+  num_obstacles_min: 8           # At difficulty 0.0
+  num_obstacles_max: 30          # At difficulty 1.0
+
+  # Cylinder dimensions
+  cylinder_radius_min: 0.15
+  cylinder_radius_max: 0.35
+  cylinder_height_min: 0.5
+  cylinder_height_max: 1.0
+
+  # Course dimensions
+  course_width: 7.0              # Width of obstacle course (Y axis)
+  course_length: 18.0            # Length of obstacle course (X axis)
+  obstacle_spawn_x_min: 2.0      # Start after robot spawn
+  obstacle_spawn_x_max: 16.0     # End before final goal
+
+  # Passage width (for navigability)
+  min_passage_width: 0.9         # Robot width ~0.5m + clearance
+  max_passage_width: 2.0
+
+  # Safety clearances
+  obstacle_min_spawn_distance: 1.5
+  obstacle_waypoint_clearance: 1.0
+  randomize_obstacles_on_reset: true
+  randomize_obstacle_colors: true
+
+  # ===========================================
+  # Reward Configuration (tuned for obstacles)
+  # ===========================================
+
+  # Progress rewards
+  reward_progress_scale: 25.0       # Strong progress incentive
+  reward_away_penalty_scale: 12.0   # Penalty for moving away
+
+  # Conditional bonuses
+  reward_heading_scale: 0.4
+  reward_velocity_scale: 0.2
+  reward_smooth_scale: 0.1
+  progress_gate: 0.01
+  heading_gate: 0.7
+
+  # Forward preference
+  reward_reverse_penalty: -0.3
+
+  # Goal rewards
+  reward_waypoint_bonus: 200.0
+  reward_all_waypoints_bonus: 500.0
+  reward_collision_penalty: -200.0  # Strong collision penalty
+
+  # Obstacle avoidance (CRITICAL for BARN)
+  reward_obstacle_danger_zone: 1.5  # Start penalizing closer (need to navigate tight spaces)
+  reward_obstacle_penalty_max: 10.0 # Strong penalty when very close
+
+  # Anti-stuck
+  reward_stuck_penalty: -2.0
+  stuck_threshold_steps: 30
+  stuck_movement_threshold: 0.05
+
+ppo:
+  policy: "MultiInputPolicy"
+  learning_rate: 0.0002          # Slightly lower for complex task
+  n_steps: 2048
+  batch_size: 64
+  n_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.01                 # Encourage exploration
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+
+training:
+  total_timesteps: 500000        # Longer training for obstacle course
+  checkpoint_freq: 50000
+  log_interval: 10
+
+paths:
+  save_dir: "models/ppo_barn"
+  log_dir: "logs/ppo_barn"
+  tensorboard_dir: "logs/tensorboard"
+
+hardware:
+  device: "cuda"
+  seed: 42

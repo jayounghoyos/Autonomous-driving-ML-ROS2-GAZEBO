@@ -114,3 +114,7 @@ MIT License
 - [Isaac Lab Documentation](https://isaac-sim.github.io/IsaacLab/main/index.html)
 - [Isaac Sim 5.1.0 ROS2](https://docs.isaacsim.omniverse.nvidia.com/5.1.0/installation/install_ros.html)
 - [Stable-Baselines3](https://stable-baselines3.readthedocs.io/)
+
+### Test
+
+$ISAAC_PYTHON training/evaluate.py --model models/ppo/ppo_20251225_091035/final_model.zip --episodes 10

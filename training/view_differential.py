@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-View Trained Agent in Isaac Sim GUI.
+View Trained Differential Drive Agent in Isaac Sim GUI.
 
-This script loads a trained model and runs it with visualization.
-Supports full sensor models (Camera + LiDAR + Vector).
+Loads a trained model and runs it with visualization.
 
 Usage:
-    $ISAAC_PYTHON training/view_agent.py --model models/ppo_full_sensors/.../final_model.zip
+    $ISAAC_PYTHON training/view_differential.py --model models/ppo_differential/.../final_model.zip
+    $ISAAC_PYTHON training/view_differential.py --model models/ppo_differential/.../final_model.zip --stochastic
 """
 
 from __future__ import annotations
@@ -18,17 +18,17 @@ from pathlib import Path
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="View trained agent")
+    parser = argparse.ArgumentParser(description="View trained differential drive agent")
     parser.add_argument("--model", type=str, required=True, help="Path to model")
     parser.add_argument(
         "--config",
         type=str,
-        default="training/configs/ppo_full_sensors_config.yaml",
-        help="Path to config YAML",
+        default="training/configs/ppo_differential_config.yaml",
+        help="Config YAML",
     )
     parser.add_argument("--episodes", type=int, default=5, help="Episodes to run")
     parser.add_argument("--slow", action="store_true", help="Slow motion")
-    parser.add_argument("--stochastic", action="store_true", help="Use stochastic actions (more exploration)")
+    parser.add_argument("--stochastic", action="store_true", help="Use stochastic actions")
     return parser.parse_args()
 
 
@@ -43,7 +43,7 @@ def main() -> int:
             return 1
 
     print("=" * 60)
-    print("Leatherback Agent Viewer (Full Sensors)")
+    print("Differential Drive Agent Viewer")
     print("=" * 60)
     print(f"Model: {model_path}")
     print(f"Config: {args.config}")
@@ -59,22 +59,29 @@ def main() -> int:
     project_root = Path(__file__).parent.parent.absolute()
     sys.path.insert(0, str(project_root))
 
-    from isaac_lab.envs import LeatherbackEnv, LeatherbackEnvCfg
+    from isaac_lab.envs import DifferentialDriveEnv, DifferentialDriveEnvCfg
 
     # Load config
     config_path = Path(args.config)
     if config_path.exists():
         with open(config_path) as f:
             config = yaml.safe_load(f)
+        robot_config = config.get("robot", {})
         env_config = config.get("env", {})
         print(f"Loaded config: {config_path}")
     else:
+        robot_config = {}
         env_config = {}
         print("Using default config")
 
-    # Create environment WITH GUI (headless=False)
+    # Create environment WITH GUI
     print("\nCreating environment with GUI...")
-    env_cfg = LeatherbackEnvCfg(
+    env_cfg = DifferentialDriveEnvCfg(
+        robot_type=robot_config.get("type", "jackal"),
+        wheel_radius=robot_config.get("wheel_radius", 0.098),
+        track_width=robot_config.get("track_width", 0.37558),
+        wheelbase=robot_config.get("wheelbase", 0.262),
+        skid_steer_correction=robot_config.get("skid_steer_correction", 4.2),
         use_camera=env_config.get("use_camera", True),
         use_lidar=env_config.get("use_lidar", True),
         episode_length_s=env_config.get("episode_length_s", 120.0),
@@ -82,16 +89,13 @@ def main() -> int:
         num_waypoints=env_config.get("num_waypoints", 5),
         waypoint_spacing=env_config.get("waypoint_spacing", 4.0),
         arena_radius=env_config.get("arena_radius", 25.0),
-        num_obstacles_min=env_config.get("num_obstacles_min", 3),
-        num_obstacles_max=env_config.get("num_obstacles_max", 8),
-        obstacle_spawn_radius_min=env_config.get("obstacle_spawn_radius_min", 6.0),
-        obstacle_spawn_radius_max=env_config.get("obstacle_spawn_radius_max", 18.0),
         lidar_num_points=env_config.get("lidar_num_points", 180),
         lidar_max_range=env_config.get("lidar_max_range", 20.0),
+        num_obstacles_min=env_config.get("num_obstacles_min", 3),
+        num_obstacles_max=env_config.get("num_obstacles_max", 8),
     )
 
-    # Create environment with GUI
-    env = LeatherbackEnv(cfg=env_cfg, headless=False)
+    env = DifferentialDriveEnv(cfg=env_cfg, headless=False)
 
     # Load model
     print(f"\nLoading model from {model_path}...")
@@ -109,9 +113,9 @@ def main() -> int:
     print("Press Ctrl+C to stop early")
     print("=" * 60)
 
-    # Wait for GUI to initialize
+    # Wait for GUI
     print("\nInitializing GUI (please wait)...")
-    for _ in range(60):  # Wait up to 3 seconds
+    for _ in range(60):
         if not env.sim_app.is_running():
             break
         env._world.step(render=True)
@@ -134,10 +138,7 @@ def main() -> int:
 
             done = False
             while not done and env.sim_app.is_running():
-                # Get action from trained model
                 action, _ = model.predict(obs, deterministic=deterministic)
-
-                # Step environment
                 obs, reward, terminated, truncated, info = env.step(action)
                 episode_reward += reward
                 step += 1
@@ -147,11 +148,9 @@ def main() -> int:
                 if obs["vector"][0] < env.cfg.goal_tolerance:
                     waypoints_this_ep += 1
 
-                # Slow mode
                 if args.slow:
                     time.sleep(0.02)
 
-                # Progress update
                 if step % 200 == 0:
                     dist = obs["vector"][0]
                     print(f"  Step {step}: dist={dist:.1f}m, reward={episode_reward:.1f}")

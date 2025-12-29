@@ -76,6 +76,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Enable LiDAR",
     )
+    parser.add_argument(
+        "--config",
+        type=str,
+        default="training/configs/ppo_config.yaml",
+        help="Path to config YAML (to match training settings)",
+    )
 
     # Output
     parser.add_argument(
@@ -110,6 +116,7 @@ def main() -> int:
     print("Leatherback Evaluation")
     print("=" * 70)
     print(f"  Model: {model_path}")
+    print(f"  Config: {args.config}")
     print(f"  Episodes: {args.episodes}")
     print(f"  Max steps: {args.max_steps}")
     print(f"  Deterministic: {deterministic}")
@@ -119,6 +126,7 @@ def main() -> int:
     # Import after parsing (allows --help without Isaac Sim)
     print("\nInitializing Isaac Sim...")
     import torch
+    import yaml
     from stable_baselines3 import PPO
 
     # Add project to path
@@ -127,11 +135,32 @@ def main() -> int:
 
     from isaac_lab.envs import LeatherbackEnv, LeatherbackEnvCfg
 
-    # Create environment
+    # Load config to match training settings
+    config_path = Path(args.config)
+    if config_path.exists():
+        with open(config_path) as f:
+            config = yaml.safe_load(f)
+        env_config = config.get("env", {})
+        print(f"  Loaded config from: {config_path}")
+    else:
+        env_config = {}
+        print(f"  Warning: Config not found, using defaults")
+
+    # Create environment with same settings as training
     print("\nCreating environment...")
     env_cfg = LeatherbackEnvCfg(
-        use_camera=args.camera,
-        use_lidar=args.lidar,
+        use_camera=args.camera or env_config.get("use_camera", False),
+        use_lidar=args.lidar or env_config.get("use_lidar", False),
+        episode_length_s=env_config.get("episode_length_s", 60.0),
+        goal_tolerance=env_config.get("goal_tolerance", 0.5),
+        num_waypoints=env_config.get("num_waypoints", 5),
+        waypoint_spacing=env_config.get("waypoint_spacing", 4.0),
+        arena_radius=env_config.get("arena_radius", 25.0),
+        # Obstacle settings
+        num_obstacles_min=env_config.get("num_obstacles_min", 3),
+        num_obstacles_max=env_config.get("num_obstacles_max", 8),
+        obstacle_spawn_radius_min=env_config.get("obstacle_spawn_radius_min", 6.0),
+        obstacle_spawn_radius_max=env_config.get("obstacle_spawn_radius_max", 18.0),
     )
     env = LeatherbackEnv(cfg=env_cfg, headless=args.headless)
 

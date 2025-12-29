@@ -660,24 +660,24 @@ class LeatherbackEnv(gym.Env):
         # Reset Ackermann controller
         self._ackermann_controller.reset()
 
-        # Randomize obstacles for this episode (before physics reset)
+        # Use world.reset() for proper physics state reset FIRST
+        # This resets all articulations to their default states
+        self._world.reset()
+
+        # After world reset, randomize obstacles
         self._randomize_obstacles()
 
         # Generate new waypoints
         self._waypoints = self._generate_waypoints()
         self._current_waypoint_idx = 0
 
-        # Update goal marker position
+        # Update goal marker position AFTER world reset
         first_wp = self._waypoints[0]
         self._goal_marker.set_world_pose(
             position=np.array([first_wp[0], first_wp[1], 0.3])
         )
 
-        # Use world.reset() for proper physics state reset
-        # This resets all articulations to their default states
-        self._world.reset()
-
-        # After world reset, apply zero velocities to ensure robot is stationary
+        # Apply zero velocities to ensure robot is stationary
         num_dofs = self._robot.num_dof
         zero_action = self._ArticulationAction(
             joint_positions=np.zeros(num_dofs, dtype=np.float32),
@@ -685,7 +685,7 @@ class LeatherbackEnv(gym.Env):
         )
         self._robot.apply_action(zero_action)
 
-        # Step once to apply the reset
+        # Step simulation to apply changes
         self._world.step(render=not self._headless)
 
         # Reset state variables
