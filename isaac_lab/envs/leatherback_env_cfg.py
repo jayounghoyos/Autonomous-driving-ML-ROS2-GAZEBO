@@ -24,8 +24,10 @@ class LeatherbackEnvCfg:
     # Environment Settings
     # =========================================================================
 
-    # Number of parallel environments (GPU accelerated)
-    num_envs: int = 4096
+    # Single environment — Isaac Sim supports only one SimulationApp per process.
+    # True parallelism requires SubprocVecEnv (separate processes, ~7GB VRAM each).
+    # The variant classes below document the intended multi-env architecture.
+    num_envs: int = 1
 
     # Environment spacing in meters (for parallel envs)
     env_spacing: float = 20.0

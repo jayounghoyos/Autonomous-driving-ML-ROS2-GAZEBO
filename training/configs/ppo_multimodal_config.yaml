@@ -129,8 +129,7 @@ env:
 
   # Obstacle spawn region
   obstacle_spawn_x_min: 1.5
-  obstacle_spawn_x_max: 18.0
-  spawn_obstacles_before_goals: true
+  obstacle_spawn_x_max: 18.0     # Obstacles spawn up to this X position (before final goal)
 
   # Passage width
   min_passage_width: 0.65

@@ -90,7 +90,10 @@ class LeatherbackEnv(gym.Env):
         # Initialize state variables
         self._step_count = 0
         self._prev_action = np.zeros(2, dtype=np.float32)
+        self._current_action = np.zeros(2, dtype=np.float32)
         self._prev_distance = 0.0
+        self._prev_position: np.ndarray | None = None
+        self._stuck_counter = 0
         self._waypoints: np.ndarray | None = None
         self._current_waypoint_idx = 0
 
@@ -586,21 +589,80 @@ class LeatherbackEnv(gym.Env):
         )
         self._robot.apply_action(robot_action)
 
-    def _calculate_reward(self, distance: float, terminated: bool) -> float:
-        """Calculate reward for current step."""
+    def _calculate_reward(
+        self,
+        distance: float,
+        current_position: np.ndarray,
+        terminated: bool,
+        obs: dict[str, np.ndarray],
+    ) -> float:
+        """Calculate reward for current step.
+
+        Uses conditional gating — behavior bonuses only apply when the robot
+        is actually making progress, preventing reward hacking.
+
+        Args:
+            distance: Current distance to active waypoint.
+            current_position: Robot position this step.
+            terminated: True ONLY for failure terminations (not success).
+            obs: Current observation dict.
+        """
         reward = 0.0
+        progress_gate = 0.005  # meters — minimum forward motion to gate bonuses
 
-        # Progress reward
+        # =====================================================================
+        # 1. CORE: Progress toward goal (always active)
+        # =====================================================================
         progress = self._prev_distance - distance
-        reward += progress * self.cfg.reward_progress_scale
+        if progress > 0:
+            reward += progress * self.cfg.reward_progress_scale
+        else:
+            # Lighter penalty for moving away — don't collapse exploration
+            reward += progress * self.cfg.reward_progress_scale * 0.5
 
-        # Heading alignment (extracted from observation)
-        # This is simplified - in practice you'd use the actual heading error
+        # =====================================================================
+        # 2. CONDITIONAL: Heading alignment (only if making progress)
+        # =====================================================================
+        # obs["vector"][1] = cos(heading_error): 1.0 = perfectly aligned, -1.0 = opposite
+        cos_heading = float(obs["vector"][1])
+        if progress > progress_gate:
+            heading_bonus = ((cos_heading + 1.0) / 2.0) * self.cfg.reward_heading_scale
+            reward += heading_bonus
 
-        # Time penalty
+        # =====================================================================
+        # 3. CONDITIONAL: Smooth actions (only if making progress)
+        # =====================================================================
+        if progress > progress_gate:
+            action_diff = np.abs(self._current_action - self._prev_action).mean()
+            smoothness = max(0.0, 1.0 - action_diff)
+            reward += smoothness * 0.05
+
+        # =====================================================================
+        # 4. Reverse penalty (always active)
+        # =====================================================================
+        if self._current_action[0] < 0:
+            reward -= 0.2
+
+        # =====================================================================
+        # 5. Anti-stuck penalty (always active)
+        # =====================================================================
+        if self._prev_position is not None:
+            movement = np.linalg.norm(current_position[:2] - self._prev_position[:2])
+            if movement < 0.03:
+                self._stuck_counter += 1
+                if self._stuck_counter > 20:
+                    reward -= 1.0
+            else:
+                self._stuck_counter = 0
+
+        # =====================================================================
+        # 6. Time penalty (always active — encourage efficiency)
+        # =====================================================================
         reward += self.cfg.reward_time_penalty
 
-        # Termination penalty
+        # =====================================================================
+        # 7. Failure penalty (only for actual failures)
+        # =====================================================================
         if terminated:
             reward += self.cfg.reward_collision_penalty
 
@@ -691,10 +753,14 @@ class LeatherbackEnv(gym.Env):
         # Reset state variables
         self._step_count = 0
         self._prev_action = np.zeros(2, dtype=np.float32)
+        self._current_action = np.zeros(2, dtype=np.float32)
+        self._stuck_counter = 0
 
-        # Get initial observation
+        # Get initial observation and position
         obs = self._get_observation()
         self._prev_distance = obs["vector"][0]
+        position, _ = self._get_robot_pose()
+        self._prev_position = position.copy()
 
         print(f"Reset: First waypoint at ({first_wp[0]:.1f}, {first_wp[1]:.1f})")
 
@@ -705,7 +771,7 @@ class LeatherbackEnv(gym.Env):
     ) -> tuple[dict[str, np.ndarray], float, bool, bool, dict[str, Any]]:
         """Execute one environment step."""
         self._step_count += 1
-        self._prev_action = action.copy()
+        self._current_action = action.copy()
 
         # Apply action
         self._apply_action(action)
@@ -723,7 +789,8 @@ class LeatherbackEnv(gym.Env):
         if distance < self.cfg.goal_tolerance:
             self._current_waypoint_idx += 1
             goal_bonus = self.cfg.reward_goal_bonus
-            print(f"  Waypoint {self._current_waypoint_idx}/{self.cfg.num_waypoints} reached!")
+            if self._step_count % 300 == 1:
+                print(f"  Waypoint {self._current_waypoint_idx}/{self.cfg.num_waypoints} reached!")
 
             if self._current_waypoint_idx < self.cfg.num_waypoints:
                 next_wp = self._waypoints[self._current_waypoint_idx]
@@ -734,23 +801,27 @@ class LeatherbackEnv(gym.Env):
                 obs = self._get_observation()
                 distance = obs["vector"][0]
 
-        # Check termination
-        terminated, truncated, _ = self._check_termination(position, orientation)
+        # Check termination — only failure conditions (out of bounds, fall, flip)
+        failure_terminated, truncated, _ = self._check_termination(position, orientation)
 
-        # All waypoints completed
-        if self._current_waypoint_idx >= self.cfg.num_waypoints:
-            terminated = True
-            goal_bonus += self.cfg.reward_goal_bonus * 2  # Extra bonus for completing all
-            print("  All waypoints completed!")
+        # All waypoints completed — success, NOT a failure
+        success_terminated = self._current_waypoint_idx >= self.cfg.num_waypoints
+        if success_terminated:
+            goal_bonus += self.cfg.reward_goal_bonus * 2
+            print(f"  All waypoints completed!")
 
-        # Calculate reward
-        reward = self._calculate_reward(distance, terminated)
+        terminated = failure_terminated or success_terminated
+
+        # Calculate reward — pass failure flag only so success doesn't get collision penalty
+        reward = self._calculate_reward(distance, position, failure_terminated, obs)
         reward += goal_bonus
 
-        # Update previous distance
+        # Update state for next step
         self._prev_distance = distance
+        self._prev_position = position.copy()
+        self._prev_action = self._current_action.copy()
 
-        return obs, reward, terminated, truncated, {}
+        return obs, reward, terminated, truncated, {"is_success": success_terminated}
 
     def render(self) -> np.ndarray | None:
         """Render the environment."""

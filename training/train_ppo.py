@@ -155,15 +155,11 @@ def main() -> int:
     print("\nInitializing Isaac Sim...")
     import torch
     from stable_baselines3 import PPO
-    from stable_baselines3.common.callbacks import (
-        CheckpointCallback,
-        EvalCallback,
-        CallbackList,
-    )
-    from stable_baselines3.common.vec_env import DummyVecEnv
+    from stable_baselines3.common.callbacks import CheckpointCallback, CallbackList
+    from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 
-    # Add project to path for imports
     sys.path.insert(0, str(project_root))
+    from training.callbacks import linear_schedule, TrainingMetricsCallback
 
     from isaac_lab.envs import LeatherbackEnv, LeatherbackEnvCfg
 
@@ -210,13 +206,28 @@ def main() -> int:
     # Create environment
     print("\nCreating environment...")
     env = LeatherbackEnv(cfg=env_cfg, headless=args.headless)
-
-    # Wrap for Stable-Baselines3
     vec_env = DummyVecEnv([lambda: env])
+
+    # LR schedule and VecNormalize path
+    vecnorm_path = save_dir / "vecnormalize.pkl"
+    use_lr_schedule = ppo_config.get("use_lr_schedule", True)
+    learning_rate_value = ppo_config.get("learning_rate", 3e-4)
+    learning_rate = linear_schedule(learning_rate_value) if use_lr_schedule else learning_rate_value
 
     # Create or load model
     if args.resume:
         print(f"\nLoading model from {args.resume}...")
+        resume_path = Path(args.resume)
+        resume_vecnorm = resume_path.parent / "vecnormalize.pkl"
+        if resume_vecnorm.exists():
+            vec_env = VecNormalize.load(str(resume_vecnorm), vec_env)
+            vec_env.training = True
+            vec_env.norm_reward = True
+            print(f"  VecNormalize stats loaded from {resume_vecnorm}")
+        else:
+            vec_env = VecNormalize(vec_env, norm_obs=True, norm_reward=True, clip_obs=10.0)
+            print("  No VecNormalize stats found, starting fresh normalization")
+
         model = PPO.load(
             args.resume,
             env=vec_env,
@@ -225,11 +236,13 @@ def main() -> int:
         )
         print("Model loaded successfully")
     else:
+        vec_env = VecNormalize(vec_env, norm_obs=True, norm_reward=True, clip_obs=10.0)
+
         print("\nCreating new PPO model...")
         model = PPO(
             policy=ppo_config.get("policy", "MlpPolicy"),
             env=vec_env,
-            learning_rate=ppo_config.get("learning_rate", 3e-4),
+            learning_rate=learning_rate,
             n_steps=ppo_config.get("n_steps", 2048),
             batch_size=ppo_config.get("batch_size", 64),
             n_epochs=ppo_config.get("n_epochs", 10),
@@ -249,7 +262,7 @@ def main() -> int:
     # Setup callbacks
     callbacks = []
 
-    # Checkpoint callback
+    # Checkpoint — saves vecnormalize_{step}.pkl alongside model checkpoints
     checkpoint_freq = training_config.get("checkpoint_freq", 50000)
     checkpoint_callback = CheckpointCallback(
         save_freq=checkpoint_freq,
@@ -260,16 +273,12 @@ def main() -> int:
     )
     callbacks.append(checkpoint_callback)
 
-    # Evaluation callback (optional - requires separate eval env)
-    # eval_callback = EvalCallback(
-    #     vec_env,
-    #     best_model_save_path=str(save_dir / "best"),
-    #     log_path=str(log_dir),
-    #     eval_freq=training_config.get("eval_freq", 10000),
-    #     n_eval_episodes=training_config.get("n_eval_episodes", 5),
-    #     deterministic=True,
-    # )
-    # callbacks.append(eval_callback)
+    # Metrics callback — tracks success_rate in TensorBoard without a second env
+    metrics_callback = TrainingMetricsCallback(
+        window=training_config.get("metrics_window", 50),
+        log_freq=ppo_config.get("n_steps", 2048),
+    )
+    callbacks.append(metrics_callback)
 
     callback_list = CallbackList(callbacks)
 
@@ -308,8 +317,11 @@ def main() -> int:
         model.save(str(final_model_path))
         print(f"\nFinal model saved to {final_model_path}")
 
-        # Cleanup
-        env.close()
+        # Save VecNormalize stats — required to run the model correctly at inference
+        vec_env.save(str(vecnorm_path))
+        print(f"VecNormalize stats saved to {vecnorm_path}")
+
+        vec_env.close()
         print("Environment closed")
 
     print("\n" + "=" * 70)

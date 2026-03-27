@@ -35,7 +35,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--config",
         type=str,
-        default="training/configs/ppo_differential_config.yaml",
+        default="training/configs/ppo_barn_config.yaml",
         help="Training config YAML",
     )
     parser.add_argument(
@@ -95,13 +95,6 @@ def load_config(config_path: str) -> dict:
 
     with open(config_file) as f:
         return yaml.safe_load(f)
-
-
-def linear_schedule(initial_value: float):
-    """Linear learning rate schedule: decays from initial_value to 0."""
-    def func(progress_remaining: float) -> float:
-        return progress_remaining * initial_value
-    return func
 
 
 def main() -> int:
@@ -180,8 +173,8 @@ def main() -> int:
     import torch
     from stable_baselines3 import PPO
     from stable_baselines3.common.callbacks import CheckpointCallback, CallbackList
-    from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv
-    from stable_baselines3.common.vec_env import VecNormalize
+    from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv, VecNormalize
+    from training.callbacks import linear_schedule, TrainingMetricsCallback
 
     sys.path.insert(0, str(project_root))
 
@@ -381,6 +374,14 @@ def main() -> int:
         save_vecnormalize=True,  # saves vecnormalize_{step}.pkl alongside checkpoint
     )
     callbacks.append(checkpoint_callback)
+
+    # Metrics callback — tracks success_rate in TensorBoard without a second env
+    metrics_callback = TrainingMetricsCallback(
+        window=training_config.get("metrics_window", 50),
+        log_freq=ppo_config.get("n_steps", 2048),
+    )
+    callbacks.append(metrics_callback)
+
     callback_list = CallbackList(callbacks)
 
     # Save config

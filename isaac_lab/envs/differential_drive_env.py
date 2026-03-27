@@ -1492,7 +1492,8 @@ class DifferentialDriveEnv(gym.Env):
             self._current_waypoint_idx += 1
             goal_bonus = self.cfg.reward_waypoint_bonus
             num_waypoints = len(self._waypoints)
-            print(f"  Waypoint {self._current_waypoint_idx}/{num_waypoints} reached!")
+            if self._step_count % 300 == 1:
+                print(f"  [Ep {self._episode_count}] Waypoint {self._current_waypoint_idx}/{num_waypoints} reached!")
 
             if self._current_waypoint_idx < num_waypoints:
                 next_wp = self._waypoints[self._current_waypoint_idx]
@@ -1510,7 +1511,7 @@ class DifferentialDriveEnv(gym.Env):
         success_terminated = self._current_waypoint_idx >= num_waypoints
         if success_terminated:
             goal_bonus += self.cfg.reward_all_waypoints_bonus
-            print("  All waypoints completed!")
+            print(f"  [Ep {self._episode_count}] All waypoints completed!")
 
         terminated = failure_terminated or success_terminated
 
@@ -1523,7 +1524,7 @@ class DifferentialDriveEnv(gym.Env):
         self._prev_position = position.copy()
         self._prev_action = action.copy()
 
-        return obs, reward, terminated, truncated, {}
+        return obs, reward, terminated, truncated, {"is_success": success_terminated}
 
     def render(self) -> np.ndarray | None:
         """Render the environment."""
