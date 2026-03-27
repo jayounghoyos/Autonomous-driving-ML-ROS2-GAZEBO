@@ -97,6 +97,13 @@ def load_config(config_path: str) -> dict:
         return yaml.safe_load(f)
 
 
+def linear_schedule(initial_value: float):
+    """Linear learning rate schedule: decays from initial_value to 0."""
+    def func(progress_remaining: float) -> float:
+        return progress_remaining * initial_value
+    return func
+
+
 def main() -> int:
     """Main training function."""
     args = parse_args()
@@ -173,7 +180,8 @@ def main() -> int:
     import torch
     from stable_baselines3 import PPO
     from stable_baselines3.common.callbacks import CheckpointCallback, CallbackList
-    from stable_baselines3.common.vec_env import DummyVecEnv
+    from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv
+    from stable_baselines3.common.vec_env import VecNormalize
 
     sys.path.insert(0, str(project_root))
 
@@ -289,15 +297,48 @@ def main() -> int:
     )
 
     # Create environment
-    print("\nCreating environment...")
-    env = DifferentialDriveEnv(cfg=env_cfg, headless=args.headless)
+    # NOTE: Isaac Sim creates one SimulationApp per process. DummyVecEnv with
+    # n_envs > 1 would try to create multiple SimulationApps in the same process
+    # and will crash. SubprocVecEnv (separate processes) is the correct approach
+    # for parallelism, but needs ~6-8GB VRAM per instance.
+    n_envs = env_config.get("num_envs", 1)
+    print(f"\nCreating environment... (n_envs={n_envs})")
 
-    # Wrap for SB3
-    vec_env = DummyVecEnv([lambda: env])
+    if n_envs > 1:
+        # Each subprocess gets its own SimulationApp — requires sufficient VRAM
+        env_fns = [
+            (lambda cfg=env_cfg, hl=args.headless: DifferentialDriveEnv(cfg=cfg, headless=hl))
+            for _ in range(n_envs)
+        ]
+        vec_env = SubprocVecEnv(env_fns)
+        print(f"  WARNING: SubprocVecEnv with {n_envs} envs requires ~{n_envs * 7}GB VRAM")
+    else:
+        env = DifferentialDriveEnv(cfg=env_cfg, headless=args.headless)
+        vec_env = DummyVecEnv([lambda: env])
+
+    # Observation and reward normalization — critical for stable critic learning.
+    # Without this, rewards ranging from -200 (collision) to +500 (waypoints)
+    # make the value function hard to learn.
+    vecnorm_path = save_dir / "vecnormalize.pkl"
+    use_lr_schedule = ppo_config.get("use_lr_schedule", True)
+    learning_rate_value = ppo_config.get("learning_rate", 3e-4)
+    learning_rate = linear_schedule(learning_rate_value) if use_lr_schedule else learning_rate_value
 
     # Create or load model
     if args.resume:
         print(f"\nLoading model from {args.resume}...")
+        # Load VecNormalize stats if they exist alongside the checkpoint
+        resume_path = Path(args.resume)
+        resume_vecnorm = resume_path.parent / "vecnormalize.pkl"
+        if resume_vecnorm.exists():
+            vec_env = VecNormalize.load(str(resume_vecnorm), vec_env)
+            vec_env.training = True
+            vec_env.norm_reward = True
+            print(f"  VecNormalize stats loaded from {resume_vecnorm}")
+        else:
+            vec_env = VecNormalize(vec_env, norm_obs=True, norm_reward=True, clip_obs=10.0)
+            print("  No VecNormalize stats found, starting fresh normalization")
+
         model = PPO.load(
             args.resume,
             env=vec_env,
@@ -306,11 +347,13 @@ def main() -> int:
         )
         print("Model loaded")
     else:
+        vec_env = VecNormalize(vec_env, norm_obs=True, norm_reward=True, clip_obs=10.0)
+
         print("\nCreating new PPO model...")
         model = PPO(
             policy=ppo_config.get("policy", "MlpPolicy"),
             env=vec_env,
-            learning_rate=ppo_config.get("learning_rate", 3e-4),
+            learning_rate=learning_rate,
             n_steps=ppo_config.get("n_steps", 2048),
             batch_size=ppo_config.get("batch_size", 64),
             n_epochs=ppo_config.get("n_epochs", 10),
@@ -335,7 +378,7 @@ def main() -> int:
         save_path=str(save_dir),
         name_prefix="checkpoint",
         save_replay_buffer=False,
-        save_vecnormalize=True,
+        save_vecnormalize=True,  # saves vecnormalize_{step}.pkl alongside checkpoint
     )
     callbacks.append(checkpoint_callback)
     callback_list = CallbackList(callbacks)
@@ -375,7 +418,11 @@ def main() -> int:
         model.save(str(final_model_path))
         print(f"\nFinal model saved to {final_model_path}")
 
-        env.close()
+        # Save VecNormalize stats — required to run the model correctly at inference
+        vec_env.save(str(vecnorm_path))
+        print(f"VecNormalize stats saved to {vecnorm_path}")
+
+        vec_env.close()
         print("Environment closed")
 
     print("\n" + "=" * 70)

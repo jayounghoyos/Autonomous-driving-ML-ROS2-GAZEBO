@@ -1369,7 +1369,7 @@ class DifferentialDriveEnv(gym.Env):
         if self._prev_position is not None:
             actual_movement = np.linalg.norm(current_position[:2] - self._prev_position[:2])
             if actual_movement < self.cfg.stuck_movement_threshold:
-                self._stuck_counter = getattr(self, '_stuck_counter', 0) + 1
+                self._stuck_counter += 1
                 if self._stuck_counter > self.cfg.stuck_threshold_steps:
                     reward += self.cfg.reward_stuck_penalty
             else:
@@ -1502,18 +1502,20 @@ class DifferentialDriveEnv(gym.Env):
                 obs = self._get_observation()
                 distance, _ = self._extract_nav_info(obs)
 
-        # Check termination
-        terminated, truncated, _ = self._check_termination(position, orientation)
+        # Check termination (only failure conditions: out of bounds, fall, flip)
+        failure_terminated, truncated, _ = self._check_termination(position, orientation)
 
-        # All waypoints completed
+        # All waypoints completed — success termination, NOT a failure
         num_waypoints = len(self._waypoints)
-        if self._current_waypoint_idx >= num_waypoints:
-            terminated = True
+        success_terminated = self._current_waypoint_idx >= num_waypoints
+        if success_terminated:
             goal_bonus += self.cfg.reward_all_waypoints_bonus
             print("  All waypoints completed!")
 
-        # Calculate reward with robust system (no heading/action rewards)
-        reward = self._calculate_reward(distance, position, terminated, obs)
+        terminated = failure_terminated or success_terminated
+
+        # Calculate reward — only pass failure flag so success doesn't get collision penalty
+        reward = self._calculate_reward(distance, position, failure_terminated, obs)
         reward += goal_bonus
 
         # Update state for next step

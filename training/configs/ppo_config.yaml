@@ -35,6 +35,7 @@ env:
 ppo:
   policy: "MultiInputPolicy"  # Required for Dict observation space
   learning_rate: 0.0003
+  use_lr_schedule: true   # Decay LR linearly to 0 over training
   n_steps: 2048           # Steps per rollout
   batch_size: 64          # Minibatch size
   n_epochs: 10            # Epochs per update
