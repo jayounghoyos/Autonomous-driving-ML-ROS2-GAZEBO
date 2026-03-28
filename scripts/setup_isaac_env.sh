@@ -11,7 +11,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo "=============================================="
-echo " Leatherback RL Environment Setup"
+echo " Jackal RL Environment Setup"
 echo " Isaac Sim 5.1.0 (Standalone) + ROS2 Jazzy"
 echo "=============================================="
 

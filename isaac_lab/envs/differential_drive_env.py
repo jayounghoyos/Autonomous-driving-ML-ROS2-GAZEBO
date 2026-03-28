@@ -4,15 +4,12 @@
 Uses the Clearpath Jackal robot model from Isaac Sim assets.
 Implements Gymnasium-compatible RL environment for autonomous navigation.
 
-Supported robots:
-- Clearpath Jackal (default): 4-wheel skid-steer, 2 cameras, IMU
-- Clearpath Dingo: 2-wheel differential
-- AgileX Limo: 4-wheel differential
+Robot: Clearpath Jackal (4-wheel skid-steer, 2 cameras, IMU)
 
 Key features:
-- Uses actual robot USD models from Isaac Sim assets
+- Uses actual robot USD model from Isaac Sim assets
 - DifferentialController with skid-steer correction factor
-- Same sensor support as Leatherback: Camera + LiDAR + Vector
+- Sensor support: Camera + LiDAR + Vector
 """
 
 from __future__ import annotations
@@ -30,35 +27,16 @@ except ImportError:
     from differential_drive_env_cfg import DifferentialDriveEnvCfg
 
 
-# Robot USD paths relative to Isaac assets root
+# Robot USD path relative to Isaac assets root
 ROBOT_PATHS = {
     "jackal": "Isaac/Robots/Clearpath/Jackal/jackal.usd",
-    "dingo": "Isaac/Robots/Clearpath/Dingo/dingo.usd",
-    "limo": "Isaac/Robots/AgilexRobotics/limo/limo.usd",
 }
 
-# Robot-specific configurations
+# Robot-specific configuration (Clearpath Jackal)
 ROBOT_CONFIGS = {
     "jackal": {
         "wheel_radius": 0.098,
         "track_width": 0.37558,
-        "chassis_prim": "base_link",
-        "wheel_joints": [
-            "front_left_wheel_joint",
-            "front_right_wheel_joint",
-            "rear_left_wheel_joint",
-            "rear_right_wheel_joint",
-        ],
-    },
-    "dingo": {
-        "wheel_radius": 0.049,
-        "track_width": 0.38,
-        "chassis_prim": "base_link",
-        "wheel_joints": ["front_left_wheel_joint", "front_right_wheel_joint"],
-    },
-    "limo": {
-        "wheel_radius": 0.045,
-        "track_width": 0.172,
         "chassis_prim": "base_link",
         "wheel_joints": [
             "front_left_wheel_joint",
@@ -1561,7 +1539,7 @@ if __name__ == "__main__":
     parser.add_argument("--headless", action="store_true", help="Run without GUI")
     parser.add_argument("--steps", type=int, default=500, help="Test steps")
     parser.add_argument("--robot", type=str, default="jackal",
-                        choices=["jackal", "dingo", "limo"],
+                        choices=["jackal"],
                         help="Robot type")
     args = parser.parse_args()
 

@@ -1,4 +1,4 @@
-"""Shared training utilities for both Leatherback and Differential Drive training scripts.
+"""Shared training utilities for Jackal Differential Drive training scripts.
 
 Provides:
   - linear_schedule: LR decay function for PPO

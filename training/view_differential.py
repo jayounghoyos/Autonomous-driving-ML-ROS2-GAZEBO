@@ -23,7 +23,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--config",
         type=str,
-        default="training/configs/ppo_differential_config.yaml",
+        default="training/configs/ppo_barn_config.yaml",
         help="Config YAML",
     )
     parser.add_argument("--episodes", type=int, default=5, help="Episodes to run")

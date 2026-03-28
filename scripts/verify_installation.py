@@ -168,11 +168,11 @@ def check_project_structure() -> bool:
     ]
 
     required_files = [
-        "isaac_lab/envs/leatherback_env.py",
-        "isaac_lab/envs/leatherback_env_cfg.py",
-        "training/train_ppo.py",
-        "training/evaluate.py",
-        "training/configs/ppo_config.yaml",
+        "isaac_lab/envs/differential_drive_env.py",
+        "isaac_lab/envs/differential_drive_env_cfg.py",
+        "training/train_differential.py",
+        "training/callbacks.py",
+        "training/configs/ppo_barn_config.yaml",
         "requirements.txt",
         "pyproject.toml",
         "README.md",
@@ -202,7 +202,7 @@ def check_project_structure() -> bool:
 def main() -> int:
     """Run all verification checks."""
     print("=" * 60)
-    print(f"{Colors.BOLD}Leatherback RL - Installation Verification{Colors.RESET}")
+    print(f"{Colors.BOLD}Jackal RL - Installation Verification{Colors.RESET}")
     print("=" * 60)
 
     checks = [

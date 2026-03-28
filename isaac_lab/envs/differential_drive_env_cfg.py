@@ -7,10 +7,7 @@ using the Clearpath Jackal model from Isaac Sim assets.
 For sim2real with skid-steer robots, the wheelDistance parameter is scaled
 to account for tire slippage during turns (typically 4-5x actual value).
 
-Supported robots:
-- Clearpath Jackal (default): /Isaac/Robots/Clearpath/Jackal/jackal.usd
-- Clearpath Dingo: /Isaac/Robots/Clearpath/Dingo/dingo.usd
-- AgileX Limo: /Isaac/Robots/AgilexRobotics/limo/limo.usd
+Robot: Clearpath Jackal — /Isaac/Robots/Clearpath/Jackal/jackal.usd
 """
 
 from __future__ import annotations
@@ -41,8 +38,8 @@ class DifferentialDriveEnvCfg:
     # Robot USD path (None = use default Jackal from Isaac assets)
     robot_usd_path: str | None = None
 
-    # Robot type for auto-configuration
-    robot_type: Literal["jackal", "dingo", "limo", "custom"] = "jackal"
+    # Robot type (Jackal is the only supported robot)
+    robot_type: str = "jackal"
 
     # =========================================================================
     # Clearpath Jackal Geometry (from official specs)
